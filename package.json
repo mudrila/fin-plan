@@ -1,12 +1,21 @@
 {
-  "name": "tmp",
+  "name": "fin-plan",
+  "author": {
+    "name": "Kyrylo Klymenko & Artem",
+    "email": "klimenkomud@gmail.com"
+  },
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mudrila/fin-plan"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix",
+    "pretty": "prettier . --write"
   },
   "dependencies": {
     "react": "^18",
@@ -19,6 +28,9 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.8"
+    "eslint-config-next": "14.2.8",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "prettier": "^3.3.3",
+    "sharp": "^0.33.5"
   }
 }
