@@ -31,10 +31,10 @@ vercel link
 ```
 
 6. Pull environment variables from `Vercel`
+
 ```bash
 vercel env pull .env.local
 ```
-
 
 7. Finally, run the development server:
 

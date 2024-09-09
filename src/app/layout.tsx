@@ -1,6 +1,6 @@
+import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { PropsWithChildren } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/theme';
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -8,9 +8,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {children}
-          </ThemeProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
