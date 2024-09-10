@@ -1,5 +1,5 @@
-import React from 'react';
 import { Container, Box, Typography, Stack } from '@mui/material';
+import React from 'react';
 
 interface SignUpContainerProps {
   children: React.ReactNode;
@@ -7,7 +7,10 @@ interface SignUpContainerProps {
 
 export default function SignUpContainer({ children }: SignUpContainerProps) {
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+    >
       <Box
         sx={{
           marginTop: 8,
@@ -16,7 +19,10 @@ export default function SignUpContainer({ children }: SignUpContainerProps) {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
+        <Typography
+          component="h1"
+          variant="h5"
+        >
           Sign Up
         </Typography>
         <Stack

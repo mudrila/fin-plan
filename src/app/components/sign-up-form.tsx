@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { InputAdornment, Box, Button, TextField, Stack, Card , IconButton, Link} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { InputAdornment, Box, Button, TextField, Stack, Card, IconButton } from '@mui/material';
 import { useState } from 'react';
 
-import SignUpContainer from "@/app/components/sign-up-container"; 
+import SignUpContainer from '@/app/components/sign-up-container';
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -38,13 +38,11 @@ export default function SignUpForm() {
 
     if (!password.match(passwordRegex)) {
       setPasswordError(
-        'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol.'
+        'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol.',
       );
       valid = false;
-    } else if (password === email.split("@")[0]){
-      setPasswordError(
-        'Password should not be the same as email.'
-      );
+    } else if (password === email.split('@')[0]) {
+      setPasswordError('Password should not be the same as email.');
       valid = false;
     } else {
       setPasswordError('');
@@ -67,12 +65,14 @@ export default function SignUpForm() {
     if (validateForm()) {
       alert('Form is valid, submitting...');
       // redirect
-      
     }
   };
   return (
     <SignUpContainer>
-      <Card variant="outlined" sx={{ p: 3 }}>
+      <Card
+        variant="outlined"
+        sx={{ p: 3 }}
+      >
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -86,7 +86,7 @@ export default function SignUpForm() {
               label="Name"
               name="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               error={formSubmitted}
               helperText={formSubmitted}
             />
@@ -97,7 +97,7 @@ export default function SignUpForm() {
               label="Email Address"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               error={!!emailError && formSubmitted}
               helperText={formSubmitted && emailError}
               autoComplete="email"
@@ -110,13 +110,16 @@ export default function SignUpForm() {
               type={showPassword ? 'text' : 'password'}
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               error={!!passwordError && formSubmitted}
               helperText={formSubmitted && passwordError}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -131,7 +134,7 @@ export default function SignUpForm() {
               type={showPassword ? 'text' : 'password'}
               id="confirm-password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={e => setConfirmPassword(e.target.value)}
               error={!!confirmPasswordError && formSubmitted}
               helperText={formSubmitted && confirmPasswordError}
             />
@@ -146,7 +149,6 @@ export default function SignUpForm() {
           </Button>
         </Box>
       </Card>
-
     </SignUpContainer>
   );
 }
