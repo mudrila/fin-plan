@@ -2,10 +2,19 @@
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { InputAdornment, Box, Button, TextField, Stack, Card, IconButton } from '@mui/material';
+import {
+  InputAdornment,
+  Button,
+  TextField,
+  CardContent,
+  Card,
+  CardHeader,
+  CardActions,
+  IconButton,
+  LinearProgress,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
-
-import SignUpContainer from '@/app/components/sign-up-container';
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -17,138 +26,194 @@ export default function SignUpForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%.*?&])[A-Za-z\d@$!%.*?&]{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const evaluatePasswordStrength = (password: string) => {
+    let strength = 0;
+
+    if (password.length >= 8) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+    setPasswordStrength(strength);
+
+    switch (strength) {
+      case 5:
+        setProgressColor('success');
+        break;
+      case 3:
+      case 4:
+        setProgressColor('warning');
+        break;
+      default:
+        setProgressColor('error');
+    }
   };
 
-  const validateForm = () => {
-    let valid = true;
+  const handlePasswordChange = (e: string) => {
+    const newPassword = e;
+    setPassword(newPassword);
+    evaluatePasswordStrength(newPassword);
 
-    if (email.match(emailRegex)) {
-      setEmailError('');
-    } else {
-      setEmailError('Invalid email format');
-      valid = false;
-    }
-
-    if (!password.match(passwordRegex)) {
+    if (!newPassword.match(passwordRegex)) {
       setPasswordError(
         'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol.',
       );
-      valid = false;
-    } else if (password === email.split('@')[0]) {
+    } else if (newPassword === email.split('@')[0]) {
       setPasswordError('Password should not be the same as email.');
-      valid = false;
     } else {
       setPasswordError('');
     }
 
-    if (password === confirmPassword) {
-      setConfirmPasswordError('');
-    } else {
+    if (confirmPassword && newPassword !== confirmPassword) {
       setConfirmPasswordError('Passwords do not match');
-      valid = false;
+    } else {
+      setConfirmPasswordError('');
     }
+  };
 
-    return valid;
+  const handleEmailChange = (e: string) => {
+    const newEmail = e;
+    setEmail(newEmail);
+
+    if (!newEmail.match(emailRegex)) {
+      setEmailError('Invalid email format');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handleConfirmPasswordChange = (e: string) => {
+    const newConfirmPassword = e;
+    setConfirmPassword(newConfirmPassword);
+
+    if (password && newConfirmPassword !== password) {
+      setConfirmPasswordError('Passwords do not match');
+    } else {
+      setConfirmPasswordError('');
+    }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(prevState => !prevState);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setFormSubmitted(true);
 
-    if (validateForm()) {
+    if (!emailError && !passwordError && !confirmPasswordError) {
       alert('Form is valid, submitting...');
       // redirect
     }
   };
+
   return (
-    <SignUpContainer>
-      <Card
-        variant="outlined"
-        sx={{ p: 3 }}
-      >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+    <Card
+      sx={{
+        justifyContent: 'center',
+        textAlign: 'center',
+        p: 2,
+      }}
+      component="form"
+      onSubmit={handleSubmit}
+    >
+      <CardHeader
+        sx={{
+          textAlign: 'center',
+        }}
+        title="Sign Up"
+      />
+      <CardContent>
+        <TextField
+          required
+          fullWidth
+          id="name"
+          label="Name"
+          name="name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          sx={{ marginBottom: 3 }}
+        />
+        <TextField
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          value={email}
+          onChange={e => handleEmailChange(e.target.value)}
+          error={!!emailError}
+          helperText={emailError}
+          autoComplete="email"
+          sx={{ marginBottom: 3 }}
+        />
+        <TextField
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          id="password"
+          value={password}
+          onChange={e => handlePasswordChange(e.target.value)}
+          error={!!passwordError}
+          helperText={passwordError}
+          sx={{ marginBottom: 3 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          required
+          fullWidth
+          name="confirmPassword"
+          label="Confirm Password"
+          type={showPassword ? 'text' : 'password'}
+          id="confirm-password"
+          value={confirmPassword}
+          onChange={e => handleConfirmPasswordChange(e.target.value)}
+          error={!!confirmPasswordError}
+          helperText={confirmPasswordError}
+          sx={{ marginBottom: 1 }}
+        />
+        <LinearProgress
+          variant="determinate"
+          value={(passwordStrength / 5) * 100}
+          color={progressColor}
+          sx={{ height: 10, borderRadius: 5 }}
+        />
+        <Typography
+          variant="body2"
+          color="text.secondary"
         >
-          <Stack spacing={2}>
-            <TextField
-              required
-              fullWidth
-              id="name"
-              label="Name"
-              name="name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              error={formSubmitted}
-              helperText={formSubmitted}
-            />
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              error={!!emailError && formSubmitted}
-              helperText={formSubmitted && emailError}
-              autoComplete="email"
-            />
-            <TextField
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              error={!!passwordError && formSubmitted}
-              helperText={formSubmitted && passwordError}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              required
-              fullWidth
-              name="confirmPassword"
-              label="Confirm Password"
-              type={showPassword ? 'text' : 'password'}
-              id="confirm-password"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              error={!!confirmPasswordError && formSubmitted}
-              helperText={formSubmitted && confirmPasswordError}
-            />
-          </Stack>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            onSubmit={validateForm}
-          >
-            Sign up
-          </Button>
-        </Box>
-      </Card>
-    </SignUpContainer>
+          Password strength:{' '}
+          {['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'][passwordStrength]}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+        >
+          Sign up
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
