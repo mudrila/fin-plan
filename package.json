@@ -19,7 +19,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "pretty": "prettier . --write"
+    "pretty": "prettier . --write",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -27,6 +28,8 @@
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.0.2",
     "@mui/material-nextjs": "^6.0.2",
+    "@neondatabase/serverless": "^0.9.5",
+    "@prisma/adapter-neon": "^5.19.1",
     "@prisma/client": "^5.19.1",
     "next": "14.2.8",
     "react": "^18",
