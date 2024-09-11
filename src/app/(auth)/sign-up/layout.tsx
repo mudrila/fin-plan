@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   title: 'Sign Up | Fin-Plan',
 };
 
-export default function SignInLayout({ children }: PropsWithChildren) {
+export default function SignUpLayout({ children }: PropsWithChildren) {
   return (
     <Container
       component="main"
-      maxWidth="xs"
+      maxWidth="sm"
     >
       <Box
         sx={{

@@ -14,7 +14,9 @@ import {
   LinearProgress,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+
+const PASSWORD_STRENGTH_DESCRIPTIONS = ['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong']
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -31,6 +33,7 @@ export default function SignUpForm() {
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%.*?&])[A-Za-z\d@$!%.*?&]{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordStrengthDescription = useMemo(() => PASSWORD_STRENGTH_DESCRIPTIONS[passwordStrength], [passwordStrength])
 
   const evaluatePasswordStrength = (password: string) => {
     let strength = 0;
@@ -201,8 +204,7 @@ export default function SignUpForm() {
           variant="body2"
           color="text.secondary"
         >
-          Password strength:{' '}
-          {['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'][passwordStrength]}
+          {`Password strength: ${passwordStrengthDescription}`}
         </Typography>
       </CardContent>
       <CardActions>
