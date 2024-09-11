@@ -14,9 +14,9 @@ import {
   LinearProgress,
   Typography,
 } from '@mui/material';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 
-const PASSWORD_STRENGTH_DESCRIPTIONS = ['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong']
+const PASSWORD_STRENGTH_DESCRIPTIONS = ['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -33,7 +33,10 @@ export default function SignUpForm() {
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%.*?&])[A-Za-z\d@$!%.*?&]{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordStrengthDescription = useMemo(() => PASSWORD_STRENGTH_DESCRIPTIONS[passwordStrength], [passwordStrength])
+  const passwordStrengthDescription = useMemo(
+    () => PASSWORD_STRENGTH_DESCRIPTIONS[passwordStrength],
+    [passwordStrength],
+  );
 
   const evaluatePasswordStrength = (password: string) => {
     let strength = 0;
@@ -59,8 +62,8 @@ export default function SignUpForm() {
     }
   };
 
-  const handlePasswordChange = (e: string) => {
-    const newPassword = e;
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
     setPassword(newPassword);
     evaluatePasswordStrength(newPassword);
 
@@ -81,8 +84,8 @@ export default function SignUpForm() {
     }
   };
 
-  const handleEmailChange = (e: string) => {
-    const newEmail = e;
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
     setEmail(newEmail);
 
     if (!newEmail.match(emailRegex)) {
@@ -92,8 +95,8 @@ export default function SignUpForm() {
     }
   };
 
-  const handleConfirmPasswordChange = (e: string) => {
-    const newConfirmPassword = e;
+  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
     setConfirmPassword(newConfirmPassword);
 
     if (password && newConfirmPassword !== password) {
@@ -150,7 +153,7 @@ export default function SignUpForm() {
           label="Email Address"
           name="email"
           value={email}
-          onChange={e => handleEmailChange(e.target.value)}
+          onChange={handleEmailChange}
           error={!!emailError}
           helperText={emailError}
           autoComplete="email"
@@ -164,7 +167,7 @@ export default function SignUpForm() {
           type={showPassword ? 'text' : 'password'}
           id="password"
           value={password}
-          onChange={e => handlePasswordChange(e.target.value)}
+          onChange={handlePasswordChange}
           error={!!passwordError}
           helperText={passwordError}
           sx={{ marginBottom: 3 }}
@@ -189,7 +192,7 @@ export default function SignUpForm() {
           type={showPassword ? 'text' : 'password'}
           id="confirm-password"
           value={confirmPassword}
-          onChange={e => handleConfirmPasswordChange(e.target.value)}
+          onChange={handleConfirmPasswordChange}
           error={!!confirmPasswordError}
           helperText={confirmPasswordError}
           sx={{ marginBottom: 1 }}

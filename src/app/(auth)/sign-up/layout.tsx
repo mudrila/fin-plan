@@ -1,11 +1,6 @@
 import { Container, Box } from '@mui/material';
-import type { Metadata } from 'next';
 import { PropsWithChildren } from 'react';
 import React from 'react';
-
-export const metadata: Metadata = {
-  title: 'Sign Up | Fin-Plan',
-};
 
 export default function SignUpLayout({ children }: PropsWithChildren) {
   return (
