@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { useState, useMemo, ChangeEvent } from 'react';
 
-const PASSWORD_STRENGTH_DESCRIPTIONS = ['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
+ export const PASSWORD_STRENGTH_DESCRIPTIONS = ['', 'Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
