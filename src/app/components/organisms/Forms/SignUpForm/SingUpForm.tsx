@@ -78,11 +78,11 @@ export default function SignUpForm() {
           value={email}
           errorMessage={emailError}
           onError={setEmailError}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
         <PasswordInput
           onError={setPasswordError}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           setShowPassword={setShowPassword}
           showPassword={showPassword}
           email={email}
@@ -119,11 +119,7 @@ export default function SignUpForm() {
         >
           Already have an account?
         </Typography>
-        <Link
-          href="/sign-in"
-        >
-          Sign In
-        </Link>
+        <Link href="/sign-in">Sign In</Link>
       </Box>
     </Card>
   );

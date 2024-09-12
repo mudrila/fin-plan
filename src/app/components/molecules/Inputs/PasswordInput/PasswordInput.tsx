@@ -1,13 +1,20 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, InputAdornment, IconButton, LinearProgress, Typography, Box } from '@mui/material';
+import {
+  TextField,
+  InputAdornment,
+  IconButton,
+  LinearProgress,
+  Typography,
+  Box,
+} from '@mui/material';
 import { useState, ChangeEvent, useMemo } from 'react';
 
 import { PASSWORD_STRENGTH_DESCRIPTIONS } from '@/constants/content';
 
 interface PasswordInputProps {
-  onError: (errorMessage: string) => void
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onError: (errorMessage: string) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   setShowPassword: (showPassword: boolean) => void;
   showPassword: boolean;
   email: string;
@@ -22,7 +29,7 @@ export default function PasswordInput({
   email,
   value,
 }: PasswordInputProps) {
-  const valueBlackList = [email.split('@')[0]]
+  const valueBlackList = [email.split('@')[0]];
   const [passwordError, setPasswordErrorState] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
@@ -82,7 +89,7 @@ export default function PasswordInput({
     setShowPassword(!showPassword);
   };
 
-  const showPasswordStrength = true
+  const showPasswordStrength = true;
 
   return (
     <Box>
@@ -110,18 +117,22 @@ export default function PasswordInput({
           ),
         }}
       />
-      {showPasswordStrength && (<LinearProgress
-        variant="determinate"
-        value={(passwordStrength / 5) * 100}
-        color={progressColor}
-        sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
-      />)}
-      {showPasswordStrength && (<Typography
-        variant="body2"
-        color="text.secondary"
-      >
-        {`Password strength: ${passwordStrengthDescription}`}
-      </Typography>)}
+      {showPasswordStrength && (
+        <LinearProgress
+          variant="determinate"
+          value={(passwordStrength / 5) * 100}
+          color={progressColor}
+          sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
+        />
+      )}
+      {showPasswordStrength && (
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          {`Password strength: ${passwordStrengthDescription}`}
+        </Typography>
+      )}
     </Box>
   );
 }

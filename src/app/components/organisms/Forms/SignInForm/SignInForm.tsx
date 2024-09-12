@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -22,7 +14,7 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
-  const isFormValid = !emailError && !passwordError
+  const isFormValid = !emailError && !passwordError;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -54,11 +46,11 @@ export default function SignInForm() {
           value={email}
           errorMessage={emailError}
           onError={setEmailError}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
         <PasswordInput
           onError={setPasswordError}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           setShowPassword={setShowPassword}
           showPassword={showPassword}
           email={email}
@@ -83,11 +75,7 @@ export default function SignInForm() {
         >
           {`Don't have an account?`}
         </Typography>
-        <Link
-          href="/sign-up"
-        >
-          Sign Up
-        </Link>
+        <Link href="/sign-up">Sign Up</Link>
       </Box>
     </Card>
   );
