@@ -8,12 +8,12 @@ import {
   Button,
   Box,
   Typography,
-  Link,
 } from '@mui/material';
+import Link from 'next/link';
 import { useState } from 'react';
 
 import { EmailInput } from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
-import { PasswordInput } from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
+import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -22,12 +22,12 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
-  const isFormValid = () => !emailError && !passwordError;
+  const isFormValid = !emailError && !passwordError
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (isFormValid()) {
+    if (isFormValid) {
       alert('Sign in');
     }
   };
@@ -51,18 +51,18 @@ export default function SignInForm() {
       />
       <CardContent>
         <EmailInput
-          email={email}
-          setEmail={setEmail}
-          emailError={emailError}
-          setEmailError={setEmailError}
+          value={email}
+          errorMessage={emailError}
+          onError={setEmailError}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <PasswordInput
-          setPasswordError={setPasswordError}
-          setPassword={setPassword}
+          onError={setPasswordError}
+          onChange={(e) => setPassword(e.target.value)}
           setShowPassword={setShowPassword}
           showPassword={showPassword}
           email={email}
-          password={password}
+          value={password}
         />
       </CardContent>
       <CardActions>
@@ -70,7 +70,7 @@ export default function SignInForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={!isFormValid()}
+          disabled={!isFormValid}
         >
           Sign in
         </Button>
@@ -81,13 +81,10 @@ export default function SignInForm() {
           component="span"
           sx={{ marginRight: 1 }}
         >
-          Don&apos;t have an account?
+          {`Don't have an account?`}
         </Typography>
         <Link
           href="/sign-up"
-          underline="none"
-          variant="body2"
-          color="primary"
         >
           Sign Up
         </Link>

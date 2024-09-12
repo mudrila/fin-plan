@@ -9,12 +9,12 @@ import {
   CardActions,
   Box,
   Typography,
-  Link,
 } from '@mui/material';
+import Link from 'next/link';
 import { useState, ChangeEvent } from 'react';
 
 import { EmailInput } from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
-import { PasswordInput } from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
+import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -75,18 +75,18 @@ export default function SignUpForm() {
           sx={{ marginBottom: 3 }}
         />
         <EmailInput
-          email={email}
-          setEmail={setEmail}
-          emailError={emailError}
-          setEmailError={setEmailError}
+          value={email}
+          errorMessage={emailError}
+          onError={setEmailError}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <PasswordInput
-          setPasswordError={setPasswordError}
-          setPassword={setPassword}
+          onError={setPasswordError}
+          onChange={(e) => setPassword(e.target.value)}
           setShowPassword={setShowPassword}
           showPassword={showPassword}
           email={email}
-          password={password}
+          value={password}
         />
         <TextField
           required
@@ -121,9 +121,6 @@ export default function SignUpForm() {
         </Typography>
         <Link
           href="/sign-in"
-          underline="none"
-          variant="body2"
-          color="primary"
         >
           Sign In
         </Link>

@@ -1,27 +1,28 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, InputAdornment, IconButton, LinearProgress, Typography } from '@mui/material';
+import { TextField, InputAdornment, IconButton, LinearProgress, Typography, Box } from '@mui/material';
 import { useState, ChangeEvent, useMemo } from 'react';
 
 import { PASSWORD_STRENGTH_DESCRIPTIONS } from '@/constants/content';
 
 interface PasswordInputProps {
-  setPasswordError: (error: string) => void;
-  setPassword: (password: string) => void;
+  onError: (errorMessage: string) => void
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
   setShowPassword: (showPassword: boolean) => void;
   showPassword: boolean;
   email: string;
-  password: string;
+  value: string;
 }
 
-export function PasswordInput({
-  setPasswordError,
-  setPassword,
+export default function PasswordInput({
+  onError,
+  onChange,
   setShowPassword,
   showPassword,
   email,
-  password,
+  value,
 }: PasswordInputProps) {
+  const valueBlackList = [email.split('@')[0]]
   const [passwordError, setPasswordErrorState] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
@@ -59,20 +60,20 @@ export function PasswordInput({
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
-    setPassword(newPassword);
+    onChange(e);
     evaluatePasswordStrength(newPassword);
 
     if (!newPassword.match(passwordRegex)) {
       const errorMessage =
         'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol';
-      setPasswordError(errorMessage);
+      onError(errorMessage);
       setPasswordErrorState(errorMessage);
-    } else if (newPassword === email.split('@')[0]) {
+    } else if (newPassword === valueBlackList[0]) {
       const errorMessage = 'Password should not be the same as email';
-      setPasswordError(errorMessage);
+      onError(errorMessage);
       setPasswordErrorState(errorMessage);
     } else {
-      setPasswordError('');
+      onError('');
       setPasswordErrorState('');
     }
   };
@@ -81,20 +82,21 @@ export function PasswordInput({
     setShowPassword(!showPassword);
   };
 
+  const showPasswordStrength = true
+
   return (
-    <>
+    <Box>
       <TextField
         required
         fullWidth
         name="password"
         label="Password"
         id="password"
-        value={password}
+        value={value}
         onChange={handlePasswordChange}
         error={!!passwordError}
         helperText={passwordError}
         type={showPassword ? 'text' : 'password'}
-        sx={{ marginBottom: 3 }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -108,18 +110,18 @@ export function PasswordInput({
           ),
         }}
       />
-      <LinearProgress
+      {showPasswordStrength && (<LinearProgress
         variant="determinate"
         value={(passwordStrength / 5) * 100}
         color={progressColor}
-        sx={{ height: 10, borderRadius: 5 }}
-      />
-      <Typography
+        sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
+      />)}
+      {showPasswordStrength && (<Typography
         variant="body2"
         color="text.secondary"
       >
         {`Password strength: ${passwordStrengthDescription}`}
-      </Typography>
-    </>
+      </Typography>)}
+    </Box>
   );
 }
