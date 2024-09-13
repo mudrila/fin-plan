@@ -31,11 +31,11 @@ export default function PasswordInput({
   valueBlackList,
   value,
   showPasswordStrength,
-  name = "password",
-  label = "Password",
-  id = "password", 
+  name = 'password',
+  label = 'Password',
+  id = 'password',
   isConfirmPassword = false,
-  primaryPassword
+  primaryPassword,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
@@ -72,7 +72,7 @@ export default function PasswordInput({
         setProgressColor('error');
     }
   };
-  
+
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     onChange(e);
@@ -104,7 +104,6 @@ export default function PasswordInput({
       }
     }
   };
-
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);

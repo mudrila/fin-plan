@@ -84,7 +84,7 @@ export default function SignUpForm() {
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={confirmPassword}
           showPasswordStrength={false}
-          name='confirmPassword'
+          name="confirmPassword"
           label="Confirm Password"
           id="confirm-password"
           isConfirmPassword={true}
