@@ -4,14 +4,13 @@ import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } f
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { EmailInput } from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
+import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
   const isFormValid = !emailError && !passwordError;
@@ -42,18 +41,18 @@ export default function SignInForm() {
         title="Sign In"
       />
       <CardContent>
-        <EmailInput
-          value={email}
-          errorMessage={emailError}
-          onError={setEmailError}
-          onChange={e => setEmail(e.target.value)}
-        />
+        <Box sx={{ marginBottom: 3, width: 488 }}>
+          <EmailInput
+            value={email}
+            errorMessage={emailError}
+            onError={setEmailError}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </Box>
         <PasswordInput
           onError={setPasswordError}
           onChange={e => setPassword(e.target.value)}
-          setShowPassword={setShowPassword}
-          showPassword={showPassword}
-          email={email}
+          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
         />
       </CardContent>

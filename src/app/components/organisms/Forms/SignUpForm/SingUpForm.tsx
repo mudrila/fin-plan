@@ -1,5 +1,7 @@
 'use client';
 
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Button,
   TextField,
@@ -9,11 +11,13 @@ import {
   CardActions,
   Box,
   Typography,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import Link from 'next/link';
 import { useState, ChangeEvent } from 'react';
 
-import { EmailInput } from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
+import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
 export default function SignUpForm() {
@@ -36,6 +40,10 @@ export default function SignUpForm() {
     } else {
       setConfirmPasswordError('');
     }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -64,28 +72,29 @@ export default function SignUpForm() {
         title="Sign Up"
       />
       <CardContent>
-        <TextField
-          required
-          fullWidth
-          id="name"
-          label="Name"
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          sx={{ marginBottom: 3 }}
-        />
-        <EmailInput
-          value={email}
-          errorMessage={emailError}
-          onError={setEmailError}
-          onChange={e => setEmail(e.target.value)}
-        />
+        <Box sx={{ marginBottom: 3, width: 488 }}>
+          <TextField
+            required
+            fullWidth
+            id="name"
+            label="Name"
+            name="name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+        </Box>
+        <Box sx={{ marginBottom: 3, width: 488 }}>
+          <EmailInput
+            value={email}
+            errorMessage={emailError}
+            onError={setEmailError}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </Box>
         <PasswordInput
           onError={setPasswordError}
           onChange={e => setPassword(e.target.value)}
-          setShowPassword={setShowPassword}
-          showPassword={showPassword}
-          email={email}
+          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
         />
         <TextField
@@ -99,7 +108,18 @@ export default function SignUpForm() {
           onChange={handleConfirmPasswordChange}
           error={!!confirmPasswordError}
           helperText={confirmPasswordError}
-          sx={{ marginBottom: 1 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </CardContent>
       <CardActions>

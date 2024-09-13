@@ -15,21 +15,17 @@ import { PASSWORD_STRENGTH_DESCRIPTIONS } from '@/constants/content';
 interface PasswordInputProps {
   onError: (errorMessage: string) => void;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  setShowPassword: (showPassword: boolean) => void;
-  showPassword: boolean;
-  email: string;
+  valueBlackList: string[];
   value: string;
 }
 
 export default function PasswordInput({
   onError,
   onChange,
-  setShowPassword,
-  showPassword,
-  email,
+  valueBlackList,
   value,
 }: PasswordInputProps) {
-  const valueBlackList = [email.split('@')[0]];
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
@@ -75,7 +71,7 @@ export default function PasswordInput({
         'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol';
       onError(errorMessage);
       setPasswordErrorState(errorMessage);
-    } else if (newPassword === valueBlackList[0]) {
+    } else if (valueBlackList.includes(newPassword)) {
       const errorMessage = 'Password should not be the same as email';
       onError(errorMessage);
       setPasswordErrorState(errorMessage);

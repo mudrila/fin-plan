@@ -1,4 +1,4 @@
-import { TextField, Box } from '@mui/material';
+import { TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
 
 interface EmailInputProps {
@@ -8,7 +8,7 @@ interface EmailInputProps {
   errorMessage: string | null;
 }
 
-export function EmailInput({ onChange, onError, value, errorMessage }: EmailInputProps) {
+export default function EmailInput({ onChange, onError, value, errorMessage }: EmailInputProps) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,19 +22,17 @@ export function EmailInput({ onChange, onError, value, errorMessage }: EmailInpu
     }
   };
   return (
-    <Box sx={{ marginBottom: 3, width: 488 }}>
-      <TextField
-        required
-        fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        value={value}
-        onChange={handleEmailChange}
-        error={!!errorMessage}
-        helperText={errorMessage}
-        autoComplete="email"
-      />
-    </Box>
+    <TextField
+      required
+      fullWidth
+      id="email"
+      label="Email Address"
+      name="email"
+      value={value}
+      onChange={handleEmailChange}
+      error={!!errorMessage}
+      helperText={errorMessage}
+      autoComplete="email"
+    />
   );
 }
