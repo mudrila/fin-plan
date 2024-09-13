@@ -1,7 +1,5 @@
 'use client';
 
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Button,
   TextField,
@@ -11,11 +9,9 @@ import {
   CardActions,
   Box,
   Typography,
-  InputAdornment,
-  IconButton,
 } from '@mui/material';
 import Link from 'next/link';
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
@@ -25,26 +21,10 @@ export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
-  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newConfirmPassword = e.target.value;
-    setConfirmPassword(newConfirmPassword);
-
-    if (password && newConfirmPassword !== password) {
-      setConfirmPasswordError('Passwords do not match');
-    } else {
-      setConfirmPasswordError('');
-    }
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -96,30 +76,19 @@ export default function SignUpForm() {
           onChange={e => setPassword(e.target.value)}
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
+          showPasswordStrength={true}
         />
-        <TextField
-          required
-          fullWidth
-          name="confirmPassword"
-          label="Confirm Password"
-          type={showPassword ? 'text' : 'password'}
-          id="confirm-password"
+        <PasswordInput
+          onError={setConfirmPasswordError}
+          onChange={e => setConfirmPassword(e.target.value)}
+          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-          error={!!confirmPasswordError}
-          helperText={confirmPasswordError}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
+          showPasswordStrength={false}
+          name='confirmPassword'
+          label="Confirm Password"
+          id="confirm-password"
+          isConfirmPassword={true}
+          primaryPassword={password}
         />
       </CardContent>
       <CardActions>

@@ -17,6 +17,12 @@ interface PasswordInputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   valueBlackList: string[];
   value: string;
+  showPasswordStrength?: boolean;
+  name?: string;
+  label?: string;
+  id?: string;
+  isConfirmPassword?: boolean;
+  primaryPassword?: string;
 }
 
 export default function PasswordInput({
@@ -24,6 +30,12 @@ export default function PasswordInput({
   onChange,
   valueBlackList,
   value,
+  showPasswordStrength,
+  name = "password",
+  label = "Password",
+  id = "password", 
+  isConfirmPassword = false,
+  primaryPassword
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
@@ -60,41 +72,52 @@ export default function PasswordInput({
         setProgressColor('error');
     }
   };
-
+  
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     onChange(e);
-    evaluatePasswordStrength(newPassword);
 
-    if (!newPassword.match(passwordRegex)) {
-      const errorMessage =
-        'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol';
-      onError(errorMessage);
-      setPasswordErrorState(errorMessage);
-    } else if (valueBlackList.includes(newPassword)) {
-      const errorMessage = 'Password should not be the same as email';
-      onError(errorMessage);
-      setPasswordErrorState(errorMessage);
+    if (isConfirmPassword) {
+      if (primaryPassword && newPassword !== primaryPassword) {
+        const errorMessage = 'Passwords do not match';
+        onError(errorMessage);
+        setPasswordErrorState(errorMessage);
+      } else {
+        onError('');
+        setPasswordErrorState('');
+      }
     } else {
-      onError('');
-      setPasswordErrorState('');
+      evaluatePasswordStrength(newPassword);
+
+      if (!newPassword.match(passwordRegex)) {
+        const errorMessage =
+          'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol';
+        onError(errorMessage);
+        setPasswordErrorState(errorMessage);
+      } else if (valueBlackList.includes(newPassword)) {
+        const errorMessage = 'Password should not be the same as email';
+        onError(errorMessage);
+        setPasswordErrorState(errorMessage);
+      } else {
+        onError('');
+        setPasswordErrorState('');
+      }
     }
   };
+
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  const showPasswordStrength = true;
 
   return (
     <Box>
       <TextField
         required
         fullWidth
-        name="password"
-        label="Password"
-        id="password"
+        name={name}
+        label={label}
+        id={id}
         value={value}
         onChange={handlePasswordChange}
         error={!!passwordError}

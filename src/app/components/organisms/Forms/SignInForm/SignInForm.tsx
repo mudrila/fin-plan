@@ -54,6 +54,7 @@ export default function SignInForm() {
           onChange={e => setPassword(e.target.value)}
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
+          showPasswordStrength={false}
         />
       </CardContent>
       <CardActions>
