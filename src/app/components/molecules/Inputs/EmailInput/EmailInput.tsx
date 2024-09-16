@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { emailRegex } from '@/constants/content'
+import { emailRegex } from '@/constants/content';
 
 interface EmailInputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -17,7 +17,6 @@ export default function EmailInput({
   errorMessage,
   disabled,
 }: EmailInputProps) {
-
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     onChange(e);

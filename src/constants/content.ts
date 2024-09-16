@@ -7,4 +7,5 @@ export const PASSWORD_STRENGTH_DESCRIPTIONS = [
   'Very Strong',
 ];
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%()<>.*?&])[A-Za-z\d@$!%()<>.*?&]{8,}$/;
+export const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%()<>.*?&])[A-Za-z\d@$!%()<>.*?&]{8,}$/;

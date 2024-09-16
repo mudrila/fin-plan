@@ -2,14 +2,12 @@ import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-
-  const secret = process.env.AUTH_SECRET
-  const salt = process.env.PASSWORD_SALT
+  const secret = process.env.AUTH_SECRET;
+  const salt = process.env.PASSWORD_SALT;
 
   if (!secret || !salt) {
-    throw new Error('You need to set AUTH_SECRET and PASSWORD_SALT')
+    throw new Error('You need to set AUTH_SECRET and PASSWORD_SALT');
   }
-
 
   const sessionUser = req.auth?.user;
   const { pathname } = req.nextUrl;
@@ -23,7 +21,7 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-};
+}
 
 export const config = {
   matcher: ['/app/:path*', '/sign-in', '/sign-up'],

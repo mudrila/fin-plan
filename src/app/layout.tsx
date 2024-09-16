@@ -15,7 +15,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
               richColors
             />
             {children}
-            </ThemeProvider>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

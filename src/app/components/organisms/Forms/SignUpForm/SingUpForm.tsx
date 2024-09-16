@@ -29,9 +29,15 @@ export default function SignUpForm() {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const isFormValid = (
-    isPending || !name ||  !email || !password || !confirmPassword || !!emailError || !!passwordError || !!confirmPasswordError 
-  )
+  const isFormValid =
+    isPending ||
+    !name ||
+    !email ||
+    !password ||
+    !confirmPassword ||
+    !!emailError ||
+    !!passwordError ||
+    !!confirmPasswordError;
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -51,7 +57,7 @@ export default function SignUpForm() {
         if (data.errorMessage) {
           toast.error(data.errorMessage);
         } else if (!data.error) {
-          toast.success('Signed Up! You will be redirected to app in a blink of an eye')
+          toast.success('Signed Up! You will be redirected to app in a blink of an eye');
           router.push('/app');
           router.refresh();
         }
