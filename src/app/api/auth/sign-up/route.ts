@@ -1,44 +1,42 @@
 import { NextResponse } from 'next/server';
 import { generateHashPassword } from '@/utils';
-import { signIn } from '@/utils/auth';
 import { prisma } from '@/utils/prisma';
+import { emailRegex, passwordRegex } from '@/constants/content'
 
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
 
+		if (email && password) {
+			if (!email.match(emailRegex) && !password.match(passwordRegex)) {
+				return NextResponse.json({ message: 'Please check our email and password' });
+			}
+		} else {
+			return NextResponse.json({ message: 'Please enter email and password' });
+		}
+
     const user = await prisma.user.findFirst({
-      where: { email: email },
+      where: { email },
     });
 
     if (user) {
-      return NextResponse.json({ errorMessage: 'User with such email already exists' });
+			return NextResponse.json({ errorMessage: 'User with such email already exists' });
     }
 
     const passwordHash = await generateHashPassword(password);
 
     const newUser = await prisma.user.create({
       data: {
-        name: name,
-        email: email,
+        name,
+        email,
         password: passwordHash.hash,
       },
     });
 
-    if (newUser.id) {
-      const signInResponse = await signIn('credentials', {
-        email: email,
-        password: password,
-        redirect: false,
-      });
-
-      if (signInResponse?.error) {
-        return NextResponse.json({ errorMessage: signInResponse.error });
-      }
-
-      return NextResponse.json({ message: 'User created and signed successfully' });
-    }
-  } catch (error) {
-    return NextResponse.json({ errorMessage: error });
+		return NextResponse.json({ message: 'Signed Up!' });
+		
+  } catch (e) {
+    console.error(e, 'Error during Sign Up');
+		return NextResponse.json({ errorMessage: "Unexpected error happened during sign up. Please, try again later or cry - idk, we don't care right now" });
   }
 }

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useState, ChangeEvent, useMemo } from 'react';
 
-import { PASSWORD_STRENGTH_DESCRIPTIONS } from '@/constants/content';
+import { PASSWORD_STRENGTH_DESCRIPTIONS, passwordRegex } from '@/constants/content';
 
 interface PasswordInputProps {
   onError: (errorMessage: string) => void;
@@ -44,8 +44,6 @@ export default function PasswordInput({
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%().*?&])[A-Za-z\d@$!%().*?&]{8,}$/;
   const passwordStrengthDescription = useMemo(
     () => PASSWORD_STRENGTH_DESCRIPTIONS[passwordStrength],
     [passwordStrength],

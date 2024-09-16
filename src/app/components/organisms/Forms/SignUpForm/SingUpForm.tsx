@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
-import { Toaster, toast } from 'sonner';
+import { useState, useTransition, FormEvent } from 'react';
+import { toast } from 'sonner';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
@@ -29,26 +29,29 @@ export default function SignUpForm() {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
+  const isFormValid = (
+    isPending || !name ||  !email || !password || !confirmPassword || !!emailError || !!passwordError || !!confirmPasswordError 
+  )
   const router = useRouter();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!emailError && !passwordError && !confirmPasswordError) {
       startTransition(async () => {
-        const formData = new FormData(event.currentTarget);
         const response = await fetch('/api/auth/sign-up', {
           method: 'POST',
           body: JSON.stringify({
-            name: formData.get('name'),
-            email: formData.get('email'),
-            password: formData.get('password'),
+            name: name,
+            email: email,
+            password: password,
           }),
         });
         const data = await response.json();
         if (data.errorMessage) {
           toast.error(data.errorMessage);
         } else if (!data.error) {
+          toast.success('Signed Up! You will be redirected to app in a blink of an eye')
           router.push('/app');
           router.refresh();
         }
@@ -66,10 +69,6 @@ export default function SignUpForm() {
       component="form"
       onSubmit={handleSubmit}
     >
-      <Toaster
-        position="top-center"
-        richColors
-      />
       <CardHeader
         sx={{
           textAlign: 'center',
@@ -125,7 +124,7 @@ export default function SignUpForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={isPending}
+          disabled={isFormValid}
         >
           {isPending ? 'loading...' : 'Sign up'}
         </Button>

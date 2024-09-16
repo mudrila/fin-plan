@@ -1,26 +1,29 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({
-    req,
-    secret: process.env.AUTH_SECRET!,
-    salt: process.env.PASSWORD_SALT!,
-  });
+export function middleware(req: NextRequest) {
 
+  const secret = process.env.AUTH_SECRET
+  const salt = process.env.PASSWORD_SALT
+
+  if (!secret || !salt) {
+    throw new Error('You need to set AUTH_SECRET and PASSWORD_SALT')
+  }
+
+
+  const sessionUser = req.auth?.user;
   const { pathname } = req.nextUrl;
 
-  if (token && (pathname === '/sign-in' || pathname === '/sign-up')) {
+  if (sessionUser && (pathname === '/sign-in' || pathname === '/sign-up')) {
     return NextResponse.redirect(new URL('/app', req.url));
   }
 
-  if (!token && pathname.startsWith('/app')) {
+  if (!sessionUser && pathname.startsWith('/app')) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ['/app/:path*', '/sign-in', '/sign-up'],
