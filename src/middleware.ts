@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
+import { auth } from "@/utils/auth"
 
-export function middleware(req: NextRequest) {
+export default auth((req) => {
   const secret = process.env.AUTH_SECRET;
   const salt = process.env.PASSWORD_SALT;
 
@@ -21,7 +21,7 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ['/app/:path*', '/sign-in', '/sign-up'],
