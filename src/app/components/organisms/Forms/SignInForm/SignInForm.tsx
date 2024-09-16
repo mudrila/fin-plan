@@ -1,37 +1,25 @@
 'use client';
 
-import {
-  Button,
-  TextField,
-  CardContent,
-  Card,
-  CardHeader,
-  CardActions,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useState } from 'react';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
-export default function SignUpForm() {
-  const [name, setName] = useState('');
+export default function SignInForm() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const isFormValid = !emailError && !passwordError;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!emailError && !passwordError && !confirmPasswordError) {
-      alert('Form is valid, submitting...');
-      // redirect
+    if (isFormValid) {
+      alert('Sign in');
     }
   };
 
@@ -41,6 +29,7 @@ export default function SignUpForm() {
         justifyContent: 'center',
         textAlign: 'center',
         p: 2,
+        mt: 10,
       }}
       component="form"
       onSubmit={handleSubmit}
@@ -49,20 +38,9 @@ export default function SignUpForm() {
         sx={{
           textAlign: 'center',
         }}
-        title="Sign Up"
+        title="Sign In"
       />
       <CardContent>
-        <Box sx={{ marginBottom: 3, width: 488 }}>
-          <TextField
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
-        </Box>
         <Box sx={{ marginBottom: 3, width: 488 }}>
           <EmailInput
             value={email}
@@ -76,19 +54,7 @@ export default function SignUpForm() {
           onChange={e => setPassword(e.target.value)}
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
-          showPasswordStrength={true}
-        />
-        <PasswordInput
-          onError={setConfirmPasswordError}
-          onChange={e => setConfirmPassword(e.target.value)}
-          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
-          value={confirmPassword}
           showPasswordStrength={false}
-          name="confirmPassword"
-          label="Confirm Password"
-          id="confirm-password"
-          isConfirmPassword={true}
-          primaryPassword={password}
         />
       </CardContent>
       <CardActions>
@@ -96,8 +62,9 @@ export default function SignUpForm() {
           type="submit"
           fullWidth
           variant="contained"
+          disabled={!isFormValid}
         >
-          Sign up
+          Sign in
         </Button>
       </CardActions>
       <Box sx={{ mt: 2 }}>
@@ -106,9 +73,9 @@ export default function SignUpForm() {
           component="span"
           sx={{ marginRight: 1 }}
         >
-          Already have an account?
+          {`Don't have an account?`}
         </Typography>
-        <Link href="/sign-in">Sign In</Link>
+        <Link href="/sign-up">Sign Up</Link>
       </Box>
     </Card>
   );
