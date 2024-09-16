@@ -6,9 +6,16 @@ interface EmailInputProps {
   onError: (errorMessage: string) => void;
   value: string;
   errorMessage: string | null;
+  disabled?: boolean;
 }
 
-export default function EmailInput({ onChange, onError, value, errorMessage }: EmailInputProps) {
+export default function EmailInput({
+  onChange,
+  onError,
+  value,
+  errorMessage,
+  disabled,
+}: EmailInputProps) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +36,7 @@ export default function EmailInput({ onChange, onError, value, errorMessage }: E
       label="Email Address"
       name="email"
       value={value}
+      disabled={disabled}
       onChange={handleEmailChange}
       error={!!errorMessage}
       helperText={errorMessage}

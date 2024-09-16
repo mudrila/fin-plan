@@ -23,6 +23,7 @@ interface PasswordInputProps {
   id?: string;
   isConfirmPassword?: boolean;
   primaryPassword?: string;
+  disabled?: boolean;
 }
 
 export default function PasswordInput({
@@ -36,6 +37,7 @@ export default function PasswordInput({
   id = 'password',
   isConfirmPassword = false,
   primaryPassword,
+  disabled,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
@@ -118,6 +120,7 @@ export default function PasswordInput({
         label={label}
         id={id}
         value={value}
+        disabled={disabled}
         onChange={handlePasswordChange}
         error={!!passwordError}
         helperText={passwordError}
@@ -136,20 +139,20 @@ export default function PasswordInput({
         }}
       />
       {showPasswordStrength && (
-        <LinearProgress
-          variant="determinate"
-          value={(passwordStrength / 5) * 100}
-          color={progressColor}
-          sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
-        />
-      )}
-      {showPasswordStrength && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          {`Password strength: ${passwordStrengthDescription}`}
-        </Typography>
+        <>
+          <LinearProgress
+            variant="determinate"
+            value={(passwordStrength / 5) * 100}
+            color={progressColor}
+            sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
+          />
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            {`Password strength: ${passwordStrengthDescription}`}
+          </Typography>
+        </>
       )}
     </Box>
   );
