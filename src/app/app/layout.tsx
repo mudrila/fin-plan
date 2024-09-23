@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
+import MiniDrawer from '@/app/components/navigation/NavigationSidebar';
 
 export default function AppLayout({ children }: PropsWithChildren) {
-  return <>{children}</>;
+  return <MiniDrawer>{children}</MiniDrawer>;
 }
