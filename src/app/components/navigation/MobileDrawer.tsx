@@ -1,5 +1,14 @@
-import { SwipeableDrawer, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton } from '@mui/material';
 import { ChevronLeft } from '@mui/icons-material';
+import {
+  SwipeableDrawer,
+  List,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 
@@ -26,7 +35,11 @@ interface MobileDrawerProps {
   handleDrawerOpen: () => void;
 }
 
-export default function MobileDrawer({ open, handleDrawerClose, handleDrawerOpen }: MobileDrawerProps) {
+export default function MobileDrawer({
+  open,
+  handleDrawerClose,
+  handleDrawerOpen,
+}: MobileDrawerProps) {
   return (
     <SwipeableDrawer
       anchor="left"
@@ -51,22 +64,24 @@ export default function MobileDrawer({ open, handleDrawerClose, handleDrawerOpen
       <Divider />
       <List>
         <ListItem disablePadding>
-          <StyledLink href="/app" passHref>
+          <StyledLink
+            href="/app"
+            passHref
+          >
             <ListItemButton>
-              <ListItemIcon>
-                D
-              </ListItemIcon>
+              <ListItemIcon>D</ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItemButton>
           </StyledLink>
         </ListItem>
 
         <ListItem disablePadding>
-          <StyledLink href="/app/budget" passHref>
+          <StyledLink
+            href="/app/budget"
+            passHref
+          >
             <ListItemButton>
-              <ListItemIcon>
-                B
-              </ListItemIcon>
+              <ListItemIcon>B</ListItemIcon>
               <ListItemText primary="Budget" />
             </ListItemButton>
           </StyledLink>

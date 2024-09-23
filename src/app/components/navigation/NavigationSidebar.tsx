@@ -12,15 +12,15 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Link from 'next/link';
 import { useState, PropsWithChildren } from 'react';
-import Header from '@/app/components/molecules/Header/Header';
 import MobileDrawer from './MobileDrawer';
+import Header from '@/app/components/molecules/Header/Header';
 
 const drawerWidth = 180;
 
@@ -139,7 +139,11 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
         </Toolbar>
       </AppBar>
       {isMobile ? (
-        <MobileDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen} />
+        <MobileDrawer
+          open={open}
+          handleDrawerClose={handleDrawerClose}
+          handleDrawerOpen={handleDrawerOpen}
+        />
       ) : (
         <Drawer
           variant="permanent"
@@ -158,8 +162,14 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
           </DrawerHeader>
           <Divider />
           <List>
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <StyledLink href="/app" passHref>
+            <ListItem
+              disablePadding
+              sx={{ display: 'block' }}
+            >
+              <StyledLink
+                href="/app"
+                passHref
+              >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -188,8 +198,14 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
               </StyledLink>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <StyledLink href="/app/budget" passHref>
+            <ListItem
+              disablePadding
+              sx={{ display: 'block' }}
+            >
+              <StyledLink
+                href="/app/budget"
+                passHref
+              >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
