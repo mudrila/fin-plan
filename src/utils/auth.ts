@@ -2,7 +2,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { User } from '@prisma/client';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { prisma } from './prisma';
+import prisma from './prisma';
 import { generateHashPassword } from './';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({

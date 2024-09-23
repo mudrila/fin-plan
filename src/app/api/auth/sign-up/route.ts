@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { emailRegex, passwordRegex } from '@/constants/content';
 import { generateHashPassword } from '@/utils';
-import { prisma } from '@/utils/prisma';
+import prisma from '@/utils/prisma';
 
 export async function POST(request: Request) {
   try {
