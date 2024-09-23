@@ -11,7 +11,9 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition, FormEvent } from 'react';
+import { toast } from 'sonner';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
@@ -21,17 +23,45 @@ export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const isFormValid =
+    isPending ||
+    !name ||
+    !email ||
+    !password ||
+    !confirmPassword ||
+    !!emailError ||
+    !!passwordError ||
+    !!confirmPasswordError;
+  const router = useRouter();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!emailError && !passwordError && !confirmPasswordError) {
-      alert('Form is valid, submitting...');
-      // redirect
+      startTransition(async () => {
+        const response = await fetch('/api/auth/sign-up', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+          }),
+        });
+        const data = await response.json();
+        if (data.errorMessage) {
+          toast.error(data.errorMessage);
+        } else if (!data.error) {
+          toast.success('Signed Up! You will be redirected to app in a blink of an eye');
+          router.push('/app');
+          router.refresh();
+        }
+      });
     }
   };
 
@@ -61,6 +91,7 @@ export default function SignUpForm() {
             name="name"
             value={name}
             onChange={e => setName(e.target.value)}
+            disabled={isPending}
           />
         </Box>
         <Box sx={{ marginBottom: 3, width: 488 }}>
@@ -69,6 +100,7 @@ export default function SignUpForm() {
             errorMessage={emailError}
             onError={setEmailError}
             onChange={e => setEmail(e.target.value)}
+            disabled={isPending}
           />
         </Box>
         <PasswordInput
@@ -77,6 +109,7 @@ export default function SignUpForm() {
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
           showPasswordStrength={true}
+          disabled={isPending}
         />
         <PasswordInput
           onError={setConfirmPasswordError}
@@ -87,8 +120,9 @@ export default function SignUpForm() {
           name="confirmPassword"
           label="Confirm Password"
           id="confirm-password"
-          isConfirmPassword={true}
+          isConfirmPassword
           primaryPassword={password}
+          disabled={isPending}
         />
       </CardContent>
       <CardActions>
@@ -96,8 +130,9 @@ export default function SignUpForm() {
           type="submit"
           fullWidth
           variant="contained"
+          disabled={isFormValid}
         >
-          Sign up
+          {isPending ? 'loading...' : 'Sign up'}
         </Button>
       </CardActions>
       <Box sx={{ mt: 2 }}>
