@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { useState, useTransition, FormEvent } from 'react';
 import { toast } from 'sonner';
 
@@ -38,7 +38,6 @@ export default function SignUpForm() {
     !!emailError ||
     !!passwordError ||
     !!confirmPasswordError;
-  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,9 +47,9 @@ export default function SignUpForm() {
         const response = await fetch('/api/auth/sign-up', {
           method: 'POST',
           body: JSON.stringify({
-            name: name,
-            email: email,
-            password: password,
+            name,
+            email,
+            password,
           }),
         });
         const data = await response.json();
@@ -58,8 +57,11 @@ export default function SignUpForm() {
           toast.error(data.errorMessage);
         } else if (!data.error) {
           toast.success('Signed Up! You will be redirected to app in a blink of an eye');
-          router.push('/app');
-          router.refresh();
+          await signIn('email-and-password', {
+            redirectTo: '/app',
+            email,
+            password,
+          });
         }
       });
     }
@@ -108,7 +110,7 @@ export default function SignUpForm() {
           onChange={e => setPassword(e.target.value)}
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
-          showPasswordStrength={true}
+          showPasswordStrength
           disabled={isPending}
         />
         <PasswordInput

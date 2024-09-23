@@ -88,8 +88,7 @@ export default function PasswordInput({
       }
     } else {
       evaluatePasswordStrength(newPassword);
-
-      if (!newPassword.match(passwordRegex)) {
+      if (!passwordRegex.test(newPassword)) {
         const errorMessage =
           'Password must be at least 8 characters, have 1 lowercase, 1 uppercase, 1 number, and 1 special symbol';
         onError(errorMessage);
