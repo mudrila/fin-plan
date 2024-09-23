@@ -12,10 +12,14 @@ import {
   MenuItem,
   ListItemIcon,
 } from '@mui/material';
+import type { Session } from 'next-auth';
 import { useState, MouseEvent } from 'react';
+import { auth } from '@/utils/auth';
 
-export default function Header() {
+export default async function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const session: Session | null = await auth();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -73,7 +77,9 @@ export default function Header() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <Typography sx={{ textAlign: 'center', p: 1 }}>Hello, user.name</Typography>
+          <Typography sx={{ textAlign: 'center', p: 1 }}>
+            Hello, {session ? session.user?.name : 'user'}
+          </Typography>
           {/* For now */}
           <MenuItem>
             <ListItemIcon>
