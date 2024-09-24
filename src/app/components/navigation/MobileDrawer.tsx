@@ -1,16 +1,17 @@
 import { ChevronLeft } from '@mui/icons-material';
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import {
   SwipeableDrawer,
   List,
   Divider,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Link from 'next/link';
+import { StyledLink } from '@/app/components/atoms/Link/StyledNextLink';
 
 const drawerWidth = 180;
 
@@ -21,13 +22,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  display: block;
-`;
 
 interface MobileDrawerProps {
   open: boolean;
@@ -69,7 +63,7 @@ export default function MobileDrawer({
             passHref
           >
             <ListItemButton>
-              <ListItemIcon>D</ListItemIcon>
+              <SpaceDashboardIcon />
               <ListItemText primary="Dashboard" />
             </ListItemButton>
           </StyledLink>
@@ -81,7 +75,7 @@ export default function MobileDrawer({
             passHref
           >
             <ListItemButton>
-              <ListItemIcon>B</ListItemIcon>
+              <DonutSmallIcon />
               <ListItemText primary="Budget" />
             </ListItemButton>
           </StyledLink>

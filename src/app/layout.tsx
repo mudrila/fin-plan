@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { SessionProvider } from 'next-auth/react';
 import { PropsWithChildren } from 'react';
 import { Toaster } from 'sonner';
 import theme from '@/theme';
@@ -14,7 +15,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
               position="top-center"
               richColors
             />
-            {children}
+            <SessionProvider>{children}</SessionProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

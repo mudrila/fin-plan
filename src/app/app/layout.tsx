@@ -1,6 +1,12 @@
+import { CssBaseline } from '@mui/material';
 import { PropsWithChildren } from 'react';
-import MiniDrawer from '@/app/components/navigation/NavigationSidebar';
+import NavigationWrapper from '@/app/components/navigation/NavigationSidebar';
 
 export default function AppLayout({ children }: PropsWithChildren) {
-  return <MiniDrawer>{children}</MiniDrawer>;
+  return (
+    <>
+      <CssBaseline />
+      <NavigationWrapper>{children}</NavigationWrapper>
+    </>
+  );
 }

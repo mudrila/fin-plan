@@ -11,15 +11,16 @@ import {
   Tooltip,
   MenuItem,
   ListItemIcon,
+  Button,
 } from '@mui/material';
-import type { Session } from 'next-auth';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
-import { auth } from '@/utils/auth';
 
-export default async function Header() {
+export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const session: Session | null = await auth();
+  const session = useSession();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -31,10 +32,8 @@ export default async function Header() {
 
   return (
     <Toolbar disableGutters>
-      <Typography
-        variant="h6"
-        noWrap
-        component="a"
+      <Button
+        LinkComponent={Link}
         href="/"
         sx={{
           mr: 2,
@@ -44,10 +43,11 @@ export default async function Header() {
           letterSpacing: '.1rem',
           color: 'inherit',
           textDecoration: 'none',
+          fontSize: 18,
         }}
       >
         FinPlan UI
-      </Typography>
+      </Button>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
@@ -56,7 +56,7 @@ export default async function Header() {
             sx={{ p: 0 }}
           >
             <Avatar
-              alt="User avatar"
+              alt={session.data?.user?.name || 'User'}
               src=""
             />
           </IconButton>
@@ -78,9 +78,8 @@ export default async function Header() {
           onClose={handleCloseUserMenu}
         >
           <Typography sx={{ textAlign: 'center', p: 1 }}>
-            Hello, {session ? session.user?.name : 'user'}
+            Hello, {session.data?.user?.name}
           </Typography>
-          {/* For now */}
           <MenuItem>
             <ListItemIcon>
               <Logout fontSize="small" />

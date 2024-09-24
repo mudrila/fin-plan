@@ -1,25 +1,25 @@
 'use client';
 
 import { Menu, ChevronLeft } from '@mui/icons-material';
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import {
   Box,
   Toolbar,
   List,
-  CssBaseline,
   Divider,
   IconButton,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   useMediaQuery,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Link from 'next/link';
 import { useState, PropsWithChildren } from 'react';
 import MobileDrawer from './MobileDrawer';
+import { StyledLink } from '@/app/components/atoms/Link/StyledNextLink';
 import Header from '@/app/components/molecules/Header/Header';
 
 const drawerWidth = 180;
@@ -92,14 +92,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: prop => prop !== 'open' })
   }),
 );
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  display: block;
-`;
-
-export default function MiniDrawer({ children }: PropsWithChildren) {
+export default function NavigationWrapper({ children }: PropsWithChildren) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -115,7 +108,6 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
       <AppBar
         position="fixed"
         open={open}
@@ -179,15 +171,7 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
                     color: 'inherit',
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      justifyContent: 'center',
-                      mr: open ? 3 : 'auto',
-                    }}
-                  >
-                    D
-                  </ListItemIcon>
+                  <SpaceDashboardIcon />
                   <ListItemText
                     primary="Dashboard"
                     sx={{
@@ -213,15 +197,7 @@ export default function MiniDrawer({ children }: PropsWithChildren) {
                     px: 2.5,
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      justifyContent: 'center',
-                      mr: open ? 3 : 'auto',
-                    }}
-                  >
-                    B
-                  </ListItemIcon>
+                  <DonutSmallIcon />
                   <ListItemText
                     primary="Budget"
                     sx={{
