@@ -1,3 +1,4 @@
+import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { SessionProvider } from 'next-auth/react';
@@ -11,6 +12,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
+            <CssBaseline />
             <Toaster
               position="top-center"
               richColors
