@@ -14,7 +14,7 @@ import {
   Button,
 } from '@mui/material';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
 
 export default function Header() {
@@ -28,6 +28,10 @@ export default function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleSignOut = () => {
+    signOut();
   };
 
   return (
@@ -80,7 +84,7 @@ export default function Header() {
           <Typography sx={{ textAlign: 'center', p: 1 }}>
             Hello, {session.data?.user?.name}
           </Typography>
-          <MenuItem>
+          <MenuItem onClick={handleSignOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
