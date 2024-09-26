@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
@@ -14,34 +14,38 @@ export default function SignInForm() {
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
   const isFormValid = !emailError && !passwordError;
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    setLoading(true);
     event.preventDefault();
 
     if (isFormValid) {
-      startTransition(async () => {
-        const response = await fetch('/api/auth/sign-in', {
-          method: 'POST',
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+      try {
+        const result = await signIn('email-and-password', {
+          redirectTo: '/app',
+          email,
+          password,
+          redirect: false,
         });
-        const data = await response.json();
-        if (data.errorMessage) {
-          toast.error(data.errorMessage);
-        } else if (!data.error) {
-          toast.success('Signed In! You will be redirected to app in a blink of an eye');
-          await signIn('email-and-password', {
-            redirectTo: '/app',
-            email,
-            password,
+        if (!result || !!result.error || !result.ok) {
+          toast.error('User with given email and password was not found', {
+            duration: 3000,
           });
+        } else if (result.ok) {
+          toast.success('Welcome on board!', { duration: 3000 });
+          window.location.href = `/app?t=${Date.now()}`;
         }
-      });
+      } catch (e) {
+        console.error(e, 'Unexpected error while logging in');
+        toast.error('Unexpected error while processing login. Please, try again later', {
+          duration: 3000,
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -69,7 +73,7 @@ export default function SignInForm() {
             errorMessage={emailError}
             onError={setEmailError}
             onChange={e => setEmail(e.target.value)}
-            disabled={isPending}
+            disabled={loading}
           />
         </Box>
         <PasswordInput
@@ -78,7 +82,7 @@ export default function SignInForm() {
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
           showPasswordStrength={false}
-          disabled={isPending}
+          disabled={loading}
         />
       </CardContent>
       <CardActions>
@@ -86,7 +90,7 @@ export default function SignInForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={!isFormValid || isPending}
+          disabled={!isFormValid || loading}
         >
           Sign in
         </Button>
