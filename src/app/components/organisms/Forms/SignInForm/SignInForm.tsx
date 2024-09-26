@@ -2,7 +2,9 @@
 
 import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } from '@mui/material';
 import Link from 'next/link';
-import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
 
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
@@ -12,6 +14,7 @@ export default function SignInForm() {
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   const isFormValid = !emailError && !passwordError;
 
@@ -19,7 +22,26 @@ export default function SignInForm() {
     event.preventDefault();
 
     if (isFormValid) {
-      alert('Sign in');
+      startTransition(async () => {
+        const response = await fetch('/api/auth/sign-in', {
+          method: 'POST',
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+        const data = await response.json();
+        if (data.errorMessage) {
+          toast.error(data.errorMessage);
+        } else if (!data.error) {
+          toast.success('Signed In! You will be redirected to app in a blink of an eye');
+          await signIn('email-and-password', {
+            redirectTo: '/app',
+            email,
+            password,
+          });
+        }
+      });
     }
   };
 
@@ -47,6 +69,7 @@ export default function SignInForm() {
             errorMessage={emailError}
             onError={setEmailError}
             onChange={e => setEmail(e.target.value)}
+            disabled={isPending}
           />
         </Box>
         <PasswordInput
@@ -55,6 +78,7 @@ export default function SignInForm() {
           valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
           value={password}
           showPasswordStrength={false}
+          disabled={isPending}
         />
       </CardContent>
       <CardActions>
@@ -62,7 +86,7 @@ export default function SignInForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={!isFormValid}
+          disabled={!isFormValid || isPending}
         >
           Sign in
         </Button>
