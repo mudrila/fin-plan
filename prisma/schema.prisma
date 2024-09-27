@@ -47,6 +47,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  budgetAccounts BudgetAccount[]
 }
 
 model VerificationRequest {
@@ -58,4 +59,23 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
+}
+
+model BudgetAccount {
+  id           String            @id @default(uuid())
+  userId       String
+  title        String
+  description  String?
+  icon         String?
+  monthlyLimit Decimal           @default(0)
+  type         BudgetAccountType @default(Debit)
+  user         User              @relation(fields: [userId], references: [id])
+}
+
+enum BudgetAccountType {
+  Income
+  Debt
+  SpendingCategory
+  Credit
+  Debit
 }
