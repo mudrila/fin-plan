@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import {
   Button,
   TextField,
@@ -31,7 +31,7 @@ export default function BudgetAccountForm() {
     event.preventDefault();
 
     toast.message('Hand tight - we are creating budget account for ya...');
-		
+
     const formData = new FormData(event.currentTarget);
     const title = formData.get('title');
     const description = formData.get('description');

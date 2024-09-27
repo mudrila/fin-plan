@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import prisma from '@/utils/prisma';
 import { accountTypes } from '@/constants/content';
+import prisma from '@/utils/prisma';
 
 export async function POST(request: Request) {
   try {
