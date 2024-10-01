@@ -5,7 +5,8 @@ import prisma from '@/utils/prisma';
 
 export async function POST(request: Request) {
   try {
-    const { title, description, icon, monthlyLimit, type, userId } = await request.json();
+    const { title, description, icon, monthlyLimit, type, currentBalance, userId } =
+      await request.json();
 
     const BudgetAccountTypeEnum = z.enum(accountTypes);
 
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
         z.number().min(0, 'Monthly limit must be a positive number'),
       ),
       type: BudgetAccountTypeEnum.default('Debit'),
+      currentBalance: z.preprocess(val => Number(val), z.number()),
       userId: z.string().min(1),
     });
 
@@ -27,6 +29,7 @@ export async function POST(request: Request) {
       icon,
       monthlyLimit,
       type,
+      currentBalance,
       userId,
     });
 
@@ -39,15 +42,16 @@ export async function POST(request: Request) {
           icon,
           monthlyLimit,
           type,
+          currentBalance,
         },
       });
     }
 
-    return NextResponse.json({ message: 'Your account created!' });
+    return NextResponse.json({ success: true });
   } catch (e) {
     console.error(e, 'Error during account creation');
     return NextResponse.json({
-      errorMessage: 'Please check our data',
+      errorMessage: 'Unexpected error happened while creating budget account.',
     });
   }
 }
