@@ -12,10 +12,10 @@ import {
   Select,
   IconButton,
   FormControl,
-  InputLabel
+  InputLabel,
 } from '@mui/material';
-import { FixedSizeList } from 'react-window';
 import { useState, useTransition } from 'react';
+import { FixedSizeList } from 'react-window';
 import { toast } from 'sonner';
 import { accountTypes } from '@/constants/content';
 

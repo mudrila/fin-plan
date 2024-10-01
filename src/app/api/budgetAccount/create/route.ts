@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { accountTypes } from '@/constants/content';
-import prisma from '@/utils/prisma';
 import { auth } from '@/utils/auth';
+import prisma from '@/utils/prisma';
 
 export async function POST(request: Request) {
   try {
     const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
-    const session = await auth()
-    const userId = session?.user?.id
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({ errorMessage: 'No user session' });
