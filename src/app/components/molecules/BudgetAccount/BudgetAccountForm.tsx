@@ -10,12 +10,11 @@ import {
   DialogTitle,
   MenuItem,
   Select,
-  Grid2,
   IconButton,
   FormControl,
-  InputLabel,
+  InputLabel
 } from '@mui/material';
-import { useSession } from 'next-auth/react';
+import { FixedSizeList } from 'react-window';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { accountTypes } from '@/constants/content';
@@ -30,8 +29,8 @@ export default function BudgetAccountForm() {
   const [iconModalOpen, setIconModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const session = useSession();
-  const userId = session.data?.user?.id;
+  const iconList = Object.keys(Icons);
+  const iconsPerRow = 12;
 
   const handleIconClick = (iconName: string) => {
     setIcon(iconName);
@@ -67,7 +66,6 @@ export default function BudgetAccountForm() {
           icon,
           monthlyLimit,
           type,
-          userId,
           currentBalance: 0,
         }),
       });
@@ -88,6 +86,26 @@ export default function BudgetAccountForm() {
   const renderIcon = (iconName: string) => {
     const IconComponent = Icons[iconName as keyof typeof Icons];
     return IconComponent ? <IconComponent /> : null;
+  };
+
+  const IconRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const startIndex = index * iconsPerRow;
+    const endIndex = Math.min(startIndex + iconsPerRow, iconList.length);
+    const iconsForRow = iconList.slice(startIndex, endIndex);
+
+    return (
+      <div style={{ ...style, display: 'flex', justifyContent: 'space-around' }}>
+        {iconsForRow.map(iconName => (
+          <IconButton
+            key={iconName}
+            onClick={() => handleIconClick(iconName)}
+            title={iconName}
+          >
+            {renderIcon(iconName)}
+          </IconButton>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -135,52 +153,49 @@ export default function BudgetAccountForm() {
             onChange={e => setDescription(e.target.value)}
             disabled={isPending}
           />
-          <TextField
-            id="icon"
-            name="icon"
+          <FormControl
+            fullWidth
             margin="dense"
-            label="Icon"
-            type="text"
-            fullWidth
             variant="outlined"
-            value={icon || ''}
-            onClick={handleOpenIconModal}
-            disabled={isPending}
-            slotProps={{
-              input: {
-                readOnly: true,
-                endAdornment: icon ? renderIcon(icon) : null,
-              },
-            }}
-          />
-          <Dialog
-            open={iconModalOpen}
-            onClose={handleCloseIconModal}
-            fullWidth
-            maxWidth="md"
           >
-            <DialogTitle>Select an Icon</DialogTitle>
-            <DialogContent>
-              <Grid2
-                container
-                spacing={2}
-              >
-                {Object.keys(Icons).map(iconName => (
-                  <Grid2 key={iconName}>
-                    <IconButton
-                      onClick={() => handleIconClick(iconName)}
-                      title={iconName}
-                    >
-                      {renderIcon(iconName)}
-                    </IconButton>
-                  </Grid2>
-                ))}
-              </Grid2>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseIconModal}>Cancel</Button>
-            </DialogActions>
-          </Dialog>
+            <InputLabel id="icon-label">Icon</InputLabel>
+            <Select
+              id="icon"
+              name="icon"
+              label="Icon"
+              labelId="icon-label"
+              fullWidth
+              value={icon || ''}
+              onClick={handleOpenIconModal}
+              readOnly
+              inputProps={{
+                readOnly: true,
+              }}
+              startAdornment={icon ? renderIcon(icon) : null}
+            />
+
+            <Dialog
+              open={iconModalOpen}
+              onClose={handleCloseIconModal}
+              fullWidth
+              maxWidth="md"
+            >
+              <DialogTitle>Select an Icon</DialogTitle>
+              <DialogContent>
+                <FixedSizeList
+                  height={400}
+                  width="100%"
+                  itemSize={35}
+                  itemCount={iconList.length}
+                >
+                  {IconRow}
+                </FixedSizeList>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseIconModal}>Cancel</Button>
+              </DialogActions>
+            </Dialog>
+          </FormControl>
           <TextField
             id="monthlyLimit"
             name="monthlyLimit"
