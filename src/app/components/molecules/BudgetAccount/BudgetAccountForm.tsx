@@ -1,5 +1,4 @@
 'use client';
-import * as Icons from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import {
   Button,
@@ -10,13 +9,12 @@ import {
   DialogTitle,
   MenuItem,
   Select,
-  IconButton,
   FormControl,
   InputLabel,
 } from '@mui/material';
 import { useState, useTransition } from 'react';
-import { FixedSizeList } from 'react-window';
 import { toast } from 'sonner';
+import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
 
 export default function BudgetAccountForm() {
@@ -26,24 +24,7 @@ export default function BudgetAccountForm() {
   const [monthlyLimit, setMonthlyLimit] = useState('0');
   const [type, setType] = useState('Debit');
   const [icon, setIcon] = useState('');
-  const [iconModalOpen, setIconModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-
-  const iconList = Object.keys(Icons);
-  const iconsPerRow = 12;
-
-  const handleIconClick = (iconName: string) => {
-    setIcon(iconName);
-    setIconModalOpen(false);
-  };
-
-  const handleOpenIconModal = () => {
-    setIconModalOpen(true);
-  };
-
-  const handleCloseIconModal = () => {
-    setIconModalOpen(false);
-  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,31 +62,6 @@ export default function BudgetAccountForm() {
         toast.error('Something went wrong...');
       }
     });
-  };
-
-  const renderIcon = (iconName: string) => {
-    const IconComponent = Icons[iconName as keyof typeof Icons];
-    return IconComponent ? <IconComponent /> : null;
-  };
-
-  const IconRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
-    const startIndex = index * iconsPerRow;
-    const endIndex = Math.min(startIndex + iconsPerRow, iconList.length);
-    const iconsForRow = iconList.slice(startIndex, endIndex);
-
-    return (
-      <div style={{ ...style, display: 'flex', justifyContent: 'space-around' }}>
-        {iconsForRow.map(iconName => (
-          <IconButton
-            key={iconName}
-            onClick={() => handleIconClick(iconName)}
-            title={iconName}
-          >
-            {renderIcon(iconName)}
-          </IconButton>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -153,49 +109,10 @@ export default function BudgetAccountForm() {
             onChange={e => setDescription(e.target.value)}
             disabled={isPending}
           />
-          <FormControl
-            fullWidth
-            margin="dense"
-            variant="outlined"
-          >
-            <InputLabel id="icon-label">Icon</InputLabel>
-            <Select
-              id="icon"
-              name="icon"
-              label="Icon"
-              labelId="icon-label"
-              fullWidth
-              value={icon || ''}
-              onClick={handleOpenIconModal}
-              readOnly
-              inputProps={{
-                readOnly: true,
-              }}
-              startAdornment={icon ? renderIcon(icon) : null}
-            />
-
-            <Dialog
-              open={iconModalOpen}
-              onClose={handleCloseIconModal}
-              fullWidth
-              maxWidth="md"
-            >
-              <DialogTitle>Select an Icon</DialogTitle>
-              <DialogContent>
-                <FixedSizeList
-                  height={400}
-                  width="100%"
-                  itemSize={35}
-                  itemCount={iconList.length}
-                >
-                  {IconRow}
-                </FixedSizeList>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseIconModal}>Cancel</Button>
-              </DialogActions>
-            </Dialog>
-          </FormControl>
+          <IconSelect
+            icon={icon}
+            setIcon={setIcon}
+          />
           <TextField
             id="monthlyLimit"
             name="monthlyLimit"
