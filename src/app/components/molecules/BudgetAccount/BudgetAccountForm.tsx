@@ -16,6 +16,7 @@ import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
+import { useRouter } from 'next/navigation';
 
 export default function BudgetAccountForm() {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function BudgetAccountForm() {
   const [type, setType] = useState('Debit');
   const [icon, setIcon] = useState('');
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,6 +60,7 @@ export default function BudgetAccountForm() {
       } else if (responseData.success) {
         toast.success('Your budget account created!', { duration: 5000 });
         handleClose();
+        router.refresh();
       } else {
         toast.error('Something went wrong...');
       }
