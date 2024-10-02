@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
@@ -25,6 +26,7 @@ export default function BudgetAccountForm() {
   const [type, setType] = useState('Debit');
   const [icon, setIcon] = useState('');
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,6 +58,7 @@ export default function BudgetAccountForm() {
       if (responseData.errorMessage) {
         toast.error(responseData.errorMessage);
       } else if (responseData.success) {
+        router.refresh();
         toast.success('Your budget account created!', { duration: 5000 });
         handleClose();
       } else {
