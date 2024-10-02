@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
-import BudgetAccountList from '@/app/components/molecules/BudgetAccount/BudgetAccountList';
 import BudgetAccountForm from '@/app/components/molecules/BudgetAccount/BudgetAccountForm';
+import BudgetAccountList from '@/app/components/molecules/BudgetAccount/BudgetAccountList';
 import { SerializedBudgetAccount } from '@/constants/content';
 
 export default function Budget({ accounts }: { accounts: SerializedBudgetAccount[] }) {
