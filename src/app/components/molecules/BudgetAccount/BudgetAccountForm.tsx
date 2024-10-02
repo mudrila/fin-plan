@@ -11,17 +11,10 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Typography,
-  Divider,
 } from '@mui/material';
-import { BudgetAccount } from '@prisma/client';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
-import { IconSelect, IconRenderrer } from '@/app/components/molecules/IconSelect/IconSelect';
+import { IconSelect } from '@/app/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
 
 export default function BudgetAccountForm() {
@@ -32,12 +25,6 @@ export default function BudgetAccountForm() {
   const [type, setType] = useState('Debit');
   const [icon, setIcon] = useState('');
   const [isPending, startTransition] = useTransition();
-
-  const [budgetAccounts, setBudgetAccounts] = useState<{
-    incomeAccounts: BudgetAccount[];
-    debtCreditDebitGoalAccounts: BudgetAccount[];
-    spendingCategories: BudgetAccount[];
-  } | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,105 +64,15 @@ export default function BudgetAccountForm() {
     });
   };
 
-  useEffect(() => {
-    async function getAccounts() {
-      const response = await fetch('/api/budgetAccount/get', { method: 'GET' });
-
-      try {
-        const data = await response.json();
-
-        const incomeAccounts = data.filter((account: BudgetAccount) => account.type === 'Income');
-        const debtCreditDebitGoalAccounts = data.filter((account: BudgetAccount) =>
-          ['Debit', 'Credit', 'Debt', 'Goal'].includes(account.type),
-        );
-        const spendingCategories = data.filter(
-          (account: BudgetAccount) => account.type === 'SpendingCategory',
-        );
-
-        setBudgetAccounts({
-          incomeAccounts,
-          debtCreditDebitGoalAccounts,
-          spendingCategories,
-        });
-      } catch (error) {
-        console.error('error during parsing json', error);
-      }
-    }
-    getAccounts();
-  }, []);
-
   return (
     <>
-      <Box sx={{ textAlign: 'center' }}>
-        <Box
-          justifyContent={'space-between'}
-          display={'flex'}
-        >
-          <Typography variant="h5">Your budget accounts</Typography>
-          <Button
-            variant="outlined"
-            onClick={handleClickOpen}
-            endIcon={<AddIcon />}
-          >
-            Create Budget Account
-          </Button>
-        </Box>
-        <Divider sx={{ marginY: 2 }} />
-        {[
-          { accounts: budgetAccounts?.incomeAccounts, title: 'Income Accounts' },
-          {
-            accounts: budgetAccounts?.debtCreditDebitGoalAccounts,
-            title: 'Debt/Credit/Debit/Goal Accounts',
-          },
-          { accounts: budgetAccounts?.spendingCategories, title: 'Spending Categories' },
-        ].map((group, index) => {
-          return (
-            <Box key={index}>
-              <Typography
-                variant="h6"
-                sx={{ textAlign: 'center' }}
-              >
-                {group.title}
-              </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  margin: 1,
-                  flexWrap: 'wrap',
-                }}
-              >
-                {group.accounts?.map(account => {
-                  return (
-                    <Card
-                      key={account.id}
-                      sx={{ width: 150, height: 150, marginBottom: 1, marginRight: 1 }}
-                    >
-                      <CardHeader
-                        title={
-                          account.icon ? (
-                            <Box
-                              display="flex"
-                              alignItems="center"
-                            >
-                              <IconRenderrer iconName={account.icon} />
-                              <Box ml={1}>{account.title}</Box>
-                            </Box>
-                          ) : (
-                            account.title
-                          )
-                        }
-                      />
-                      <CardContent>{`Limit: ${account.monthlyLimit}`}</CardContent>
-                    </Card>
-                  );
-                })}
-              </Box>
-            </Box>
-          );
-        })}
-        <Divider />
-      </Box>
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        endIcon={<AddIcon />}
+      >
+        Create Budget Account
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
