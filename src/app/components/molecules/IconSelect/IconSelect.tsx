@@ -23,7 +23,12 @@ interface IconSelectProps {
   setIcon: (e: string) => void;
 }
 
-export default function IconSelect({ icon, setIcon }: IconSelectProps) {
+export function IconRenderrer({ iconName }: { iconName: string }) {
+  const IconComponent = Icons[iconName as keyof typeof Icons];
+  return IconComponent ? <IconComponent /> : null;
+}
+
+export function IconSelect({ icon, setIcon }: IconSelectProps) {
   const handleIconClick = (iconName: string) => {
     setIcon(iconName);
     setIconModalOpen(false);
@@ -43,11 +48,6 @@ export default function IconSelect({ icon, setIcon }: IconSelectProps) {
   const iconList = Object.keys(Icons);
 
   const iconsPerRow = isMobile ? 6 : 12;
-
-  function IconRenderrer({ iconName }: { iconName: string }) {
-    const IconComponent = Icons[iconName as keyof typeof Icons];
-    return IconComponent ? <IconComponent /> : null;
-  }
 
   const IconRow = ({ index, style }: { index: number; style: CSSProperties }) => {
     const startIndex = index * iconsPerRow;
