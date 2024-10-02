@@ -58,9 +58,9 @@ export default function BudgetAccountForm() {
       if (responseData.errorMessage) {
         toast.error(responseData.errorMessage);
       } else if (responseData.success) {
+        router.refresh();
         toast.success('Your budget account created!', { duration: 5000 });
         handleClose();
-        router.refresh();
       } else {
         toast.error('Something went wrong...');
       }
