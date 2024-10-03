@@ -1,5 +1,3 @@
-import { BudgetAccountType } from '@prisma/client';
-
 export const PASSWORD_STRENGTH_DESCRIPTIONS = [
   '',
   'Very Weak',
@@ -19,14 +17,3 @@ export const accountTypes = [
   'Debit',
   'Goal',
 ] as const;
-
-export interface SerializedBudgetAccount {
-  id: string;
-  userId: string;
-  title: string;
-  description: string | null;
-  icon: string | null;
-  monthlyLimit: number;
-  currentBalance: number;
-  type: BudgetAccountType;
-}

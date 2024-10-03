@@ -28,7 +28,7 @@ export function IconRenderrer({ iconName }: { iconName: string }) {
   return IconComponent ? <IconComponent /> : null;
 }
 
-export function IconSelect({ icon, setIcon }: IconSelectProps) {
+export default function IconSelect({ icon, setIcon }: IconSelectProps) {
   const handleIconClick = (iconName: string) => {
     setIcon(iconName);
     setIconModalOpen(false);

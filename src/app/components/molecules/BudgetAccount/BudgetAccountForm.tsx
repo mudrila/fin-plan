@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
-import { IconSelect } from '@/app/components/molecules/IconSelect/IconSelect';
+import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
 
 export default function BudgetAccountForm() {
