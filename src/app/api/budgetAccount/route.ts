@@ -5,13 +5,14 @@ import { budgetAccountSchema } from '@/utils/schemas';
 
 export async function POST(request: Request) {
   try {
-    const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
     const session = await auth();
     const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({ errorMessage: 'No user session' });
     }
+
+    const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
 
     const validatedData = budgetAccountSchema.parse({
       title,
@@ -35,9 +36,12 @@ export async function POST(request: Request) {
           currentBalance,
         },
       });
+      return NextResponse.json({ success: true });
+    } else {
+      return NextResponse.json({
+        errorMessage: 'Data provided for Budget Account creation is invalid!',
+      });
     }
-
-    return NextResponse.json({ success: true });
   } catch (e) {
     console.error(e, 'Error during account creation');
     return NextResponse.json({

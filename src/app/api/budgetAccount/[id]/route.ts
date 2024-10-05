@@ -5,14 +5,15 @@ import { budgetAccountSchema } from '@/utils/schemas';
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
-    const id = params.id;
     const session = await auth();
     const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({ errorMessage: 'No user session' });
     }
+
+    const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
+    const id = params.id;
 
     const validatedData = budgetAccountSchema.parse({
       title,
@@ -25,12 +26,12 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     });
 
     const existingAccount = await prisma.budgetAccount.findUnique({
-      where: { id },
+      where: { id, userId },
     });
 
-    if (!existingAccount || existingAccount.userId !== userId) {
+    if (!existingAccount) {
       return NextResponse.json({
-        errorMessage: "You don't have permission to edit this account",
+        errorMessage: "You don't have permission to edit this budget account",
       });
     }
 
@@ -48,13 +49,12 @@ export async function PUT(request: Request, { params }: { params: { id: string }
           currentBalance,
         },
       });
+      return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({
         errorMessage: 'Data provided for Budget Account update is invalid!',
       });
     }
-
-    return NextResponse.json({ success: true });
   } catch (e) {
     console.error(e, 'Error during account updating');
     return NextResponse.json({

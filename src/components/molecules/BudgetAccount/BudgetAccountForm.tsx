@@ -1,4 +1,5 @@
 'use client';
+
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -45,37 +46,44 @@ export default function BudgetAccountForm({
   };
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
-    const loadingToastId = toast.info('Hand tight - we are creating budget account for ya...');
+    const loadingToastId = toast.loading('Hand tight - we are creating budget account for ya...');
 
     startTransition(async () => {
-      const response = await fetch(
-        account ? `/api/budgetAccount/${account.id}` : '/api/budgetAccount/create',
-        {
-          method: account ? 'PUT' : 'POST',
-          body: JSON.stringify({
-            title,
-            description,
-            icon,
-            monthlyLimit,
-            type,
-            currentBalance,
-          }),
-        },
-      );
-      const responseData = await response.json();
-      toast.dismiss(loadingToastId);
-
-      if (responseData.errorMessage) {
-        toast.error(responseData.errorMessage);
-      } else if (responseData.success) {
-        router.refresh();
-        toast.success(`Your budget account ${account ? 'updated' : 'created'}!`, {
-          duration: 5000,
-        });
-        handleClose();
-      } else {
-        toast.error('Something went wrong...');
+      try {
+        const response = await fetch(
+          account ? `/api/budgetAccount/${account.id}` : '/api/budgetAccount',
+          {
+            method: account ? 'PUT' : 'POST',
+            body: JSON.stringify({
+              title,
+              description,
+              icon,
+              monthlyLimit,
+              type,
+              currentBalance,
+            }),
+          },
+        );
+        const responseData = await response.json();
+  
+        if (responseData.errorMessage) {
+          toast.error(responseData.errorMessage, { id: loadingToastId });
+        } else if (responseData.success) {
+          router.refresh();
+          toast.success(
+            `Budget Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,
+            {
+              duration: 5000,
+              id: loadingToastId
+            },
+          );
+          handleClose();
+        } else {
+          toast.error('Something went wrong...', { id: loadingToastId });
+        }
+      } catch (e) {
+        console.error('Error while creating / updating budget account', e);
+        toast.error('Something went wrong...', { id: loadingToastId });
       }
     });
   };
@@ -96,7 +104,7 @@ export default function BudgetAccountForm({
           onClick={handleClickOpen}
           endIcon={<AddIcon />}
         >
-          Create Budget Account
+          Budget Account
         </Button>
       )}
       <Dialog
@@ -107,7 +115,7 @@ export default function BudgetAccountForm({
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>{account ? 'Edit' : 'Create Budget Account'}</DialogTitle>
+        <DialogTitle>{account ? `Edit ${account.title}` : 'Create Budget Account'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
