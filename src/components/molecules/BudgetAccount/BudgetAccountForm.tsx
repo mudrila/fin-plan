@@ -1,30 +1,38 @@
 'use client';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  IconButton,
+  InputLabel,
   MenuItem,
   Select,
-  FormControl,
-  InputLabel,
+  TextField,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { FormEvent, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import IconSelect from '@/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
+import { SerializedBudgetAccount } from '@/types/budget';
 
-export default function BudgetAccountForm() {
+export default function BudgetAccountForm({
+  account = null,
+}: {
+  account?: SerializedBudgetAccount | null;
+}) {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [monthlyLimit, setMonthlyLimit] = useState('0');
-  const [type, setType] = useState('Debit');
-  const [icon, setIcon] = useState('');
+  const [title, setTitle] = useState(account?.title || '');
+  const [description, setDescription] = useState(account?.description || '');
+  const [monthlyLimit, setMonthlyLimit] = useState(account?.monthlyLimit?.toString() || '0');
+  const [type, setType] = useState(account?.type.toString() || 'Debit');
+  const [icon, setIcon] = useState(account?.icon || '');
+  const [currentBalance, setCurrentBalance] = useState(account?.currentBalance?.toString() || '');
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -35,23 +43,26 @@ export default function BudgetAccountForm() {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const loadingToastId = toast.info('Hand tight - we are creating budget account for ya...');
 
     startTransition(async () => {
-      const response = await fetch('/api/budgetAccount/create', {
-        method: 'POST',
-        body: JSON.stringify({
-          title,
-          description,
-          icon,
-          monthlyLimit,
-          type,
-          currentBalance: 0,
-        }),
-      });
+      const response = await fetch(
+        account ? `/api/budgetAccount/${account.id}` : '/api/budgetAccount/create',
+        {
+          method: account ? 'PUT' : 'POST',
+          body: JSON.stringify({
+            title,
+            description,
+            icon,
+            monthlyLimit,
+            type,
+            currentBalance,
+          }),
+        },
+      );
       const responseData = await response.json();
       toast.dismiss(loadingToastId);
 
@@ -59,7 +70,9 @@ export default function BudgetAccountForm() {
         toast.error(responseData.errorMessage);
       } else if (responseData.success) {
         router.refresh();
-        toast.success('Your budget account created!', { duration: 5000 });
+        toast.success(`Your budget account ${account ? 'updated' : 'created'}!`, {
+          duration: 5000,
+        });
         handleClose();
       } else {
         toast.error('Something went wrong...');
@@ -69,13 +82,23 @@ export default function BudgetAccountForm() {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        onClick={handleClickOpen}
-        endIcon={<AddIcon />}
-      >
-        Create Budget Account
-      </Button>
+      {account ? (
+        <IconButton
+          onClick={handleClickOpen}
+          aria-label="edit"
+          color="primary"
+        >
+          <EditIcon />
+        </IconButton>
+      ) : (
+        <Button
+          variant="outlined"
+          onClick={handleClickOpen}
+          endIcon={<AddIcon />}
+        >
+          Create Budget Account
+        </Button>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -84,7 +107,7 @@ export default function BudgetAccountForm() {
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>Create Budget Account</DialogTitle>
+        <DialogTitle>{account ? 'Edit' : 'Create Budget Account'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -115,6 +138,20 @@ export default function BudgetAccountForm() {
           <IconSelect
             icon={icon}
             setIcon={setIcon}
+          />
+          <TextField
+            id="currentBalance"
+            name="currentBalance"
+            margin="dense"
+            label="Current Balance"
+            type="number"
+            fullWidth
+            variant="outlined"
+            defaultValue={0}
+            required
+            value={currentBalance}
+            onChange={e => setCurrentBalance(e.target.value)}
+            disabled={isPending}
           />
           <TextField
             id="monthlyLimit"
@@ -172,7 +209,7 @@ export default function BudgetAccountForm() {
             variant="contained"
             disabled={isPending}
           >
-            Create
+            {account ? 'Edit' : 'Create'}
           </Button>
         </DialogActions>
       </Dialog>
