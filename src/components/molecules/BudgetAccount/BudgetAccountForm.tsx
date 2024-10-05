@@ -65,7 +65,7 @@ export default function BudgetAccountForm({
           },
         );
         const responseData = await response.json();
-  
+
         if (responseData.errorMessage) {
           toast.error(responseData.errorMessage, { id: loadingToastId });
         } else if (responseData.success) {
@@ -74,7 +74,7 @@ export default function BudgetAccountForm({
             `Budget Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,
             {
               duration: 5000,
-              id: loadingToastId
+              id: loadingToastId,
             },
           );
           handleClose();
