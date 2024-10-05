@@ -12,11 +12,11 @@ import {
   InputLabel,
   Select,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { CSSProperties } from 'react';
 import { useState } from 'react';
 import { FixedSizeList } from 'react-window';
-import theme from '@/theme';
 
 interface IconSelectProps {
   icon: string;
@@ -43,6 +43,7 @@ export default function IconSelect({ icon, setIcon }: IconSelectProps) {
   };
 
   const [iconModalOpen, setIconModalOpen] = useState(false);
+  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const iconList = Object.keys(Icons);

@@ -32,6 +32,25 @@ const baseTheme = createTheme({
       fontSize: '1.125rem',
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          padding: '0.5rem 1.5rem',
+          borderRadius: 8,
+          textTransform: 'unset',
+          fontWeight: 700,
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+        },
+      },
+    },
+  },
 } as ThemeOptions);
 
 const coloredTheme = createTheme(baseTheme, {

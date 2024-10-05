@@ -6,7 +6,7 @@ export default function AuthPagesLayout({ children }: PropsWithChildren) {
   return (
     <Container
       component="main"
-      maxWidth="sm"
+      maxWidth="md"
     >
       <Box
         sx={{

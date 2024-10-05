@@ -93,9 +93,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: prop => prop !== 'open' })
 );
 
 export default function NavigationWrapper({ children }: PropsWithChildren) {
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
+  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleDrawerOpen = () => {
