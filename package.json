@@ -1,18 +1,18 @@
 {
-  "name": "fin-plan",
+  "name": "yfp",
   "author": {
-    "name": "Kyrylo Klymenko & Artem Harchenko",
-    "email": "klimenkomud@gmail.com"
+    "name": "Kyrylo Klymenko & Artem Kharchenko",
+    "email": "kyrylo@yfp.io"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/mudrila/fin-plan"
   },
   "engines": {
-    "node": "20.16.0",
-    "npm": "10.8.1"
+    "node": "20.17.0",
+    "npm": "10.8.2"
   },
   "scripts": {
     "dev": "next dev",
@@ -26,17 +26,17 @@
     "postinstall": "npm run prisma:generate"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.5.0",
+    "@auth/prisma-adapter": "^2.6.0",
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^6.1.0",
-    "@mui/material": "^6.0.2",
-    "@mui/material-nextjs": "^6.0.2",
+    "@mui/icons-material": "^6.1.2",
+    "@mui/material": "^6.1.2",
+    "@mui/material-nextjs": "^6.1.2",
     "@neondatabase/serverless": "^0.9.5",
     "@prisma/adapter-neon": "^5.19.1",
-    "@prisma/client": "^5.19.1",
-    "next": "14.2.8",
+    "@prisma/client": "^5.20.0",
+    "next": "14.2.14",
     "next-auth": "^5.0.0-beta.20",
     "react": "^18",
     "react-dom": "^18",
@@ -52,10 +52,10 @@
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8",
-    "eslint-config-next": "14.2.8",
+    "eslint-config-next": "14.2.12",
     "eslint-plugin-unused-imports": "^3.2.0",
     "prettier": "^3.3.3",
-    "prisma": "^5.19.1",
+    "prisma": "^5.20.0",
     "sharp": "^0.33.5",
     "typescript": "^5"
   }

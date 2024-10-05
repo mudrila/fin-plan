@@ -6,7 +6,9 @@ export default auth(req => {
   const salt = process.env.PASSWORD_SALT;
 
   if (!secret || !salt) {
-    throw new Error('You need to set AUTH_SECRET and PASSWORD_SALT');
+    throw new Error(
+      'AUTH_SECRET and PASSWORD_SALT are not set - application would not work properly!',
+    );
   }
 
   const sessionUser = req.auth?.user;
