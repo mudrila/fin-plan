@@ -1,3 +1,11 @@
+export const APP_SHORT_NAME = 'YFP';
+export const APP_NAME = 'Your Financial Plan';
+export const APP_DESCRIPTION = 'Budgetting and Financial Planning made easy';
+export const PROD_DOMAIN = 'https://yfp.io';
+
+export const GITHUB_NAME = 'mudrila';
+export const TWITTER_NAME = 'klimenkomud';
+
 export const PASSWORD_STRENGTH_DESCRIPTIONS = [
   '',
   'Very Weak',

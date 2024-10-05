@@ -2,7 +2,7 @@ import { Container, Box } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import React from 'react';
 
-export default function SignUpLayout({ children }: PropsWithChildren) {
+export default function AuthPagesLayout({ children }: PropsWithChildren) {
   return (
     <Container
       component="main"
