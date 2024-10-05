@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { BudgetAccount } from '@prisma/client';
-import BudgetAccountForm from '@/app/components/molecules/BudgetAccount/BudgetAccountForm';
-import BudgetAccountList from '@/app/components/molecules/BudgetAccount/BudgetAccountList';
+import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
+import BudgetAccountList from '@/components/molecules/BudgetAccount/BudgetAccountList';
 import { serializeBudgetAccount } from '@/utils/formatters';
 
 export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccount[] }) {

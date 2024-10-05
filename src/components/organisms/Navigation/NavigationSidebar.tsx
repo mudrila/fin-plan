@@ -14,18 +14,16 @@ import {
   ListItemText,
   useMediaQuery,
 } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { useState, PropsWithChildren } from 'react';
 import MobileDrawer from './MobileDrawer';
-import { StyledLink } from '@/app/components/atoms/Link/StyledNextLink';
-import Header from '@/app/components/molecules/Header/Header';
-
-const drawerWidth = 180;
+import { AppBar, DRAWER_WIDTH } from './components';
+import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
+import Header from '@/components/molecules/Header/Header';
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
+  width: DRAWER_WIDTH,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -53,31 +51,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: prop => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
 const Drawer = styled(MuiDrawer, { shouldForwardProp: prop => prop !== 'open' })(
   ({ theme, open }) => ({
-    width: drawerWidth,
+    width: DRAWER_WIDTH,
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
@@ -96,7 +72,7 @@ export default function NavigationWrapper({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleDrawerOpen = () => {
     setOpen(true);

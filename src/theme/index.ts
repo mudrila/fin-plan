@@ -87,7 +87,7 @@ const lightTheme = createTheme(coloredTheme, {
     mode: 'light',
     background: {
       default: coloredTheme.palette.gray.main,
-      paper: coloredTheme.palette.gray.light,
+      paper: 'rgba(143,150,191,.1)',
     },
   },
 });

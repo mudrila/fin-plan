@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Budget from '@/app/components/pages/Budget/Budget';
+import Budget from '@/components/pages/Budget/Budget';
 import { APP_SHORT_NAME } from '@/constants/content';
 import { auth } from '@/utils/auth';
 import prisma from '@/utils/prisma';

@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { StyledLink } from '@/app/components/atoms/Link/StyledNextLink';
+import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 
 const drawerWidth = 180;
 

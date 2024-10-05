@@ -15,8 +15,8 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
-import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
+import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
+import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -67,7 +67,8 @@ export default function SignInForm() {
         justifyContent: 'center',
         textAlign: 'center',
         p: 2,
-        minWidth: isMobile ? 300 : 600,
+        minWidth: isMobile ? 'calc(100vw - 32px)' : 600,
+        backdropFilter: 'blur(8px)',
       }}
       component="form"
       onSubmit={handleSubmit}
