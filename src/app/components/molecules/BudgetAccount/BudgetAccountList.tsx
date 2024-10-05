@@ -56,7 +56,7 @@ export default function BudgetAccountList({
     debts: SerializedBudgetAccount[];
     credits: SerializedBudgetAccount[];
     goals: SerializedBudgetAccount[];
-    spendingCategorieses: SerializedBudgetAccount[];
+    spendingCategories: SerializedBudgetAccount[];
   };
 }) {
   return (
@@ -71,7 +71,7 @@ export default function BudgetAccountList({
         title="Debt/Credit/Debit Accounts"
       />
       <BudgetAccounts
-        accounts={accounts.spendingCategorieses}
+        accounts={accounts.spendingCategories}
         title="Spending Categories Accounts"
       />
       <BudgetAccounts
