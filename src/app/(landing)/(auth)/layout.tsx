@@ -5,7 +5,7 @@ import React from 'react';
 export default function AuthPagesLayout({ children }: PropsWithChildren) {
   return (
     <Container
-      component="main"
+      component="article"
       maxWidth="md"
     >
       <Box
