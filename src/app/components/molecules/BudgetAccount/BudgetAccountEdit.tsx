@@ -1,18 +1,19 @@
 'use client';
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import BudgetAccountDialog from './BudgetAccountDialog';
+import { SerializedBudgetAccount } from '@/types/budget';
 
-export default function BudgetAccountForm() {
+export default function BudgetAccountEditFrom({ account }: { account: SerializedBudgetAccount }) {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [monthlyLimit, setMonthlyLimit] = useState('0');
-  const [type, setType] = useState('Debit');
-  const [icon, setIcon] = useState('');
+  const [title, setTitle] = useState(account.title);
+  const [description, setDescription] = useState(account.description);
+  const [monthlyLimit, setMonthlyLimit] = useState(String(account.monthlyLimit));
+  const [type, setType] = useState(String(account.type));
+  const [icon, setIcon] = useState(String(account.icon));
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -26,28 +27,26 @@ export default function BudgetAccountForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const loadingToastId = toast.info('Hand tight - we are creating budget account for ya...');
-
     startTransition(async () => {
-      const response = await fetch('/api/budgetAccount/create', {
-        method: 'POST',
+      const response = await fetch(`/api/budgetAccount/${account.id}`, {
+        method: 'PUT',
         body: JSON.stringify({
           title,
           description,
           icon,
           monthlyLimit,
           type,
-          currentBalance: 0,
+          currentBalance: account.currentBalance,
+          id: account.id,
         }),
       });
       const responseData = await response.json();
-      toast.dismiss(loadingToastId);
 
       if (responseData.errorMessage) {
         toast.error(responseData.errorMessage);
       } else if (responseData.success) {
         router.refresh();
-        toast.success('Your budget account created!', { duration: 5000 });
+        toast.success('Your budget account updated!', { duration: 5000 });
         handleClose();
       } else {
         toast.error('Something went wrong...');
@@ -60,9 +59,9 @@ export default function BudgetAccountForm() {
       <Button
         variant="outlined"
         onClick={handleClickOpen}
-        endIcon={<AddIcon />}
+        endIcon={<EditIcon />}
       >
-        Create Budget Account
+        Edit
       </Button>
       <Dialog
         open={open}
@@ -72,15 +71,15 @@ export default function BudgetAccountForm() {
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>Create Budget Account</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
         <BudgetAccountDialog
           title={title}
           setTitle={setTitle}
-          description={description}
+          description={description!}
           setDescription={setDescription}
           icon={icon}
           setIcon={setIcon}
-          monthlyLimit={monthlyLimit}
+          monthlyLimit={monthlyLimit!}
           setMonthlyLimit={setMonthlyLimit}
           type={type}
           setType={setType}
@@ -100,7 +99,7 @@ export default function BudgetAccountForm() {
             variant="contained"
             disabled={isPending}
           >
-            Create
+            Edit
           </Button>
         </DialogActions>
       </Dialog>

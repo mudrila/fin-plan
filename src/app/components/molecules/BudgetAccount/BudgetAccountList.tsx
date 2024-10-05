@@ -1,4 +1,5 @@
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
+import BudgetAccountEditFrom from './BudgetAccountEdit';
 import { IconRenderrer } from '@/app/components/molecules/IconSelect/IconSelect';
 import { BudgetAccountsProps, SerializedBudgetAccount } from '@/types/budget';
 
@@ -39,7 +40,10 @@ function BudgetAccounts({ accounts, title }: BudgetAccountsProps) {
                 )
               }
             />
-            <CardContent>{`Limit: ${account.monthlyLimit}`}</CardContent>
+            <CardContent>
+              {`Limit: ${account.monthlyLimit}`}
+              <BudgetAccountEditFrom account={account} />
+            </CardContent>
           </Card>
         ))}
       </Box>
