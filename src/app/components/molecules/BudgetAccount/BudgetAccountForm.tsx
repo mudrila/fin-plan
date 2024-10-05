@@ -11,7 +11,7 @@ import { SerializedBudgetAccount } from '@/types/budget';
 export default function BudgetAccountForm({
   account = null,
 }: {
-  account: SerializedBudgetAccount | null;
+  account?: SerializedBudgetAccount | null;
 }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(account ? account.title : '');
