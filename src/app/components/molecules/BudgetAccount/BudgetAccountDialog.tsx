@@ -1,7 +1,20 @@
 import { DialogContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
-import { BudgetAccountDialogProps } from '@/types/budget';
+
+interface BudgetAccountDialogProps {
+  title: string;
+  setTitle: (e: string) => void;
+  description: string;
+  setDescription: (e: string) => void;
+  icon: string;
+  setIcon: (e: string) => void;
+  monthlyLimit: string;
+  setMonthlyLimit: (e: string) => void;
+  type: string;
+  setType: (e: string) => void;
+  isPending: boolean;
+}
 
 export default function BudgetAccountDialog({
   title,

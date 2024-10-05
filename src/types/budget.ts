@@ -15,17 +15,3 @@ export interface BudgetAccountsProps {
   accounts: SerializedBudgetAccount[];
   title: string;
 }
-
-export interface BudgetAccountDialogProps {
-  title: string;
-  setTitle: (e: string) => void;
-  description: string;
-  setDescription: (e: string) => void;
-  icon: string;
-  setIcon: (e: string) => void;
-  monthlyLimit: string;
-  setMonthlyLimit: (e: string) => void;
-  type: string;
-  setType: (e: string) => void;
-  isPending: boolean;
-}

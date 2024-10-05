@@ -3,10 +3,10 @@ import { auth } from '@/utils/auth';
 import prisma from '@/utils/prisma';
 import { budgetAccountSchema } from '@/utils/schemas';
 
-export async function PUT(request: Request) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { title, description, icon, monthlyLimit, type, currentBalance, id } =
-      await request.json();
+    const { title, description, icon, monthlyLimit, type, currentBalance } = await request.json();
+    const id = params.id;
     const session = await auth();
     const userId = session?.user?.id;
 
