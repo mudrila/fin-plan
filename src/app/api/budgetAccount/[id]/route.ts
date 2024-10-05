@@ -48,6 +48,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
           currentBalance,
         },
       });
+    } else {
+      return NextResponse.json({
+        errorMessage: 'Data provided for Budget Account update is invalid!',
+      });
     }
 
     return NextResponse.json({ success: true });
