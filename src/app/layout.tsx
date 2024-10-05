@@ -56,7 +56,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <head>
-      <link
+        <link
           rel="shortcut icon"
           href="/favicon.png"
         />
