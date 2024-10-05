@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
+import { APP_SHORT_NAME } from '@/constants/content';
 
 export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -50,7 +51,7 @@ export default function Header() {
           fontSize: 18,
         }}
       >
-        FinPlan UI
+        {APP_SHORT_NAME}
       </Button>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 0 }}>

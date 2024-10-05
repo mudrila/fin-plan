@@ -1,11 +1,20 @@
 'use client';
 
-import { Card, CardHeader, CardContent, CardActions, Button, Box, Typography } from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Button,
+  Box,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
@@ -17,6 +26,9 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
 
   const isFormValid = !emailError && !passwordError;
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleSubmit = async (event: React.FormEvent) => {
     setLoading(true);
@@ -55,7 +67,7 @@ export default function SignInForm() {
         justifyContent: 'center',
         textAlign: 'center',
         p: 2,
-        mt: 10,
+        minWidth: isMobile ? 300 : 600,
       }}
       component="form"
       onSubmit={handleSubmit}
@@ -67,7 +79,7 @@ export default function SignInForm() {
         title="Sign In"
       />
       <CardContent>
-        <Box sx={{ marginBottom: 3, width: 488 }}>
+        <Box sx={{ marginBottom: 3 }}>
           <EmailInput
             value={email}
             errorMessage={emailError}
@@ -90,7 +102,7 @@ export default function SignInForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={!isFormValid || loading}
+          disabled={!email || !password || !isFormValid || loading}
         >
           Sign in
         </Button>

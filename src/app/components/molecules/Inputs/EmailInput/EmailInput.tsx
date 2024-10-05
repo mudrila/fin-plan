@@ -32,7 +32,7 @@ export default function EmailInput({
       required
       fullWidth
       id="email"
-      label="Email Address"
+      label="Email"
       name="email"
       value={value}
       disabled={disabled}

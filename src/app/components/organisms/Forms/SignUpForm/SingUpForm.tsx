@@ -9,12 +9,13 @@ import {
   CardActions,
   Box,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState, useTransition, FormEvent } from 'react';
 import { toast } from 'sonner';
-
 import EmailInput from '@/app/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/app/components/molecules/Inputs/PasswordInput/PasswordInput';
 
@@ -29,7 +30,10 @@ export default function SignUpForm() {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const isFormValid =
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const submitDisabled =
     isPending ||
     !name ||
     !email ||
@@ -73,6 +77,7 @@ export default function SignUpForm() {
         justifyContent: 'center',
         textAlign: 'center',
         p: 2,
+        minWidth: isMobile ? 300 : 600,
       }}
       component="form"
       onSubmit={handleSubmit}
@@ -84,7 +89,7 @@ export default function SignUpForm() {
         title="Sign Up"
       />
       <CardContent>
-        <Box sx={{ marginBottom: 3, width: 488 }}>
+        <Box sx={{ marginBottom: 3 }}>
           <TextField
             required
             fullWidth
@@ -96,7 +101,7 @@ export default function SignUpForm() {
             disabled={isPending}
           />
         </Box>
-        <Box sx={{ marginBottom: 3, width: 488 }}>
+        <Box sx={{ marginBottom: 3 }}>
           <EmailInput
             value={email}
             errorMessage={emailError}
@@ -132,7 +137,7 @@ export default function SignUpForm() {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={isFormValid}
+          disabled={submitDisabled}
         >
           {isPending ? 'loading...' : 'Sign up'}
         </Button>
