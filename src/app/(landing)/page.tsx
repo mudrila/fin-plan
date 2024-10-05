@@ -1,13 +1,5 @@
-import { Container } from '@mui/material';
-import { APP_NAME } from '@/constants/content';
+import Landing from '@/components/pages/Landing/Landing';
 
 export default function LandingPage() {
-  return (
-    <Container
-      component="article"
-      maxWidth="xl"
-    >
-      {APP_NAME}
-    </Container>
-  );
+  return <Landing />;
 }

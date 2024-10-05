@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SignUpForm from '@/app/components/organisms/Forms/SignUpForm/SingUpForm';
+import SignUpForm from '@/components/organisms/Forms/SignUpForm/SingUpForm';
 import { APP_SHORT_NAME } from '@/constants/content';
 
 export const metadata: Metadata = {

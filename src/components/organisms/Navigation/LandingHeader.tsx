@@ -1,20 +1,24 @@
+'use client';
+
 import { Box, Button, Toolbar } from '@mui/material';
 import Image from 'next/image';
 import NextLink from 'next/link';
+import { useSession } from 'next-auth/react';
 import { AppBar } from './components';
 import { APP_NAME } from '@/constants/content';
 
 export default function LandingHeader() {
+  const session = useSession();
   return (
     <AppBar
       position="fixed"
       open={false}
       sx={{
-        backgroundImage: 'unset',
         backgroundColor: 'rgba(143,150,191,.1)',
         backdropFilter: 'blur(8px)',
-        borderRadius: '40px',
+        borderRadius: '12px',
         maxWidth: '1440px',
+        width: 'calc(100vw - 24px)',
         mt: 1,
         mx: 'auto',
         left: '0',
@@ -28,34 +32,45 @@ export default function LandingHeader() {
             alignItems="center"
           >
             <Image
-              src="/img/logo-full.svg"
+              src="/img/logo/color-logo-short.svg"
               alt={`${APP_NAME} Logo`}
-              height={22}
-              width={149}
+              height={56}
+              width={80}
             />
           </Box>
         </NextLink>
-        <Box
-          display="flex"
-          gap={2}
-        >
+        {session?.data?.user ? (
           <Button
             component={NextLink}
-            href="/sign-up"
+            href="/app"
             variant="contained"
             color="primary"
           >
-            Sign Up
+            Go to App
           </Button>
-          <Button
-            component={NextLink}
-            href="/sign-in"
-            variant="outlined"
-            color="secondary"
+        ) : (
+          <Box
+            display="flex"
+            gap={2}
           >
-            Sign In
-          </Button>
-        </Box>
+            <Button
+              component={NextLink}
+              href="/sign-up"
+              variant="contained"
+              color="primary"
+            >
+              Sign Up
+            </Button>
+            <Button
+              component={NextLink}
+              href="/sign-in"
+              variant="outlined"
+              color="secondary"
+            >
+              Sign In
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

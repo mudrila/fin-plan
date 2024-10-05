@@ -15,7 +15,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
-import IconSelect from '@/app/components/molecules/IconSelect/IconSelect';
+import IconSelect from '@/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
 
 export default function BudgetAccountForm() {

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SignInForm from '@/app/components/organisms/Forms/SignInForm/SignInForm';
+import SignInForm from '@/components/organisms/Forms/SignInForm/SignInForm';
 import { APP_SHORT_NAME } from '@/constants/content';
 
 export const metadata: Metadata = {

@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
-import { IconRenderrer } from '@/app/components/molecules/IconSelect/IconSelect';
+import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
 import { BudgetAccountsProps, SerializedBudgetAccount } from '@/types/budget';
 
 function BudgetAccounts({ accounts, title }: BudgetAccountsProps) {
