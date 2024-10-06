@@ -1,8 +1,10 @@
 'use client';
 
 import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -44,9 +46,37 @@ export default function BudgetAccountForm({
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleDelete = (event: FormEvent) => {
+    event.preventDefault();
+    const loadingToastId = toast.loading(`Hand tight - we are deleting ${account?.title}...`);
+
+    startTransition(async () => {
+      try {
+        const response = await fetch(`/api/budgetAccount/${account?.id}`, { method: 'DELETE' });
+        const responseData = await response.json();
+
+        if (responseData.errorMessage) {
+          toast.error(responseData.errorMessage, { id: loadingToastId });
+        } else if (responseData.success) {
+          router.refresh();
+          toast.success('Budget Account deleted!', { duration: 5000, id: loadingToastId });
+          handleClose();
+        } else {
+          toast.error('Something went wrong...', { id: loadingToastId });
+        }
+      } catch (e) {
+        console.error('Error while deletion budget account', e);
+        toast.error('Something went wrong...', { id: loadingToastId });
+      }
+    });
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const loadingToastId = toast.loading('Hand tight - we are creating budget account for ya...');
+    const loadingToastId = toast.loading(
+      `Hand tight - we are ${account ? 'updating' : 'creating'} budget account for ya...`,
+    );
 
     startTransition(async () => {
       try {
@@ -203,22 +233,34 @@ export default function BudgetAccountForm({
             </Select>
           </FormControl>
         </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            type="reset"
-            variant="outlined"
-            disabled={isPending}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isPending}
-          >
-            {account ? 'Edit' : 'Create'}
-          </Button>
+        <DialogActions sx={{ justifyContent: account ? 'space-between' : 'flex-end' }}>
+          {account && (
+            <IconButton
+              onClick={handleDelete}
+              color="error"
+              type="button"
+              disabled={isPending}
+            >
+              <DeleteOutlineIcon />
+            </IconButton>
+          )}
+          <Box>
+            <Button
+              onClick={handleClose}
+              type="reset"
+              variant="outlined"
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isPending}
+            >
+              {account ? 'Edit' : 'Create'}
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
     </>
