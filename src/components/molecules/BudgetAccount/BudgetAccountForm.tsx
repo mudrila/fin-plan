@@ -51,31 +51,31 @@ export default function BudgetAccountForm({
     const loadingToastId = toast.loading(`Hand tight - we are deleting budget account for ya...`);
 
     startTransition(async () => {
-      try{
-        const response = await fetch(`/api/budgetAccount/${account?.id}`,{ method: "DELETE" });
+      try {
+        const response = await fetch(`/api/budgetAccount/${account?.id}`, { method: 'DELETE' });
         const responseData = await response.json();
 
         if (responseData.errorMessage) {
           toast.error(responseData.errorMessage, { id: loadingToastId });
         } else if (responseData.success) {
           router.refresh();
-          toast.success('Budget Account deleted!', { duration: 5000, id: loadingToastId } );
+          toast.success('Budget Account deleted!', { duration: 5000, id: loadingToastId });
           handleClose();
         } else {
           toast.error('Something went wrong...', { id: loadingToastId });
         }
-
       } catch (e) {
         console.error('Error while deletion budget account', e);
         toast.error('Something went wrong...', { id: loadingToastId });
       }
     });
-
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const loadingToastId = toast.loading(`Hand tight - we are ${account ? 'updating' : 'creating'} budget account for ya...`);
+    const loadingToastId = toast.loading(
+      `Hand tight - we are ${account ? 'updating' : 'creating'} budget account for ya...`,
+    );
 
     startTransition(async () => {
       try {
@@ -232,7 +232,7 @@ export default function BudgetAccountForm({
             </Select>
           </FormControl>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: account ? "space-between" : "flex-end" }}>
+        <DialogActions sx={{ justifyContent: account ? 'space-between' : 'flex-end' }}>
           {account && (
             <Button
               onClick={handleDelete}

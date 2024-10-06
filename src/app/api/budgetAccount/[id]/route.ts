@@ -63,7 +63,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request,  { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -85,10 +85,9 @@ export async function DELETE(request: Request,  { params }: { params: { id: stri
     }
 
     await prisma.budgetAccount.delete({
-      where: { id, userId }
-    })
+      where: { id, userId },
+    });
     return NextResponse.json({ success: true });
-    
   } catch (e) {
     console.error(e, 'Error during account deletion');
     return NextResponse.json({
