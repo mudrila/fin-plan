@@ -85,7 +85,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     await prisma.budgetAccount.delete({
-      where: { id, userId },
+      where: { id },
     });
     return NextResponse.json({ success: true });
   } catch (e) {

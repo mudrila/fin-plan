@@ -1,6 +1,7 @@
 'use client';
 
 import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -48,7 +49,7 @@ export default function BudgetAccountForm({
 
   const handleDelete = (event: FormEvent) => {
     event.preventDefault();
-    const loadingToastId = toast.loading(`Hand tight - we are deleting budget account for ya...`);
+    const loadingToastId = toast.loading(`Hand tight - we are deleting ${account?.title}...`);
 
     startTransition(async () => {
       try {
@@ -234,15 +235,14 @@ export default function BudgetAccountForm({
         </DialogContent>
         <DialogActions sx={{ justifyContent: account ? 'space-between' : 'flex-end' }}>
           {account && (
-            <Button
+            <IconButton
               onClick={handleDelete}
               color="error"
               type="button"
-              variant="outlined"
               disabled={isPending}
             >
-              DELETE
-            </Button>
+              <DeleteOutlineIcon />
+            </IconButton>
           )}
           <Box>
             <Button
