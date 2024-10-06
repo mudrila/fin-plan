@@ -78,7 +78,10 @@ export default function SignUpForm() {
         textAlign: 'center',
         p: 2,
         minWidth: isMobile ? 'calc(100vw - 32px)' : 600,
-        backdropFilter: 'blur(8px)',
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+        border: '1px solid rgba(255, 255, 255, 0.33)',
       }}
       component="form"
       onSubmit={handleSubmit}

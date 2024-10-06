@@ -9,9 +9,11 @@ import {
   ListItemButton,
   ListItemText,
   IconButton,
+  useTheme,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
+import ThemeModeSwitch from '@/components/atoms/ThemeModeSwitch/ThemeModeSwitch';
 
 const drawerWidth = 180;
 
@@ -34,6 +36,7 @@ export default function MobileDrawer({
   handleDrawerClose,
   handleDrawerOpen,
 }: MobileDrawerProps) {
+  const theme = useTheme();
   return (
     <SwipeableDrawer
       anchor="left"
@@ -47,6 +50,10 @@ export default function MobileDrawer({
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
+          backgroundColor: 'white',
+          ...theme.applyStyles('dark', {
+            backgroundColor: '#090b19',
+          }),
         },
       }}
     >
@@ -79,6 +86,11 @@ export default function MobileDrawer({
               <ListItemText primary="Budget" />
             </ListItemButton>
           </StyledLink>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ThemeModeSwitch /> <ListItemText primary="Switch mode" />
+          </ListItemButton>
         </ListItem>
       </List>
       <Divider />
