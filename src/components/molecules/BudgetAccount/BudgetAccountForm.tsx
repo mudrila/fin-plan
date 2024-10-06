@@ -14,6 +14,8 @@ import {
   MenuItem,
   Select,
   TextField,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState, useTransition } from 'react';
@@ -27,6 +29,8 @@ export default function BudgetAccountForm({
 }: {
   account?: SerializedBudgetAccount | null;
 }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(account?.title || '');
   const [description, setDescription] = useState(account?.description || '');
@@ -113,7 +117,14 @@ export default function BudgetAccountForm({
         PaperProps={{
           component: 'form',
           onSubmit: handleSubmit,
+          sx: {
+            backgroundColor: 'white',
+            ...theme.applyStyles('dark', {
+              backgroundColor: '#090b19',
+            }),
+          },
         }}
+        fullScreen={isMobile}
       >
         <DialogTitle>{account ? `Edit ${account.title}` : 'Create Budget Account'}</DialogTitle>
         <DialogContent>

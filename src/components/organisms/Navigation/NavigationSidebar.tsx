@@ -1,25 +1,26 @@
 'use client';
 
-import { Menu, ChevronLeft } from '@mui/icons-material';
+import { ChevronLeft, Menu } from '@mui/icons-material';
 import DonutSmallIcon from '@mui/icons-material/DonutSmall';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import {
   Box,
-  Toolbar,
-  List,
   Divider,
   IconButton,
+  List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Toolbar,
   useMediaQuery,
 } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { useState, PropsWithChildren } from 'react';
+import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
+import { PropsWithChildren, useState } from 'react';
 import MobileDrawer from './MobileDrawer';
 import { AppBar, DRAWER_WIDTH } from './components';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
+import ThemeModeSwitch from '@/components/atoms/ThemeModeSwitch/ThemeModeSwitch';
 import Header from '@/components/molecules/Header/Header';
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -182,6 +183,26 @@ export default function NavigationWrapper({ children }: PropsWithChildren) {
                   />
                 </ListItemButton>
               </StyledLink>
+            </ListItem>
+            <ListItem
+              disablePadding
+              sx={{ display: 'block' }}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ThemeModeSwitch />
+                <ListItemText
+                  primary="Switch mode"
+                  sx={{
+                    opacity: open ? 1 : 0,
+                  }}
+                />
+              </ListItemButton>
             </ListItem>
           </List>
           <Divider />

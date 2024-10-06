@@ -28,6 +28,9 @@ export default function Landing() {
             color: theme.palette.primary.main,
             fontWeight: 600,
             textAlign: 'center',
+            ...theme.applyStyles('dark', {
+              color: 'white',
+            }),
           }}
         >
           {APP_NAME}
@@ -40,6 +43,9 @@ export default function Landing() {
             fontSize: isDesktop ? '1.5rem' : '1.25rem',
             color: theme.palette.primary.light,
             textAlign: 'center',
+            ...theme.applyStyles('dark', {
+              color: 'white',
+            }),
           }}
         >
           {APP_DESCRIPTION}

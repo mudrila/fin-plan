@@ -71,7 +71,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider
+            theme={theme}
+            defaultMode="dark"
+          >
             <CssBaseline />
             <Toaster
               position="top-center"

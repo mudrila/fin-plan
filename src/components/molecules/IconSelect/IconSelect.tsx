@@ -100,6 +100,14 @@ export default function IconSelect({ icon, setIcon }: IconSelectProps) {
         onClose={handleCloseIconModal}
         fullWidth
         maxWidth="md"
+        PaperProps={{
+          sx: {
+            backgroundColor: 'white',
+            ...theme.applyStyles('dark', {
+              backgroundColor: '#090b19',
+            }),
+          },
+        }}
       >
         <DialogTitle>Select an Icon</DialogTitle>
         <DialogContent>
