@@ -5,7 +5,6 @@ import {
   Box,
   Toolbar,
   IconButton,
-  Typography,
   Menu,
   Avatar,
   Tooltip,
@@ -17,6 +16,7 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
 import { APP_SHORT_NAME } from '@/constants/content';
+import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 
 export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -82,9 +82,11 @@ export default function Header() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <Typography sx={{ textAlign: 'center', p: 1 }}>
+          <StyledLink
+            href='/app/user'
+          >
             Hello, {session.data?.user?.name}
-          </Typography>
+          </StyledLink>
           <MenuItem onClick={handleSignOut}>
             <ListItemIcon>
               <Logout fontSize="small" />

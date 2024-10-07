@@ -24,6 +24,7 @@ interface PasswordInputProps {
   isConfirmPassword?: boolean;
   primaryPassword?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 export default function PasswordInput({
@@ -38,6 +39,7 @@ export default function PasswordInput({
   isConfirmPassword = false,
   primaryPassword,
   disabled,
+  required=true,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
@@ -111,7 +113,7 @@ export default function PasswordInput({
   return (
     <Box>
       <TextField
-        required
+        required={required}
         fullWidth
         name={name}
         label={label}

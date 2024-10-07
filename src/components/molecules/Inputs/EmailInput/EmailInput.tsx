@@ -8,6 +8,7 @@ interface EmailInputProps {
   value: string;
   errorMessage: string | null;
   disabled?: boolean;
+  required?: boolean;
 }
 
 export default function EmailInput({
@@ -16,6 +17,7 @@ export default function EmailInput({
   value,
   errorMessage,
   disabled,
+  required=true,
 }: EmailInputProps) {
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -29,7 +31,7 @@ export default function EmailInput({
   };
   return (
     <TextField
-      required
+      required={required}
       fullWidth
       id="email"
       label="Email"
