@@ -1,28 +1,35 @@
-import { cookies } from 'next/headers'
-import { NextResponse } from "next/server";
-import { emailRegex, passwordRegex } from "@/constants/content";
-import { generateHashPassword } from "@/utils";
-import { auth } from "@/utils/auth";
-import prisma from "@/utils/prisma";
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
+import { emailRegex, passwordRegex } from '@/constants/content';
+import { generateHashPassword } from '@/utils';
+import { auth } from '@/utils/auth';
+import prisma from '@/utils/prisma';
+
+type UpdateData = {
+  name?: string;
+  email?: string;
+  password?: string;
+  image?: string;
+};
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const session = await auth();
   const userId = session?.user?.id;
 
-	try {
-		const id = params.id;
+  try {
+    const id = params.id;
 
     if (!userId) {
       return NextResponse.json({ errorMessage: 'No user session' });
     }
 
-		if (userId !== id){
+    if (userId !== id) {
       return NextResponse.json({
         errorMessage: "You don't have permission to edit this budget account",
       });
     }
-		const { name, email, password, image } = await request.json();
-		const updateData: any = {};
+    const { name, email, password, image } = await request.json();
+    const updateData: UpdateData = {};
 
     if (name) {
       updateData.name = name;
@@ -57,14 +64,12 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     });
 
     return NextResponse.json({ success: true });
-
-
-	} catch (e) {
-		console.error(e, 'Error during user updating');
+  } catch (e) {
+    console.error(e, 'Error during user updating');
     return NextResponse.json({
       errorMessage: 'Unexpected error happened while updating user.',
     });
-	}
+  }
 }
 
 export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
@@ -78,15 +83,15 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
       return NextResponse.json({ errorMessage: 'No user session' });
     }
 
-		if (userId !== id){
+    if (userId !== id) {
       return NextResponse.json({
         errorMessage: "You don't have permission to edit this budget account",
       });
     }
 
-    await prisma.user.delete({ where: {id} })
-    cookies().delete('next-auth.session-token')
-    cookies().delete('next-auth.csrf-token')
+    await prisma.user.delete({ where: { id } });
+    cookies().delete('next-auth.session-token');
+    cookies().delete('next-auth.csrf-token');
 
     return NextResponse.json({ success: true });
   } catch (e) {

@@ -17,7 +17,7 @@ export default function EmailInput({
   value,
   errorMessage,
   disabled,
-  required=true,
+  required = true,
 }: EmailInputProps) {
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;

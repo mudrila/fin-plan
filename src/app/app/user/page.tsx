@@ -9,8 +9,15 @@ export const metadata: Metadata = {
 
 export default async function UserPage() {
   const session = await auth();
-  const userName = session?.user?.name!;
-  const userId= session?.user?.id!;
+  const userName = session?.user?.name;
+  const userId = session?.user?.id;
 
-  return <Profile userName={userName} userId={userId}/>;
+  if (userName && userId) {
+    return (
+      <Profile
+        userName={userName}
+        userId={userId}
+      />
+    );
+  }
 }

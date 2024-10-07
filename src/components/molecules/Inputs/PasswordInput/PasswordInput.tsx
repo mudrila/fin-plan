@@ -39,7 +39,7 @@ export default function PasswordInput({
   isConfirmPassword = false,
   primaryPassword,
   disabled,
-  required=true,
+  required = true,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');

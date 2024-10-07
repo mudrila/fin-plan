@@ -82,11 +82,7 @@ export default function Header() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <StyledLink
-            href='/app/user'
-          >
-            Hello, {session.data?.user?.name}
-          </StyledLink>
+          <StyledLink href="/app/user">Hello, {session.data?.user?.name}</StyledLink>
           <MenuItem onClick={handleSignOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
