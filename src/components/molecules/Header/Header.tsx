@@ -1,11 +1,11 @@
 'use client';
 
 import { Logout } from '@mui/icons-material';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {
   Box,
   Toolbar,
   IconButton,
-  Typography,
   Menu,
   Avatar,
   Tooltip,
@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
+import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 import { APP_SHORT_NAME } from '@/constants/content';
 
 export default function Header() {
@@ -82,9 +83,12 @@ export default function Header() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <Typography sx={{ textAlign: 'center', p: 1 }}>
-            Hello, {session.data?.user?.name}
-          </Typography>
+          <MenuItem href="/app/account">
+            <ListItemIcon>
+              <ManageAccountsIcon />
+            </ListItemIcon>
+            <StyledLink href="/app/account">{session.data?.user?.name}</StyledLink>
+          </MenuItem>
           <MenuItem onClick={handleSignOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
