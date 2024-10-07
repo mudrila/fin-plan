@@ -1,12 +1,12 @@
 'use client'
-import { Card, CardHeader, CardContent, Button, Box, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import Edit from "@mui/icons-material/Edit";
-import { FormEvent, useState, useTransition } from "react";
-import PasswordInput from "@/components/molecules/Inputs/PasswordInput/PasswordInput";
-import EmailInput from "@/components/molecules/Inputs/EmailInput/EmailInput";
-import { toast } from "sonner";
+import { Card, CardHeader, CardContent, Button, Box, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { FormEvent, useState, useTransition } from "react";
+import { toast } from "sonner";
+import EmailInput from "@/components/molecules/Inputs/EmailInput/EmailInput";
+import PasswordInput from "@/components/molecules/Inputs/PasswordInput/PasswordInput";
 
 
 interface ProfileProps{

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
+import Profile from '@/components/pages/User/Profile';
 import { APP_SHORT_NAME } from '@/constants/content';
 import { auth } from '@/utils/auth';
-import Profile from '@/components/pages/User/Profile';
 
 export const metadata: Metadata = {
   title: `User page | ${APP_SHORT_NAME}`,

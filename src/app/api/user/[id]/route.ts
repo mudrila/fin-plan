@@ -1,9 +1,9 @@
+import { cookies } from 'next/headers'
+import { NextResponse } from "next/server";
 import { emailRegex, passwordRegex } from "@/constants/content";
 import { generateHashPassword } from "@/utils";
 import { auth } from "@/utils/auth";
 import prisma from "@/utils/prisma";
-import { NextResponse } from "next/server";
-import { cookies } from 'next/headers'
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const session = await auth();

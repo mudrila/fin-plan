@@ -15,8 +15,8 @@ import {
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
-import { APP_SHORT_NAME } from '@/constants/content';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
+import { APP_SHORT_NAME } from '@/constants/content';
 
 export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
