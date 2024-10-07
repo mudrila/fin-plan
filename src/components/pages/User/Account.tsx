@@ -21,10 +21,9 @@ import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordI
 
 interface ProfileProps {
   userName: string;
-  userId: string;
 }
 
-export default function Profile({ userName, userId }: ProfileProps) {
+export default function Account({ userName }: ProfileProps) {
   const [image, setImage] = useState<File>();
   const [base64Image, setBase64Image] = useState('');
   const [openAvatar, setOpenAvatar] = useState(false);
@@ -54,7 +53,7 @@ export default function Profile({ userName, userId }: ProfileProps) {
 
     startTransition(async () => {
       try {
-        const response = await fetch(`/api/user/${userId}`, {
+        const response = await fetch(`/api/account`, {
           method: 'PUT',
           body: JSON.stringify({
             name,
@@ -116,7 +115,7 @@ export default function Profile({ userName, userId }: ProfileProps) {
     event.preventDefault();
 
     try {
-      const response = await fetch(`/api/user/${userId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/account`, { method: 'DELETE' });
       const responseData = await response.json();
 
       if (responseData.errorMessage) {

@@ -12,24 +12,21 @@ type UpdateData = {
   image?: string;
 };
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request) {
   const session = await auth();
   const userId = session?.user?.id;
 
+  if (!userId) {
+    return NextResponse.json({ errorMessage: 'No user session' });
+  }
+
   try {
-    const id = params.id;
-
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
-    if (userId !== id) {
-      return NextResponse.json({
-        errorMessage: "You don't have permission to edit this budget account",
-      });
-    }
     const { name, email, password, image } = await request.json();
     const updateData: UpdateData = {};
+
+    if (!name && !email && !password && !image) {
+      return NextResponse.json({ errorMessage: 'Nothing to update' });
+    }
 
     if (name) {
       updateData.name = name;
@@ -54,12 +51,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       updateData.password = passwordHash.hash;
     }
 
-    if (Object.keys(updateData).length === 0) {
-      return NextResponse.json({ errorMessage: 'Nothing to update' });
-    }
-
     await prisma.user.update({
-      where: { id },
+      where: { id: userId },
       data: updateData,
     });
 
@@ -72,24 +65,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request) {
   const session = await auth();
   const userId = session?.user?.id;
 
+  if (!userId) {
+    return NextResponse.json({ errorMessage: 'No user session' });
+  }
+
   try {
-    const id = params.id;
 
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
-    if (userId !== id) {
-      return NextResponse.json({
-        errorMessage: "You don't have permission to edit this budget account",
-      });
-    }
-
-    await prisma.user.delete({ where: { id } });
+    await prisma.user.delete({ where: { id: userId } });
     cookies().delete('next-auth.session-token');
     cookies().delete('next-auth.csrf-token');
 
