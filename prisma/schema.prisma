@@ -49,7 +49,7 @@ model User {
   accounts                  Account[]
   sessions                  Session[]
   budgetAccounts            BudgetAccount[]
-  BudgetAccountTransactions BudgetAccountTransaction[]
+  budgetAccountTransactions BudgetAccountTransaction[]
 }
 
 model VerificationRequest {
@@ -74,8 +74,8 @@ model BudgetAccount {
   currentBalance Decimal           @default(0)
   user           User              @relation(fields: [userId], references: [id])
 
-  BudgetAccountTransactionTo BudgetAccountTransaction[] @relation("ToBudgetAccount")
-  BudgetAccountTransactionFrom   BudgetAccountTransaction[] @relation("FromBudgetAccount")
+  transactionsTo BudgetAccountTransaction[] @relation("ToBudgetAccount")
+  transactionsFrom   BudgetAccountTransaction[] @relation("FromBudgetAccount")
 }
 
 enum BudgetAccountType {

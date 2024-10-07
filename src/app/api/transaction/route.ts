@@ -58,16 +58,6 @@ export async function POST(request: Request) {
         },
       });
 
-      await prisma.budgetAccount.update({
-        where: { id: fromBudgetAccountId },
-        data: { currentBalance: Number(fromAccount.currentBalance) - amount },
-      });
-
-      await prisma.budgetAccount.update({
-        where: { id: toBudgetAccountId },
-        data: { currentBalance: Number(toAccount.currentBalance) + amount },
-      });
-
       return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({

@@ -42,12 +42,6 @@ export default function BudgetAccountTransactionFrom({
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log({
-      fromBudgetAccountId,
-      toBudgetAccountId,
-      amount,
-      description,
-    });
     const loadingToastId = toast.loading('Hand tight - we are making transaction');
 
     startTransition(async () => {
