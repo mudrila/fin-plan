@@ -12,10 +12,6 @@ export default async function UserPage() {
   const userName = session?.user?.name;
 
   if (userName) {
-    return (
-      <Profile
-        userName={userName}
-      />
-    );
+    return <Profile userName={userName} />;
   }
 }

@@ -65,7 +65,7 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE(_request: Request) {
+export async function DELETE() {
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -74,7 +74,6 @@ export async function DELETE(_request: Request) {
   }
 
   try {
-
     await prisma.user.delete({ where: { id: userId } });
     cookies().delete('next-auth.session-token');
     cookies().delete('next-auth.csrf-token');

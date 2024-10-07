@@ -1,6 +1,7 @@
 'use client';
 
 import { Logout } from '@mui/icons-material';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {
   Box,
   Toolbar,
@@ -15,9 +16,8 @@ import {
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
-import { APP_SHORT_NAME } from '@/constants/content';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
+import { APP_SHORT_NAME } from '@/constants/content';
 
 export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -85,7 +85,7 @@ export default function Header() {
         >
           <MenuItem href="/app/account">
             <ListItemIcon>
-              <ManageAccountsIcon/>
+              <ManageAccountsIcon />
             </ListItemIcon>
             <StyledLink href="/app/account">{session.data?.user?.name}</StyledLink>
           </MenuItem>
