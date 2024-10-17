@@ -19,18 +19,20 @@ import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
 
-interface ProfileProps {
+interface AccountProps {
   userName: string;
+  userEmail: string;
+  userImage: string | null;
 }
 
-export default function Account({ userName }: ProfileProps) {
-  const [image, setImage] = useState<File>();
+export default function Account({ userName, userEmail, userImage }: AccountProps) {
+  const [image, setImage] = useState<File | string | null>(userImage);
   const [base64Image, setBase64Image] = useState('');
   const [openAvatar, setOpenAvatar] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(userName);
+  const [email, setEmail] = useState(userEmail);
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
