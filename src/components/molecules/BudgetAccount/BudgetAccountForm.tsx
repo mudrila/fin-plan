@@ -10,8 +10,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  useMediaQuery,
-  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import MainForm from './Form';
