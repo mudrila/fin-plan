@@ -27,6 +27,9 @@ export default function FeatureCard({ title, description, Icon, isImplemented }:
         border: '1px solid rgba(255, 255, 255, 0.33)',
         borderRadius: 6,
         color: theme.palette.primary.main,
+        ...theme.applyStyles('dark', {
+          color: 'white',
+        }),
       }}
     >
       <Typography variant="h4">{title}</Typography>

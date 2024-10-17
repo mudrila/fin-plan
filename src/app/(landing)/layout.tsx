@@ -1,9 +1,12 @@
-import { Box, Container } from '@mui/material';
+'use client';
+
+import { Box, Container, useColorScheme } from '@mui/material';
 import Image from 'next/image';
 import { PropsWithChildren } from 'react';
 import LandingHeader from '@/components/organisms/Navigation/LandingHeader';
 
 export default function LandingLayout({ children }: PropsWithChildren) {
+  const { mode } = useColorScheme();
   return (
     <>
       <LandingHeader />
@@ -31,7 +34,9 @@ export default function LandingLayout({ children }: PropsWithChildren) {
           zIndex={-1}
         >
           <Image
-            src="/img/hero-background.jpg"
+            src={
+              mode === 'dark' ? '/img/hero-background-dark.png' : '/img/hero-background-light.jpg'
+            }
             alt="Hero Background"
             fill
           />

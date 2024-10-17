@@ -12,7 +12,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-const baseTheme = createTheme({
+const theme = createTheme({
   typography: {
     fontFamily: latoFont.style.fontFamily,
     h1: {
@@ -30,6 +30,36 @@ const baseTheme = createTheme({
     subtitle1: {
       fontWeight: 400,
       fontSize: '1.125rem',
+    },
+  },
+  colorSchemes: {
+    light: {
+      palette: {
+        background: {
+          default: palette.gray,
+          paper: 'rgba(143,150,191,.1)',
+        },
+        primary: {
+          main: palette.primary,
+        },
+        secondary: {
+          main: palette.secondary,
+        },
+        tertiary: {
+          main: palette.tertiary,
+        },
+        gray: {
+          main: palette.gray,
+        },
+      },
+    },
+    dark: {
+      palette: {
+        background: {
+          default: '#121212',
+          paper: '#26262b',
+        },
+      },
     },
   },
   components: {
@@ -53,43 +83,4 @@ const baseTheme = createTheme({
   },
 } as ThemeOptions);
 
-const coloredTheme = createTheme(baseTheme, {
-  palette: {
-    primary: baseTheme.palette.augmentColor({
-      color: {
-        main: palette.primary,
-      },
-      name: 'primary',
-    }),
-    secondary: baseTheme.palette.augmentColor({
-      color: {
-        main: palette.secondary,
-      },
-      name: 'secondary',
-    }),
-    tertiary: baseTheme.palette.augmentColor({
-      color: {
-        main: palette.tertiary,
-      },
-      name: 'tertiary',
-    }),
-    gray: baseTheme.palette.augmentColor({
-      color: {
-        main: palette.gray,
-      },
-      name: 'gray',
-    }),
-  },
-});
-
-const lightTheme = createTheme(coloredTheme, {
-  palette: {
-    mode: 'light',
-    background: {
-      default: coloredTheme.palette.gray.main,
-      paper: 'rgba(143,150,191,.1)',
-    },
-  },
-});
-
-export default lightTheme;
+export default theme;
