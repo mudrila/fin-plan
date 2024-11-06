@@ -7,7 +7,7 @@ import {
   Security,
   ArrowForward,
 } from '@mui/icons-material';
-import { Box, Button, Container, Grid, Paper, Typography, useTheme, alpha } from '@mui/material';
+import { Box, Button, Container, Grid, Paper, Typography, useTheme } from '@mui/material';
 import Link from 'next/link';
 import { APP_NAME, APP_DESCRIPTION } from '@/constants/content';
 
@@ -142,13 +142,25 @@ export default function Landing() {
                   p: 3,
                   height: '100%',
                   position: 'relative',
-                  backgroundColor: alpha(theme.palette.background.paper, 0.6),
+                  backgroundColor:
+                    theme.palette.mode === 'light'
+                      ? 'rgba(255, 255, 255, 0.9)'
+                      : 'rgba(30, 30, 36, 0.8)',
                   backdropFilter: 'blur(8px)',
                   borderRadius: 2,
-                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  border: `1px solid ${
+                    theme.palette.mode === 'light'
+                      ? 'rgba(0, 0, 0, 0.05)'
+                      : 'rgba(255, 255, 255, 0.05)'
+                  }`,
+                  transition: 'all 0.2s ease-in-out',
                   '&:hover': {
                     transform: 'translateY(-4px)',
                     boxShadow: theme.shadows[4],
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'rgba(255, 255, 255, 1)'
+                        : 'rgba(30, 30, 36, 0.95)',
                   },
                 }}
               >

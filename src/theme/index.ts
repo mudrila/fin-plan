@@ -6,9 +6,15 @@ import { aliceFont, latoFont } from './fonts';
 declare module '@mui/material/styles' {
   interface Palette {
     gray: Palette['primary'];
+    tertiary: {
+      main: string;
+    };
   }
   interface PaletteOptions {
-    gray: Palette['primary'];
+    gray: PaletteOptions['primary'];
+    tertiary: {
+      main: string;
+    };
   }
 }
 
@@ -35,30 +41,24 @@ const theme = createTheme({
   colorSchemes: {
     light: {
       palette: {
-        background: {
-          default: palette.gray,
-          paper: 'rgba(143,150,191,.1)',
-        },
-        primary: {
-          main: palette.primary,
-        },
-        secondary: {
-          main: palette.secondary,
-        },
-        tertiary: {
-          main: palette.tertiary,
-        },
-        gray: {
-          main: palette.gray,
-        },
+        mode: 'light',
+        background: palette.light.background,
+        primary: palette.primary,
+        secondary: palette.secondary,
+        tertiary: palette.tertiary,
+        gray: palette.light.gray,
+        text: palette.light.text,
       },
     },
     dark: {
       palette: {
-        background: {
-          default: '#121212',
-          paper: '#26262b',
-        },
+        mode: 'dark',
+        background: palette.dark.background,
+        primary: palette.dark.primary,
+        secondary: palette.dark.secondary,
+        tertiary: palette.tertiary,
+        gray: palette.dark.gray,
+        text: palette.dark.text,
       },
     },
   },
@@ -77,6 +77,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 4,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
         },
       },
     },
