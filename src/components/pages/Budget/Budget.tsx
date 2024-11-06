@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { BudgetAccount } from '@prisma/client';
 import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
 import BudgetAccountList from '@/components/molecules/BudgetAccount/BudgetAccountList';
+import BudgetAccountTransaction from '@/components/molecules/BudgetAccount/BudgetAccountTransactionForm';
 import { serializeBudgetAccount } from '@/utils/formatters';
 
 export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccount[] }) {
@@ -24,6 +25,7 @@ export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccou
         display="flex"
       >
         <Typography variant="h5">Your budget accounts</Typography>
+        <BudgetAccountTransaction accounts={serializedBudgetAccounts} />
         <BudgetAccountForm />
       </Box>
       <Box sx={{ mt: 2 }}>
