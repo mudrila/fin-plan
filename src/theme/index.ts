@@ -1,5 +1,5 @@
 'use client';
-import { createTheme, ThemeOptions } from '@mui/material/styles';
+import { createTheme, ThemeOptions, alpha } from '@mui/material/styles';
 import palette from './colors';
 import { aliceFont, latoFont } from './fonts';
 
@@ -75,16 +75,57 @@ const theme = createTheme({
     },
     MuiCard: {
       styleOverrides: {
-        root: {
-          borderRadius: 4,
-        },
+        root: ({ theme }) => ({
+          backgroundColor:
+            theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(18, 18, 18, 0.8)',
+          backdropFilter: 'blur(12px)',
+          borderRadius: 8,
+          border: `1px solid ${
+            theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)'
+          }`,
+          transition: theme.transitions.create(['transform', 'box-shadow', 'background-color'], {
+            duration: theme.transitions.duration.shorter,
+          }),
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow:
+              theme.palette.mode === 'light'
+                ? '0 8px 24px rgba(0, 0, 0, 0.06)'
+                : '0 8px 24px rgba(0, 0, 0, 0.24)',
+            backgroundColor:
+              theme.palette.mode === 'light'
+                ? 'rgba(255, 255, 255, 0.5)'
+                : 'rgba(18, 18, 18, 0.95)',
+          },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background:
+              theme.palette.mode === 'light'
+                ? 'linear-gradient(145deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%)'
+                : 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
+          },
+          ...(theme.palette.mode === 'light' && {
+            backgroundColor: 'rgba(245, 245, 250, 0.4)',
+          }),
+        }),
       },
     },
     MuiPaper: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           backgroundImage: 'none',
-        },
+          ...(theme.palette.mode === 'light' && {
+            backgroundColor: alpha(theme.palette.background.paper, 0.8),
+          }),
+          ...(theme.palette.mode === 'dark' && {
+            backgroundColor: alpha(theme.palette.background.paper, 0.6),
+          }),
+          backdropFilter: 'blur(8px)',
+        }),
       },
     },
   },

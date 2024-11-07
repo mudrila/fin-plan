@@ -74,9 +74,12 @@ export default function SignInForm() {
     >
       <CardHeader
         title="Sign In"
-        titleTypography={{ variant: 'h4', fontWeight: 700 }}
         sx={{
           pb: 0,
+          '& .MuiCardHeader-title': {
+            variant: 'h4',
+            fontWeight: 700,
+          },
           '& .MuiCardHeader-content': {
             overflow: 'visible',
           },
