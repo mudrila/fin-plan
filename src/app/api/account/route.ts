@@ -75,8 +75,9 @@ export async function DELETE() {
 
   try {
     await prisma.user.delete({ where: { id: userId } });
-    cookies().delete('next-auth.session-token');
-    cookies().delete('next-auth.csrf-token');
+    const cookiesInstance = await cookies();
+    cookiesInstance.delete('next-auth.session-token');
+    cookiesInstance.delete('next-auth.csrf-token');
 
     return NextResponse.json({ success: true });
   } catch (e) {

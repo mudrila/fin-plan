@@ -63,7 +63,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -72,7 +72,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ errorMessage: 'No user session' });
     }
 
-    const id = params.id;
+    const { id } = await params;
 
     const existingAccount = await prisma.budgetAccount.findUnique({
       where: { id, userId },
