@@ -1,102 +1,208 @@
 'use client';
 
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import DonutSmallIcon from '@mui/icons-material/DonutSmall';
-import MultilineChartIcon from '@mui/icons-material/MultilineChart';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
-import { Box, Button, Container, Typography, useMediaQuery, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import NextLink from 'next/link';
-import FeatureCard from './FeatureCard';
+import { AccountBalance, ArrowForward, PieChart, QueryStats, Timeline } from '@mui/icons-material';
+import { Box, Button, Container, Grid, Paper, Typography, useTheme } from '@mui/material';
+import Link from 'next/link';
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/content';
+
+interface Feature {
+  title: string;
+  description: string;
+  icon: typeof AccountBalance;
+  comingSoon?: boolean;
+}
+
+const features: Feature[] = [
+  {
+    title: 'Smart Budgeting',
+    description: 'Set, track, and achieve your financial goals with intelligent budgeting tools.',
+    icon: AccountBalance,
+  },
+  {
+    title: 'Expense Analytics',
+    description: 'Visualize your spending patterns with detailed analytics and insights.',
+    icon: Timeline,
+  },
+  {
+    title: 'Financial Forecasting',
+    description:
+      "See how today's decisions shape your financial future. Model scenarios for expenses, income, investments, and more.",
+    icon: QueryStats,
+    comingSoon: true,
+  },
+  {
+    title: 'Investing Hub',
+    description:
+      'Track your portfolio performance, set investment goals, and make data-driven decisions for your financial future.',
+    icon: PieChart,
+    comingSoon: true,
+  },
+];
 
 export default function Landing() {
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
-    <Container
-      component="section"
-      maxWidth="lg"
-    >
-      <Box width="100%">
-        <Typography
-          variant="h1"
-          sx={{
-            marginTop: isDesktop ? 0 : 2,
-            textWrap: 'balance',
-            fontSize: isDesktop ? '4.125rem' : '2.75rem',
-            color: theme.palette.primary.main,
-            fontWeight: 600,
-            textAlign: 'center',
-            ...theme.applyStyles('dark', {
-              color: 'white',
-            }),
-          }}
-        >
-          {APP_NAME}
-        </Typography>
-        <Typography
-          variant="h5"
-          sx={{
-            marginTop: 3,
-            textWrap: 'balance',
-            fontSize: isDesktop ? '1.5rem' : '1.25rem',
-            color: theme.palette.primary.light,
-            textAlign: 'center',
-            ...theme.applyStyles('dark', {
-              color: 'white',
-            }),
-          }}
-        >
-          {APP_DESCRIPTION}
-        </Typography>
-      </Box>
-      <Grid
-        container
-        mt={2}
-        spacing={2}
+    <Box>
+      {/* Hero Section */}
+      <Container
+        maxWidth="lg"
+        sx={{ mb: { xs: 8, md: 12 } }}
       >
-        <FeatureCard
-          title="Budgetting"
-          description="Budget your expenses, track your spendings and income. Visualize your balance and debts!"
-          Icon={SpaceDashboardIcon}
-          isImplemented
-        />
-        <FeatureCard
-          title="Planning"
-          description="Craft your budget for upcoming months... or even years? Put your goals!"
-          Icon={DonutSmallIcon}
-          isImplemented
-        />
-        <FeatureCard
-          title="Forecasting"
-          description="How changing your expenses would impact your finances? Better to see!"
-          Icon={MultilineChartIcon}
-          isImplemented={false}
-        />
-        <FeatureCard
-          title="Investing"
-          description="Visualize your investments as part of your budget. Get advice from experts!"
-          Icon={AutoGraphIcon}
-          isImplemented={false}
-        />
-      </Grid>
-      <Box
-        display="flex"
-        justifyContent="center"
-        my={2}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          LinkComponent={NextLink}
-          href="/sign-up"
-          size="large"
-          sx={{ width: { xs: '100%', md: '50%' } }}
+        <Grid
+          container
+          spacing={4}
+          alignItems="center"
         >
-          Get Started
-        </Button>
-      </Box>
-    </Container>
+          <Grid
+            item
+            xs={12}
+            md={6}
+          >
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: '2.5rem', md: '3.75rem' },
+                fontWeight: 700,
+                mb: 2,
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {APP_NAME}
+            </Typography>
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '1.5rem', md: '2rem' },
+                color: 'text.secondary',
+                mb: 4,
+                fontWeight: 400,
+              }}
+            >
+              {APP_DESCRIPTION}
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <Button
+                component={Link}
+                href="/sign-up"
+                variant="contained"
+                size="large"
+                endIcon={<ArrowForward />}
+                sx={{
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                }}
+              >
+                Get Started
+              </Button>
+              <Button
+                component={Link}
+                href="/sign-in"
+                variant="outlined"
+                size="large"
+                color="secondary"
+                sx={{
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                }}
+              >
+                Sign In
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+
+      {/* Features Section */}
+      <Container maxWidth="lg">
+        <Grid
+          container
+          spacing={3}
+        >
+          {features.map((feature, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              key={index}
+            >
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  position: 'relative',
+                  backgroundColor:
+                    theme.palette.mode === 'light'
+                      ? 'rgba(255, 255, 255, 0.9)'
+                      : 'rgba(30, 30, 36, 0.8)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: 2,
+                  border: `1px solid ${
+                    theme.palette.mode === 'light'
+                      ? 'rgba(0, 0, 0, 0.05)'
+                      : 'rgba(255, 255, 255, 0.05)'
+                  }`,
+                  transition: 'all 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: theme.shadows[4],
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'rgba(255, 255, 255, 1)'
+                        : 'rgba(30, 30, 36, 0.95)',
+                  },
+                }}
+              >
+                {feature.comingSoon && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      px: 1,
+                      py: 0.5,
+                      borderRadius: 1,
+                      backgroundColor: theme.palette.primary.main,
+                      color: theme.palette.primary.contrastText,
+                    }}
+                  >
+                    Coming Soon
+                  </Typography>
+                )}
+                <feature.icon
+                  sx={{
+                    fontSize: 40,
+                    color: theme.palette.primary.main,
+                    mb: 2,
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                >
+                  {feature.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {feature.description}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 }

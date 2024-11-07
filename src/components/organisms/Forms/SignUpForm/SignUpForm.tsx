@@ -6,11 +6,9 @@ import {
   CardContent,
   Card,
   CardHeader,
-  CardActions,
   Box,
   Typography,
-  useTheme,
-  useMediaQuery,
+  Stack,
 } from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
@@ -29,9 +27,6 @@ export default function SignUpForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const submitDisabled =
     isPending ||
@@ -74,26 +69,42 @@ export default function SignUpForm() {
   return (
     <Card
       sx={{
-        justifyContent: 'center',
-        textAlign: 'center',
-        p: 2,
-        minWidth: isMobile ? 'calc(100vw - 32px)' : 600,
-        background: 'rgba(255, 255, 255, 0.05)',
+        width: '100%',
+        maxWidth: 480,
+        mx: 'auto',
+        background: theme =>
+          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(18, 18, 18, 0.8)',
         backdropFilter: 'blur(20px)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-        border: '1px solid rgba(255, 255, 255, 0.33)',
+        boxShadow: theme =>
+          theme.palette.mode === 'light'
+            ? '0 8px 32px rgba(0, 0, 0, 0.08)'
+            : '0 8px 32px rgba(0, 0, 0, 0.24)',
+        border: theme =>
+          `1px solid ${
+            theme.palette.mode === 'light'
+              ? 'rgba(255, 255, 255, 0.7)'
+              : 'rgba(255, 255, 255, 0.05)'
+          }`,
+        borderRadius: 3,
       }}
       component="form"
       onSubmit={handleSubmit}
     >
       <CardHeader
-        sx={{
-          textAlign: 'center',
-        }}
         title="Sign Up"
+        sx={{
+          pb: 0,
+          '& .MuiCardHeader-title': {
+            variant: 'h4',
+            fontWeight: 700,
+          },
+          '& .MuiCardHeader-content': {
+            overflow: 'visible',
+          },
+        }}
       />
-      <CardContent>
-        <Box sx={{ marginBottom: 3 }}>
+      <CardContent sx={{ pt: 4 }}>
+        <Stack spacing={3}>
           <TextField
             required
             fullWidth
@@ -104,8 +115,6 @@ export default function SignUpForm() {
             onChange={e => setName(e.target.value)}
             disabled={isPending}
           />
-        </Box>
-        <Box sx={{ marginBottom: 3 }}>
           <EmailInput
             value={email}
             errorMessage={emailError}
@@ -113,48 +122,65 @@ export default function SignUpForm() {
             onChange={e => setEmail(e.target.value)}
             disabled={isPending}
           />
-        </Box>
-        <PasswordInput
-          onError={setPasswordError}
-          onChange={e => setPassword(e.target.value)}
-          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
-          value={password}
-          showPasswordStrength
-          disabled={isPending}
-        />
-        <PasswordInput
-          onError={setConfirmPasswordError}
-          onChange={e => setConfirmPassword(e.target.value)}
-          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
-          value={confirmPassword}
-          showPasswordStrength={false}
-          name="confirmPassword"
-          label="Confirm Password"
-          id="confirm-password"
-          isConfirmPassword
-          primaryPassword={password}
-          disabled={isPending}
-        />
+          <PasswordInput
+            onError={setPasswordError}
+            onChange={e => setPassword(e.target.value)}
+            valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
+            value={password}
+            showPasswordStrength
+            disabled={isPending}
+          />
+          <PasswordInput
+            onError={setConfirmPasswordError}
+            onChange={e => setConfirmPassword(e.target.value)}
+            valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
+            value={confirmPassword}
+            showPasswordStrength={false}
+            name="confirmPassword"
+            label="Confirm Password"
+            id="confirm-password"
+            isConfirmPassword
+            primaryPassword={password}
+            disabled={isPending}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={submitDisabled}
+            sx={{
+              py: 1.5,
+              mt: 2,
+              fontWeight: 700,
+            }}
+          >
+            {isPending ? 'Creating account...' : 'Create account'}
+          </Button>
+        </Stack>
       </CardContent>
-      <CardActions>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          disabled={submitDisabled}
-        >
-          {isPending ? 'loading...' : 'Sign up'}
-        </Button>
-      </CardActions>
-      <Box sx={{ mt: 2 }}>
+      <Box
+        sx={{
+          p: 3,
+          pt: 0,
+          textAlign: 'center',
+        }}
+      >
         <Typography
           variant="body2"
-          component="span"
-          sx={{ marginRight: 1 }}
+          color="text.secondary"
         >
-          Already have an account?
+          Already have an account?{' '}
+          <Link
+            href="/sign-in"
+            style={{
+              color: 'inherit',
+              textDecoration: 'none',
+              fontWeight: 600,
+            }}
+          >
+            Sign In
+          </Link>
         </Typography>
-        <Link href="/sign-in">Sign In</Link>
       </Box>
     </Card>
   );

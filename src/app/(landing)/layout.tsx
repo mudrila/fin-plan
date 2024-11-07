@@ -1,55 +1,35 @@
 'use client';
 
-import { Box, Container, useColorScheme } from '@mui/material';
-import Image from 'next/image';
+import { Box, Container, useColorScheme, useTheme } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import LandingHeader from '@/components/organisms/Navigation/LandingHeader';
 
 export default function LandingLayout({ children }: PropsWithChildren) {
   const { mode } = useColorScheme();
+  const theme = useTheme();
+
   return (
-    <>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background:
+          mode === 'dark'
+            ? `linear-gradient(135deg, ${theme.palette.background.default} 0%, ${theme.palette.primary.dark} 100%)`
+            : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.primary.light} 100%)`,
+      }}
+    >
       <LandingHeader />
       <Container
         component="main"
+        maxWidth="xl"
         sx={{
-          pt: 'calc(56px + 64px)',
-          minHeight: '100vh',
-          minWidth: '100vw',
-          height: '100%',
-          width: '100%',
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
+          pt: { xs: 8, md: 12 },
+          pb: { xs: 6, md: 8 },
+          minHeight: 'calc(100vh - 64px)',
         }}
       >
-        <Box
-          position="absolute"
-          minWidth="100vw"
-          minHeight="100vh"
-          height="100%"
-          width="100%"
-          top={0}
-          left={0}
-          zIndex={-1}
-        >
-          <Image
-            src={
-              mode === 'dark' ? '/img/hero-background-dark.png' : '/img/hero-background-light.jpg'
-            }
-            alt="Hero Background"
-            fill
-          />
-        </Box>
-        <Box
-          height="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          {children}
-        </Box>
+        {children}
       </Container>
-    </>
+    </Box>
   );
 }
