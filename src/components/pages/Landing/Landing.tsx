@@ -1,15 +1,9 @@
 'use client';
 
-import {
-  AccountBalance,
-  Timeline,
-  Notifications,
-  Security,
-  ArrowForward,
-} from '@mui/icons-material';
+import { AccountBalance, ArrowForward, PieChart, QueryStats, Timeline } from '@mui/icons-material';
 import { Box, Button, Container, Grid, Paper, Typography, useTheme } from '@mui/material';
 import Link from 'next/link';
-import { APP_NAME, APP_DESCRIPTION } from '@/constants/content';
+import { APP_DESCRIPTION, APP_NAME } from '@/constants/content';
 
 interface Feature {
   title: string;
@@ -30,15 +24,18 @@ const features: Feature[] = [
     icon: Timeline,
   },
   {
-    title: 'Smart Notifications',
-    description: 'Stay on top of your finances with intelligent alerts and reminders.',
-    icon: Notifications,
+    title: 'Financial Forecasting',
+    description:
+      "See how today's decisions shape your financial future. Model scenarios for expenses, income, investments, and more.",
+    icon: QueryStats,
     comingSoon: true,
   },
   {
-    title: 'Secure Platform',
-    description: 'Your financial data is protected with enterprise-grade security.',
-    icon: Security,
+    title: 'Investing Hub',
+    description:
+      'Track your portfolio performance, set investment goals, and make data-driven decisions for your financial future.',
+    icon: PieChart,
+    comingSoon: true,
   },
 ];
 
@@ -108,6 +105,7 @@ export default function Landing() {
                 href="/sign-in"
                 variant="outlined"
                 size="large"
+                color="secondary"
                 sx={{
                   px: 4,
                   py: 1.5,
