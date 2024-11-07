@@ -1,3 +1,5 @@
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -8,9 +10,9 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { useState, ChangeEvent, useMemo } from 'react';
-
-import { PASSWORD_STRENGTH_DESCRIPTIONS, passwordRegex } from '@/constants/content';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, ChangeEvent, useRef } from 'react';
+import { passwordRegex } from '@/constants/content';
 
 interface PasswordInputProps {
   onError: (errorMessage: string) => void;
@@ -27,6 +29,19 @@ interface PasswordInputProps {
   required?: boolean;
 }
 
+interface PasswordRequirement {
+  regex: RegExp;
+  label: string;
+}
+
+const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
+  { regex: /.{8,}/, label: 'At least 8 characters' },
+  { regex: /[A-Z]/, label: 'One uppercase letter' },
+  { regex: /[a-z]/, label: 'One lowercase letter' },
+  { regex: /[0-9]/, label: 'One number' },
+  { regex: /[^A-Za-z0-9]/, label: 'One special character' },
+];
+
 export default function PasswordInput({
   onError,
   onChange,
@@ -42,27 +57,18 @@ export default function PasswordInput({
   required = true,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [passwordError, setPasswordErrorState] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
-
-  const passwordStrengthDescription = useMemo(
-    () => PASSWORD_STRENGTH_DESCRIPTIONS[passwordStrength],
-    [passwordStrength],
-  );
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const evaluatePasswordStrength = (password: string) => {
-    let strength = 0;
+    const metRequirements = PASSWORD_REQUIREMENTS.filter(req => req.regex.test(password)).length;
 
-    if (password.length >= 8) strength += 1;
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[a-z]/.test(password)) strength += 1;
-    if (/[0-9]/.test(password)) strength += 1;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    setPasswordStrength(metRequirements);
 
-    setPasswordStrength(strength);
-
-    switch (strength) {
+    switch (metRequirements) {
       case 5:
         setProgressColor('success');
         break;
@@ -136,23 +142,90 @@ export default function PasswordInput({
             </InputAdornment>
           ),
         }}
+        onFocus={() => setIsFocused(true)}
+        onBlur={e => {
+          if (!e.relatedTarget?.closest(`#${id}-strength`)) {
+            setIsFocused(false);
+          }
+        }}
+        inputRef={inputRef}
       />
-      {showPasswordStrength && (
-        <>
-          <LinearProgress
-            variant="determinate"
-            value={(passwordStrength / 5) * 100}
-            color={progressColor}
-            sx={{ height: 10, borderRadius: 5, marginTop: 3 }}
-          />
-          <Typography
-            variant="body2"
-            color="text.secondary"
+      <AnimatePresence>
+        {showPasswordStrength && isFocused && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            {`Password strength: ${passwordStrengthDescription}`}
-          </Typography>
-        </>
-      )}
+            <Box
+              sx={{
+                mt: 2,
+                p: 2,
+                borderRadius: 1,
+                backgroundColor: theme =>
+                  theme.palette.mode === 'light'
+                    ? 'rgba(0, 0, 0, 0.03)'
+                    : 'rgba(255, 255, 255, 0.03)',
+              }}
+              tabIndex={-1}
+            >
+              <LinearProgress
+                variant="determinate"
+                value={(passwordStrength / 5) * 100}
+                color={progressColor}
+                sx={{
+                  height: 6,
+                  borderRadius: 3,
+                  mb: 2,
+                  backgroundColor: theme =>
+                    theme.palette.mode === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+                }}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                    gap: 1,
+                  }}
+                >
+                  {PASSWORD_REQUIREMENTS.map((req, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        color: req.regex.test(value)
+                          ? theme => theme.palette.success.main
+                          : theme => theme.palette.text.secondary,
+                      }}
+                    >
+                      <motion.div
+                        initial={{ scale: 0.5 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.1 + index * 0.05 }}
+                      >
+                        {req.regex.test(value) ? (
+                          <Check fontSize="small" />
+                        ) : (
+                          <Close fontSize="small" />
+                        )}
+                      </motion.div>
+                      <Typography variant="caption">{req.label}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </motion.div>
+            </Box>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }

@@ -1,16 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
-  Box,
-  Typography,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Box, Typography, Stack } from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -26,9 +16,6 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
 
   const isFormValid = !emailError && !passwordError;
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleSubmit = async (event: React.FormEvent) => {
     setLoading(true);
@@ -64,26 +51,39 @@ export default function SignInForm() {
   return (
     <Card
       sx={{
-        justifyContent: 'center',
-        textAlign: 'center',
-        p: 2,
-        minWidth: isMobile ? 'calc(100vw - 32px)' : 600,
-        background: 'rgba(255, 255, 255, 0.05)',
+        width: '100%',
+        maxWidth: 480,
+        mx: 'auto',
+        background: theme =>
+          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(18, 18, 18, 0.8)',
         backdropFilter: 'blur(20px)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-        border: '1px solid rgba(255, 255, 255, 0.33)',
+        boxShadow: theme =>
+          theme.palette.mode === 'light'
+            ? '0 8px 32px rgba(0, 0, 0, 0.08)'
+            : '0 8px 32px rgba(0, 0, 0, 0.24)',
+        border: theme =>
+          `1px solid ${
+            theme.palette.mode === 'light'
+              ? 'rgba(255, 255, 255, 0.7)'
+              : 'rgba(255, 255, 255, 0.05)'
+          }`,
+        borderRadius: 3,
       }}
       component="form"
       onSubmit={handleSubmit}
     >
       <CardHeader
-        sx={{
-          textAlign: 'center',
-        }}
         title="Sign In"
+        titleTypography={{ variant: 'h4', fontWeight: 700 }}
+        sx={{
+          pb: 0,
+          '& .MuiCardHeader-content': {
+            overflow: 'visible',
+          },
+        }}
       />
-      <CardContent>
-        <Box sx={{ marginBottom: 3 }}>
+      <CardContent sx={{ pt: 4 }}>
+        <Stack spacing={3}>
           <EmailInput
             value={email}
             errorMessage={emailError}
@@ -91,35 +91,51 @@ export default function SignInForm() {
             onChange={e => setEmail(e.target.value)}
             disabled={loading}
           />
-        </Box>
-        <PasswordInput
-          onError={setPasswordError}
-          onChange={e => setPassword(e.target.value)}
-          valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
-          value={password}
-          showPasswordStrength={false}
-          disabled={loading}
-        />
+          <PasswordInput
+            onError={setPasswordError}
+            onChange={e => setPassword(e.target.value)}
+            valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
+            value={password}
+            disabled={loading}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={!email || !password || !isFormValid || loading}
+            sx={{
+              py: 1.5,
+              mt: 2,
+              fontWeight: 700,
+            }}
+          >
+            {loading ? 'Signing in...' : 'Sign in'}
+          </Button>
+        </Stack>
       </CardContent>
-      <CardActions>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          disabled={!email || !password || !isFormValid || loading}
-        >
-          Sign in
-        </Button>
-      </CardActions>
-      <Box sx={{ mt: 2 }}>
+      <Box
+        sx={{
+          p: 3,
+          pt: 0,
+          textAlign: 'center',
+        }}
+      >
         <Typography
           variant="body2"
-          component="span"
-          sx={{ marginRight: 1 }}
+          color="text.secondary"
         >
-          {`Don't have an account?`}
+          Don&apos;t have an account?{' '}
+          <Link
+            href="/sign-up"
+            style={{
+              color: 'inherit',
+              textDecoration: 'none',
+              fontWeight: 600,
+            }}
+          >
+            Sign Up
+          </Link>
         </Typography>
-        <Link href="/sign-up">Sign Up</Link>
       </Box>
     </Card>
   );
