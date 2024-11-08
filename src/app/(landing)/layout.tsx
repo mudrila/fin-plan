@@ -23,7 +23,7 @@ export default function LandingLayout({ children }: PropsWithChildren) {
         component="main"
         maxWidth="xl"
         sx={{
-          pt: { xs: 8, md: 12 },
+          pt: { xs: 12, md: 16 },
           pb: { xs: 6, md: 8 },
           minHeight: 'calc(100vh - 64px)',
         }}

@@ -23,6 +23,7 @@
     "prisma:format": "npx prisma format",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate dev",
+    "prisma:apply": "dotenv -e .env.local -- npx prisma migrate deploy",
     "postinstall": "npm run prisma:generate"
   },
   "dependencies": {
