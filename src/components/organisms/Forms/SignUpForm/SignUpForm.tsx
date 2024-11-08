@@ -55,12 +55,22 @@ export default function SignUpForm() {
         if (data.errorMessage) {
           toast.error(data.errorMessage);
         } else if (!data.error) {
-          toast.success('Signed Up! You will be redirected to app in a blink of an eye');
-          await signIn('email-and-password', {
-            redirectTo: '/app',
-            email,
-            password,
-          });
+          const sendResponse = await fetch('/api/send', {
+            method: 'POST',
+            body: JSON.stringify({
+              name,
+              email
+            }),
+          })
+          const sendData = await sendResponse.json();
+          if (!sendData.errorMessage) {
+            toast.success('Signed Up! You will be redirected to app in a blink of an eye');
+            await signIn('email-and-password', {
+              redirectTo: '/app',
+              email,
+              password,
+            });
+          }
         }
       });
     }
