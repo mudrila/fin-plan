@@ -11,13 +11,10 @@ import {
   Tooltip,
   MenuItem,
   ListItemIcon,
-  Button,
 } from '@mui/material';
-import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, MouseEvent } from 'react';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
-import { APP_SHORT_NAME } from '@/constants/content';
 
 export default function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -38,22 +35,6 @@ export default function Header() {
 
   return (
     <Toolbar disableGutters>
-      <Button
-        LinkComponent={Link}
-        href="/"
-        sx={{
-          mr: 2,
-          display: 'flex',
-          fontFamily: 'monospace',
-          fontWeight: 700,
-          letterSpacing: '.1rem',
-          color: 'inherit',
-          textDecoration: 'none',
-          fontSize: 18,
-        }}
-      >
-        {APP_SHORT_NAME}
-      </Button>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
@@ -63,7 +44,7 @@ export default function Header() {
           >
             <Avatar
               alt={session.data?.user?.name || 'User'}
-              src=""
+              src={session.data?.user?.image || ''}
             />
           </IconButton>
         </Tooltip>
