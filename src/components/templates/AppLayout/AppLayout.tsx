@@ -8,7 +8,7 @@ import Header from '@/components/molecules/Header/Header';
 import AppNavigation from '@/components/organisms/Navigation/AppNavigation';
 import { AppBar, DRAWER_WIDTH, DrawerHeader } from '@/components/organisms/Navigation/components';
 
-export default function NavigationWrapper({ children }: PropsWithChildren) {
+export default function AppLayout({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false);
 
   const theme = useTheme();

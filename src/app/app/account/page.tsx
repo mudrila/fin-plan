@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import Profile from '@/components/pages/User/Account';
+import AccountSettings from '@/components/pages/User/Account';
 import { APP_SHORT_NAME } from '@/constants/content';
 import { auth } from '@/utils/auth';
 
 export const metadata: Metadata = {
-  title: `Your Account | ${APP_SHORT_NAME}`,
+  title: `Account | ${APP_SHORT_NAME}`,
 };
 
 export default async function UserPage() {
@@ -17,7 +17,7 @@ export default async function UserPage() {
   }
 
   return (
-    <Profile
+    <AccountSettings
       userEmail={user.email!}
       userImage={user.image!}
       userName={user.name!}

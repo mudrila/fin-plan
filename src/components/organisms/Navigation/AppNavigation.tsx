@@ -14,17 +14,20 @@ function NavigationItem({
   icon,
   text,
   open,
+  onClose,
 }: {
   href: string;
   icon: React.ReactNode;
   text: string;
   open: boolean;
+  onClose: () => void;
 }) {
   const pathname = usePathname();
   return (
     <ListItem
       disablePadding
       sx={{ display: 'block' }}
+      onClick={onClose}
     >
       <ListItemButton
         component={NextLink}
@@ -64,12 +67,14 @@ export default function AppNavigation({ open, onClose }: { open: boolean; onClos
           icon={<SpaceDashboardIcon />}
           text="Dashboard"
           open={open}
+          onClose={onClose}
         />
         <NavigationItem
           href="/app/budget"
           icon={<DonutSmallIcon />}
           text="Budget"
           open={open}
+          onClose={onClose}
         />
       </List>
       <Divider />
