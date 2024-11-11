@@ -1,20 +1,26 @@
 'use client';
-import Edit from '@mui/icons-material/Edit';
+
+import { Check, Delete } from '@mui/icons-material';
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  Button,
+  Avatar,
   Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
   DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  TextField,
+  useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { FormEvent, useState, useTransition } from 'react';
+import { FormEvent, useRef, useState, useTransition, useMemo } from 'react';
 import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
@@ -26,28 +32,23 @@ interface AccountProps {
 }
 
 export default function Account({ userName, userEmail, userImage }: AccountProps) {
-  const [image, setImage] = useState<File | string | null>(userImage);
-  const [base64Image, setBase64Image] = useState('');
-  const [openAvatar, setOpenAvatar] = useState(false);
+  const theme = useTheme();
+  const [base64Image, setBase64Image] = useState(userImage);
   const [openDelete, setOpenDelete] = useState(false);
 
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState(userName);
   const [email, setEmail] = useState(userEmail);
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [openData, setOpenData] = useState(false);
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const handleClickData = () => {
-    setOpenData(true);
-  };
-
-  const handleCloseData = () => {
-    setOpenData(false);
-  };
+  const isFormChanged = useMemo(() => {
+    return name !== userName || email !== userEmail || password !== '' || base64Image !== userImage;
+  }, [name, email, password, userName, userEmail, base64Image, userImage]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -71,8 +72,6 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
         } else if (responseData.success) {
           router.refresh();
           toast.success('Your data updated!', { duration: 5000, id: loadingToastId });
-          handleCloseData();
-          handleCloseAvatar();
         } else {
           toast.error('Something went wrong...', { id: loadingToastId });
         }
@@ -83,19 +82,13 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
     });
   };
 
-  const handleClickAvatar = () => {
-    setOpenAvatar(true);
-  };
-
-  const handleCloseAvatar = () => {
-    setOpenAvatar(false);
+  const handleSelectImageInput = () => {
+    imageInputRef.current?.click();
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImage(file);
-
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
@@ -136,8 +129,8 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
 
   return (
     <>
-      <Card>
-        <CardHeader title={`Hello, ${userName}`} />
+      <Card sx={{ maxWidth: theme.breakpoints.values.sm }}>
+        <CardHeader title="Manage account" />
         <CardContent>
           <Box
             display="flex"
@@ -145,115 +138,74 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
             alignItems="start"
             gap={2}
           >
-            <Button
+            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+              <IconButton onClick={handleSelectImageInput}>
+                <Avatar
+                  alt={userName}
+                  src={base64Image || ''}
+                  sx={{ width: 100, height: 100 }}
+                />
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  hidden
+                  ref={imageInputRef}
+                  accept="image/*"
+                />
+              </IconButton>
+            </Box>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              name="name"
+              label="Name"
+              type="name"
+              fullWidth
               variant="outlined"
-              onClick={handleClickData}
-              endIcon={<Edit />}
-            >
-              Change name, email and password
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleClickAvatar}
-              endIcon={<Edit />}
-            >
-              Upload avatar
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleClickDelete}
-              endIcon={<Edit />}
-            >
-              Delete account
-            </Button>
+              value={name}
+              onChange={e => setName(e.target.value)}
+              disabled={isPending}
+            />
+            <EmailInput
+              value={email}
+              errorMessage={emailError}
+              onError={setEmailError}
+              onChange={e => setEmail(e.target.value)}
+              disabled={isPending}
+              required={false}
+            />
+            <PasswordInput
+              onError={setPasswordError}
+              onChange={e => setPassword(e.target.value)}
+              valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
+              value={password}
+              showPasswordStrength={false}
+              disabled={isPending}
+              required={false}
+            />
           </Box>
         </CardContent>
+        <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            endIcon={<Check />}
+            disabled={!!passwordError || !!emailError || isPending || !isFormChanged}
+          >
+            Update Account
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleClickDelete}
+            endIcon={<Delete />}
+            color="error"
+            disabled={isPending}
+          >
+            Delete account
+          </Button>
+        </CardActions>
       </Card>
-      <Dialog
-        open={openData}
-        onClose={handleCloseData}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Change name, email and password</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            name="name"
-            label="Name"
-            type="name"
-            fullWidth
-            variant="outlined"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            disabled={isPending}
-          />
-          <EmailInput
-            value={email}
-            errorMessage={emailError}
-            onError={setEmailError}
-            onChange={e => setEmail(e.target.value)}
-            disabled={isPending}
-            required={false}
-          />
-          <PasswordInput
-            onError={setPasswordError}
-            onChange={e => setPassword(e.target.value)}
-            valueBlackList={email && email.includes('@') ? [email, email.split('@')[0]] : []}
-            value={password}
-            showPasswordStrength={false}
-            disabled={isPending}
-            required={false}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleCloseData}
-            type="reset"
-            variant="outlined"
-            disabled={isPending}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={!!passwordError || !!emailError || isPending}
-          >
-            Change
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={openAvatar}
-        onClose={handleCloseAvatar}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Upload Profile Image</DialogTitle>
-        <DialogContent>
-          <input
-            type="file"
-            onChange={handleImageChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAvatar}>Cancel</Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={!image}
-          >
-            Upload
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Dialog
         open={openDelete}
         onClose={handleCloseDelete}
@@ -263,6 +215,12 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
         }}
       >
         <DialogTitle>Delete your account?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action cannot be undone. All your data will be deleted and you will not be able to
+            recover it.
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDelete}>Cancel</Button>
           <Button

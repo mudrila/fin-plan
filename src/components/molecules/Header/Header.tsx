@@ -3,97 +3,76 @@
 import { Logout } from '@mui/icons-material';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {
-  Box,
-  Toolbar,
-  IconButton,
-  Menu,
   Avatar,
-  Tooltip,
-  MenuItem,
+  Box,
+  Divider,
+  IconButton,
   ListItemIcon,
-  Button,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
 } from '@mui/material';
-import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import { useState, MouseEvent } from 'react';
-import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
-import { APP_SHORT_NAME } from '@/constants/content';
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import { MouseEvent, useState } from 'react';
 
 export default function Header() {
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { push } = useRouter();
+  const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
 
   const session = useSession();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+    setAnchorElement(event.currentTarget);
   };
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+    setAnchorElement(null);
+  };
+
+  const handleNavigateToSettings = () => {
+    handleCloseUserMenu();
+    push('/app/account');
   };
 
   const handleSignOut = () => {
+    handleCloseUserMenu();
     signOut();
   };
 
   return (
     <Toolbar disableGutters>
-      <Button
-        LinkComponent={Link}
-        href="/"
-        sx={{
-          mr: 2,
-          display: 'flex',
-          fontFamily: 'monospace',
-          fontWeight: 700,
-          letterSpacing: '.1rem',
-          color: 'inherit',
-          textDecoration: 'none',
-          fontSize: 18,
-        }}
-      >
-        {APP_SHORT_NAME}
-      </Button>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
-          <IconButton
-            onClick={handleOpenUserMenu}
-            sx={{ p: 0 }}
-          >
-            <Avatar
-              alt={session.data?.user?.name || 'User'}
-              src=""
-            />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleOpenUserMenu}>
+          <Avatar
+            alt={session.data?.user?.name || 'User'}
+            src={session.data?.user?.image || ''}
+          />
+        </IconButton>
         <Menu
-          sx={{ mt: '45px' }}
           id="menu-appbar"
-          anchorEl={anchorElUser}
+          anchorEl={anchorElement}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'right',
           }}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={Boolean(anchorElUser)}
+          open={Boolean(anchorElement)}
           onClose={handleCloseUserMenu}
         >
-          <MenuItem href="/app/account">
+          <MenuItem onClick={handleNavigateToSettings}>
             <ListItemIcon>
               <ManageAccountsIcon />
             </ListItemIcon>
-            <StyledLink href="/app/account">{session.data?.user?.name}</StyledLink>
+            <ListItemText>Settings</ListItemText>
           </MenuItem>
+          <Divider />
           <MenuItem onClick={handleSignOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
-            Logout
+            <ListItemText>Logout</ListItemText>
           </MenuItem>
         </Menu>
       </Box>

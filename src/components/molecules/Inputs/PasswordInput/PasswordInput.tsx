@@ -117,7 +117,7 @@ export default function PasswordInput({
   };
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       <TextField
         required={required}
         fullWidth

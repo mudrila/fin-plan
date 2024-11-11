@@ -24,9 +24,11 @@ export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccou
         justifyContent="space-between"
         display="flex"
       >
-        <Typography variant="h5">Your budget accounts</Typography>
-        <BudgetAccountTransaction accounts={serializedBudgetAccounts} />
-        <BudgetAccountForm />
+        <Typography variant="h5">Budget</Typography>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <BudgetAccountTransaction accounts={serializedBudgetAccounts} />
+          <BudgetAccountForm />
+        </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
         <BudgetAccountList accounts={groupedAccounts} />
