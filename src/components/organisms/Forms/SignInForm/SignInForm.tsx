@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
+import { providerId } from '@/constants/content';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -23,7 +25,7 @@ export default function SignInForm() {
 
     if (isFormValid) {
       try {
-        const result = await signIn('email-and-password', {
+        const result = await signIn(providerId, {
           redirectTo: '/app',
           email,
           password,
@@ -102,7 +104,7 @@ export default function SignInForm() {
             disabled={loading}
           />
 
-          <Link
+          <StyledLink
             href="/forgot-password"
             style={{
               color: 'inherit',
@@ -112,7 +114,7 @@ export default function SignInForm() {
             }}
           >
             Forgot password?
-          </Link>
+          </StyledLink>
           <Button
             type="submit"
             variant="contained"

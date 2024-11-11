@@ -40,15 +40,15 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: 'Noreply <noreply@yfp.io>',
       to: [email],
-      subject: 'Verification Code',
-      text: otpCode,
+      subject: 'Resetting your password at YFP: Verification Code',
+      text: `Your verification code: ${otpCode}`,
     });
 
     if (error) {
       return NextResponse.json({ errorMessage: error.message });
     }
 
-    return NextResponse.json({ message: 'Code sended!' });
+    return NextResponse.json({ message: 'Code sent!' });
   } catch (e) {
     console.error(e, 'Error during sending your code');
     return NextResponse.json({

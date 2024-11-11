@@ -1,17 +1,19 @@
 'use client';
 
 import { Button, Card, CardContent, CardHeader, Stack } from '@mui/material';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { toast } from 'sonner';
-import { OTPInput } from '../../../molecules/Inputs/OTPInput/OTPInput';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
+import { OTPInput } from '@/components/molecules/Inputs/OTPInput/OTPInput';
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
+    setLoading(true);
     event.preventDefault();
 
     try {
@@ -34,6 +36,8 @@ export default function ForgotPasswordForm() {
       toast.error('Unexpected error while sending code. Please, try again later', {
         duration: 3000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,13 +86,13 @@ export default function ForgotPasswordForm() {
               errorMessage={emailError}
               onError={setEmailError}
               onChange={e => setEmail(e.target.value)}
-              // disabled={loading}
+              disabled={loading}
             />
             <Button
               type="submit"
               variant="contained"
               size="large"
-              disabled={!email || !!emailError}
+              disabled={!email || !!emailError || loading}
               sx={{
                 py: 1.5,
                 mt: 2,

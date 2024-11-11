@@ -16,6 +16,7 @@ import { useState, useTransition, FormEvent } from 'react';
 import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
+import { providerId } from '@/constants/content';
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -65,7 +66,7 @@ export default function SignUpForm() {
           const sendData = await sendResponse.json();
           if (!sendData.errorMessage) {
             toast.success('Signed Up! You will be redirected to app in a blink of an eye');
-            await signIn('email-and-password', {
+            await signIn(providerId, {
               redirectTo: '/app',
               email,
               password,

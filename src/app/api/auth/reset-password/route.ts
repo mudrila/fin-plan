@@ -9,10 +9,12 @@ export async function POST(request: Request) {
 
     if (password) {
       if (!password.match(passwordRegex)) {
-        return NextResponse.json({ message: 'Please check our password' });
+        return NextResponse.json({
+          message: "Password doesn't match required security parameters",
+        });
       }
     } else {
-      return NextResponse.json({ message: 'Please enter password' });
+      return NextResponse.json({ message: "New password wasn't sent" });
     }
 
     const verificationRequest = await prisma.verificationRequest.findFirst({
@@ -24,7 +26,7 @@ export async function POST(request: Request) {
     });
 
     if (!verificationRequest) {
-      return NextResponse.json({ errorMessage: 'please check our data' });
+      return NextResponse.json({ errorMessage: "Verification token wasn't found or expired" });
     }
 
     const passwordHash = await generateHashPassword(password);
