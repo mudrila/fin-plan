@@ -59,9 +59,9 @@ export default function SignUpForm() {
             method: 'POST',
             body: JSON.stringify({
               name,
-              email
+              email,
             }),
-          })
+          });
           const sendData = await sendResponse.json();
           if (!sendData.errorMessage) {
             toast.success('Signed Up! You will be redirected to app in a blink of an eye');

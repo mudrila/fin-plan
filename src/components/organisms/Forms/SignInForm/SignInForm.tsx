@@ -101,6 +101,18 @@ export default function SignInForm() {
             value={password}
             disabled={loading}
           />
+
+          <Link
+            href="/forgot-password"
+            style={{
+              color: 'inherit',
+              textDecoration: 'none',
+              fontWeight: 600,
+              marginLeft: 'auto',
+            }}
+          >
+            Forgot password?
+          </Link>
           <Button
             type="submit"
             variant="contained"
