@@ -12,6 +12,7 @@ const lightText = {
   primary: 'rgba(0, 0, 0, 0.87)',
   secondary: 'rgba(0, 0, 0, 0.6)',
 };
+const lightRGBA = 'rgba(255, 255, 255, 0.9)';
 
 // Dark theme colors
 const darkBackground = '#121212';
@@ -21,6 +22,7 @@ const darkText = {
   primary: '#ffffff',
   secondary: 'rgba(255, 255, 255, 0.7)',
 };
+const darkRGBA = 'rgba(18, 18, 18, 0.8)';
 
 const palette = {
   // Base colors
@@ -41,6 +43,7 @@ const palette = {
   // Light theme
   light: {
     background: {
+      rgba: lightRGBA,
       default: lightBackground,
       paper: lightPaper,
     },
@@ -53,6 +56,7 @@ const palette = {
   // Dark theme
   dark: {
     background: {
+      rgba: darkRGBA,
       default: darkBackground,
       paper: darkPaper,
     },

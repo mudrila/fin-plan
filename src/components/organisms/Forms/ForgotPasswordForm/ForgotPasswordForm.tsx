@@ -1,12 +1,14 @@
 'use client';
 
-import { Button, Card, CardContent, CardHeader, Stack } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Stack, useTheme } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import { OTPInput } from '@/components/molecules/Inputs/OTPInput/OTPInput';
 
 export default function ForgotPasswordForm() {
+  const theme = useTheme();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [emailSent, setEmailSent] = useState<boolean>(false);
@@ -47,19 +49,18 @@ export default function ForgotPasswordForm() {
         width: '100%',
         maxWidth: 480,
         mx: 'auto',
-        background: theme =>
-          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(18, 18, 18, 0.8)',
+        background:
+          theme.palette.mode === 'light'
+            ? 'rgba(255, 255, 255, 0.9)' //theme.palette.background.rgba
+            : 'rgba(18, 18, 18, 0.8)', //theme.palette.background.rgba,
         backdropFilter: 'blur(20px)',
-        boxShadow: theme =>
+        boxShadow:
           theme.palette.mode === 'light'
             ? '0 8px 32px rgba(0, 0, 0, 0.08)'
             : '0 8px 32px rgba(0, 0, 0, 0.24)',
-        border: theme =>
-          `1px solid ${
-            theme.palette.mode === 'light'
-              ? 'rgba(255, 255, 255, 0.7)'
-              : 'rgba(255, 255, 255, 0.05)'
-          }`,
+        border: `1px solid ${
+          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.05)'
+        }`,
         borderRadius: 3,
       }}
       component="form"

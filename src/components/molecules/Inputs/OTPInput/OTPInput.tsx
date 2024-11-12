@@ -1,6 +1,5 @@
-import { Box, Button, Stack } from '@mui/material';
-import { MuiOtpInput } from 'mui-one-time-password-input';
-import { useState, FormEvent } from 'react';
+import { Box, Button, Stack, TextField } from '@mui/material';
+import { useState, FormEvent, useRef, ChangeEvent } from 'react';
 import { toast } from 'sonner';
 import PasswordInput from '../PasswordInput/PasswordInput';
 
@@ -9,9 +8,9 @@ interface OTPInputProps {
 }
 
 export function OTPInput({ email }: OTPInputProps) {
-  // const length = 6;
-  // const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
-  // const inputs = useRef<Array<HTMLInputElement | null>>([]);
+  const length = 6;
+  const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
+  const inputs = useRef<Array<HTMLInputElement | null>>([]);
   const [otpValid, setOtpValid] = useState<boolean>(false);
 
   const [password, setPassword] = useState('');
@@ -20,58 +19,54 @@ export function OTPInput({ email }: OTPInputProps) {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [otp, setOtp] = useState('');
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+    const value = e.target.value;
 
-  const handleChange = (newValue: string) => {
-    setOtp(newValue);
+    if (/^\d?$/.test(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+
+      if (value !== '' && index < 5) {
+        inputs.current[index + 1]?.focus();
+      }
+    }
   };
 
-  // const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-  //   const value = e.target.value;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+    if (e.key === 'Backspace' && otp[index] === '' && index > 0) {
+      const newOtp = [...otp];
+      newOtp[index - 1] = '';
+      setOtp(newOtp);
+      inputs.current[index - 1]?.focus();
+    }
+  };
 
-  //   if (/^\d?$/.test(value)) {
-  //     const newOtp = [...otp];
-  //     newOtp[index] = value;
-  //     setOtp(newOtp);
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedData = e.clipboardData.getData('Text').slice(0, length);
+    if (/^\d+$/.test(pastedData)) {
+      const newOtp = [...otp];
+      pastedData.split('').forEach((char, index) => {
+        newOtp[index] = char;
+      });
+      setOtp(newOtp);
 
-  //     if (value !== '' && index < 5) {
-  //       inputs.current[index + 1]?.focus();
-  //     }
-  //   }
-  // };
-
-  // const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>, index: number) => {
-  //   if (e.key === 'Backspace' && otp[index] === '' && index > 0) {
-  //     const newOtp = [...otp];
-  //     newOtp[index - 1] = '';
-  //     setOtp(newOtp);
-  //     inputs.current[index - 1]?.focus();
-  //   }
-  // };
-
-  // const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
-  //   const pastedData = e.clipboardData.getData('Text').slice(0, length); // Limit to OTP length
-  //   if (/^\d+$/.test(pastedData)) {
-  //     const newOtp = [...otp];
-  //     pastedData.split('').forEach((char, index) => {
-  //       newOtp[index] = char;
-  //     });
-  //     setOtp(newOtp);
-
-  //     const lastFilledIndex = Math.min(pastedData.length, length) - 1;
-  //     inputs.current[lastFilledIndex]?.focus();
-  //   }
-  //   e.preventDefault();
-  // };
+      const lastFilledIndex = Math.min(pastedData.length, length) - 1;
+      inputs.current[lastFilledIndex]?.focus();
+    }
+    e.preventDefault();
+  };
 
   const handleOtpSubmit = async (event: FormEvent) => {
+    const otpCode = otp.join('');
+
     setLoading(true);
     event.preventDefault();
 
     try {
       const response = await fetch('/api/auth/forgot-password', {
         method: 'PUT',
-        body: JSON.stringify({ otp, email }),
+        body: JSON.stringify({ otp: otpCode, email }),
       });
 
       const data = await response.json();
@@ -92,12 +87,14 @@ export function OTPInput({ email }: OTPInputProps) {
   };
 
   const handlePasswordSubmit = async (event: FormEvent) => {
+    const otpCode = otp.join('');
+
     event.preventDefault();
 
     try {
       const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
-        body: JSON.stringify({ otp, email, password }),
+        body: JSON.stringify({ otp: otpCode, email, password }),
       });
 
       const data = await response.json();
@@ -117,47 +114,33 @@ export function OTPInput({ email }: OTPInputProps) {
   };
 
   return !otpValid ? (
-    // <Stack
-    //   direction="column"
-    //   spacing={2}
-    //   onPaste={handlePaste}
-    // >
-    //   <Stack
-    //     direction="row"
-    //     spacing={1}
-    //   >
-    //     {otp.map((_, index) => (
-    //       <TextField
-    //         key={index}
-    //         onKeyDown={e => handleKeyDown(e, index)}
-    //         value={otp[index]}
-    //         onChange={e => handleChange(e, index)}
-    //         inputProps={{
-    //           maxLength: 1,
-    //           style: { textAlign: 'center' },
-    //         }}
-    //         inputRef={el => (inputs.current[index] = el)}
-    //       />
-    //     ))}
-    //   </Stack>
-    //   <Button
-    //     onClick={handleOtpSubmit}
-    //     variant="contained"
-    //     disabled={otp.includes('')}
-    //     sx={{ mt: 2 }}
-    //   >
-    //     Submit code
-    //   </Button>
-    // </Stack>
-    <Stack>
-      <MuiOtpInput
-        value={otp}
-        onChange={handleChange}
-      />
+    <Stack
+      direction="column"
+      spacing={2}
+      onPaste={handlePaste}
+    >
+      <Stack
+        direction="row"
+        spacing={1}
+      >
+        {otp.map((_, index) => (
+          <TextField
+            key={index}
+            onKeyDown={e => handleKeyDown(e, index)}
+            value={otp[index]}
+            onChange={e => handleChange(e, index)}
+            inputProps={{
+              maxLength: 1,
+              style: { textAlign: 'center' },
+            }}
+            inputRef={el => (inputs.current[index] = el)}
+          />
+        ))}
+      </Stack>
       <Button
         onClick={handleOtpSubmit}
         variant="contained"
-        disabled={otp.length < 4 || loading}
+        disabled={otp.includes('')}
         sx={{ mt: 2 }}
       >
         Submit code

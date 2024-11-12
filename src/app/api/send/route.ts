@@ -6,10 +6,7 @@ import prisma from '@/utils/prisma';
 export async function POST(request: Request) {
   try {
     if (!process.env.RESEND_API_KEY) {
-      console.log('RESEND_API_KEY is not set');
-      return NextResponse.json({
-        errorMessage: 'Server configuration error. Please try again later.',
-      });
+      throw new Error('RESEND_API_KEY is not set');
     }
 
     const { email, name } = await request.json();

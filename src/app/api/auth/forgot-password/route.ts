@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import generateOTP from '@/utils/generateOTP';
 import prisma from '@/utils/prisma';
 
 export async function POST(request: Request) {
@@ -16,17 +17,12 @@ export async function POST(request: Request) {
       });
     }
 
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not set');
+    }
+
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    function generateOTP() {
-      const digits = '0123456789';
-      let OTP = '';
-      const len = digits.length;
-      for (let i = 0; i < 6; i++) {
-        OTP += digits[Math.floor(Math.random() * len)];
-      }
-      return OTP;
-    }
     const otpCode = generateOTP();
 
     await prisma.verificationRequest.create({

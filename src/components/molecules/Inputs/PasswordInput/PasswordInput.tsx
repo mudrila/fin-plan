@@ -9,6 +9,7 @@ import {
   LinearProgress,
   Typography,
   Box,
+  useTheme,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, ChangeEvent, useRef } from 'react';
@@ -62,6 +63,8 @@ export default function PasswordInput({
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [progressColor, setProgressColor] = useState<'error' | 'warning' | 'success'>('error');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const theme = useTheme();
 
   const evaluatePasswordStrength = (password: string) => {
     const metRequirements = PASSWORD_REQUIREMENTS.filter(req => req.regex.test(password)).length;
@@ -163,7 +166,7 @@ export default function PasswordInput({
                 mt: 2,
                 p: 2,
                 borderRadius: 1,
-                backgroundColor: theme =>
+                backgroundColor:
                   theme.palette.mode === 'light'
                     ? 'rgba(0, 0, 0, 0.03)'
                     : 'rgba(255, 255, 255, 0.03)',
@@ -178,7 +181,7 @@ export default function PasswordInput({
                   height: 6,
                   borderRadius: 3,
                   mb: 2,
-                  backgroundColor: theme =>
+                  backgroundColor:
                     theme.palette.mode === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
                 }}
               />
@@ -202,8 +205,8 @@ export default function PasswordInput({
                         alignItems: 'center',
                         gap: 1,
                         color: req.regex.test(value)
-                          ? theme => theme.palette.success.main
-                          : theme => theme.palette.text.secondary,
+                          ? theme.palette.success.main
+                          : theme.palette.text.secondary,
                       }}
                     >
                       <motion.div

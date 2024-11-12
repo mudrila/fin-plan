@@ -1,6 +1,15 @@
 'use client';
 
-import { Card, CardHeader, CardContent, Button, Box, Typography, Stack } from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Button,
+  Box,
+  Typography,
+  Stack,
+  useTheme,
+} from '@mui/material';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -16,6 +25,8 @@ export default function SignInForm() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const theme = useTheme();
 
   const isFormValid = !emailError && !passwordError;
 
@@ -56,19 +67,16 @@ export default function SignInForm() {
         width: '100%',
         maxWidth: 480,
         mx: 'auto',
-        background: theme =>
+        background:
           theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(18, 18, 18, 0.8)',
         backdropFilter: 'blur(20px)',
-        boxShadow: theme =>
+        boxShadow:
           theme.palette.mode === 'light'
             ? '0 8px 32px rgba(0, 0, 0, 0.08)'
             : '0 8px 32px rgba(0, 0, 0, 0.24)',
-        border: theme =>
-          `1px solid ${
-            theme.palette.mode === 'light'
-              ? 'rgba(255, 255, 255, 0.7)'
-              : 'rgba(255, 255, 255, 0.05)'
-          }`,
+        border: `1px solid ${
+          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.05)'
+        }`,
         borderRadius: 3,
       }}
       component="form"
@@ -104,17 +112,7 @@ export default function SignInForm() {
             disabled={loading}
           />
 
-          <StyledLink
-            href="/forgot-password"
-            style={{
-              color: 'inherit',
-              textDecoration: 'none',
-              fontWeight: 600,
-              marginLeft: 'auto',
-            }}
-          >
-            Forgot password?
-          </StyledLink>
+          <StyledLink href="/forgot-password">Forgot password?</StyledLink>
           <Button
             type="submit"
             variant="contained"

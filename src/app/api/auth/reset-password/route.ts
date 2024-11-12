@@ -38,6 +38,9 @@ export async function POST(request: Request) {
       },
     });
 
+    await prisma.verificationRequest.delete({
+      where: { id: verificationRequest.id },
+    });
     return NextResponse.json({ message: 'Your password updated!' });
   } catch (e) {
     console.error(e, 'Error during updating password');
