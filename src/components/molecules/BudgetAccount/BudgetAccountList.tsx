@@ -27,7 +27,7 @@ interface BudgetAccountsProps {
 function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: BudgetAccountsProps) {
   const theme = useTheme();
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6">{title}</Typography>
         {accounts.length > 0 && (
@@ -47,7 +47,6 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
       <Box
         sx={{
           display: 'flex',
-          padding: 1,
           gap: 1,
           flexWrap: 'wrap',
         }}
