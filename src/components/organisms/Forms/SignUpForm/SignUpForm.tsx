@@ -17,7 +17,8 @@ import { useState, useTransition, FormEvent } from 'react';
 import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
-import { darkBackground, darkBorder, darkBoxShadow, lightBackground, lightBorder, lightBoxShadow, providerId } from '@/constants/content';
+import { providerId } from '@/constants/content';
+import{ paperDarkBackground, paperDarkBorder, paperDarkBoxShadow, paperLightBackground, paperLightBorder, paperLightBoxShadow } from '@/theme/tokens';
 
 export default function SignUpForm() {
   const [name, setName] = useState('');
@@ -58,23 +59,13 @@ export default function SignUpForm() {
         const data = await response.json();
         if (data.errorMessage) {
           toast.error(data.errorMessage);
-        } else if (!data.error) {
-          const sendResponse = await fetch('/api/send', {
-            method: 'POST',
-            body: JSON.stringify({
-              name,
-              email,
-            }),
+        } else if (!data.errorMessage) {
+          toast.success('Signed Up! You will be redirected to app in a blink of an eye');
+          await signIn(providerId, {
+            redirectTo: '/app',
+            email,
+            password,
           });
-          const sendData = await sendResponse.json();
-          if (!sendData.errorMessage) {
-            toast.success('Signed Up! You will be redirected to app in a blink of an eye');
-            await signIn(providerId, {
-              redirectTo: '/app',
-              email,
-              password,
-            });
-          }
         }
       });
     }
@@ -87,14 +78,14 @@ export default function SignUpForm() {
         maxWidth: 480,
         mx: 'auto',
         background:
-          theme.palette.mode === 'light' ? lightBackground : darkBackground,
+          theme.palette.mode === 'light' ? paperLightBackground : paperDarkBackground,
         backdropFilter: 'blur(20px)',
         boxShadow:
           theme.palette.mode === 'light'
-          ? lightBoxShadow
-          : darkBoxShadow,
+          ? paperLightBoxShadow
+          : paperDarkBoxShadow,
         border: `1px solid ${
-          theme.palette.mode === 'light' ? lightBorder : darkBorder
+          theme.palette.mode === 'light' ? paperLightBorder : paperDarkBorder
         }`,
         borderRadius: 3,
       }}

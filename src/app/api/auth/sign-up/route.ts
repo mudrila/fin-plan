@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
-import { emailRegex, passwordRegex } from '@/constants/content';
+import { audienceId, providerId, providerType, emailRegex, passwordRegex } from '@/constants/content';
 import { generateHashPassword } from '@/utils';
 import prisma from '@/utils/prisma';
+import { Resend } from 'resend';
 
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
 
     if (email && password) {
-      if (!email.match(emailRegex) && !password.match(passwordRegex)) {
+      if (!email.match(emailRegex) || !password.match(passwordRegex)) {
         return NextResponse.json({ message: 'Please check our email and password' });
       }
     } else {
@@ -25,13 +26,49 @@ export async function POST(request: Request) {
 
     const passwordHash = await generateHashPassword(password);
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         name,
         email,
         password: passwordHash.hash,
       },
     });
+
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not set');
+    }
+    
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    const contact = await resend.contacts.create({
+      email,
+      firstName: name,
+      unsubscribed: false,
+      audienceId,
+    });
+
+    if (!contact) {
+      return NextResponse.json({
+        errorMessage: 'Server error. Please try again later.',
+      });
+    }
+
+    const userAccountId = contact.data?.id;
+
+    if (userAccountId && newUser) {
+      await prisma.account.create({
+        data: {
+          providerAccountId: userAccountId,
+          userId: newUser.id,
+          providerId,
+          providerType,
+        },
+      });
+    } else {
+      return NextResponse.json({
+        errorMassage: 'Required data is missing from the request payload',
+      });
+    }
 
     return NextResponse.json({ message: 'Signed Up!' });
   } catch (e) {

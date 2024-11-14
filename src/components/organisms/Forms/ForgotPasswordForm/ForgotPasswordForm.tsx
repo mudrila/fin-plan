@@ -5,7 +5,7 @@ import { FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import { OTPInput } from '@/components/molecules/Inputs/OTPInput/OTPInput';
-import { darkBackground, darkBoxShadow, darkBorder, lightBackground, lightBorder, lightBoxShadow } from '@/constants/content';
+import{ paperDarkBackground, paperDarkBorder, paperDarkBoxShadow, paperLightBackground, paperLightBorder, paperLightBoxShadow } from '@/theme/tokens';
 
 export default function ForgotPasswordForm() {
   const theme = useTheme();
@@ -52,15 +52,15 @@ export default function ForgotPasswordForm() {
         mx: 'auto',
         background:
           theme.palette.mode === 'light'
-            ? lightBackground
-            : darkBackground,
+            ? paperLightBackground
+            : paperDarkBackground,
         backdropFilter: 'blur(20px)',
         boxShadow:
           theme.palette.mode === 'light'
-            ? lightBoxShadow
-            : darkBoxShadow,
-        border: `1px solid ${
-          theme.palette.mode === 'light' ? lightBorder : darkBorder
+          ? paperLightBoxShadow
+          : paperDarkBoxShadow,
+          border: `1px solid ${
+          theme.palette.mode === 'light' ? paperLightBorder : paperDarkBorder
         }`,
         borderRadius: 3,
       }}
