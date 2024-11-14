@@ -18,7 +18,14 @@ import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
 import { providerId } from '@/constants/content';
-import{ paperDarkBackground, paperDarkBorder, paperDarkBoxShadow, paperLightBackground, paperLightBorder, paperLightBoxShadow } from '@/theme/tokens';
+import {
+  paperDarkBackground,
+  paperDarkBorder,
+  paperDarkBoxShadow,
+  paperLightBackground,
+  paperLightBorder,
+  paperLightBoxShadow,
+} from '@/theme/tokens';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -68,16 +75,10 @@ export default function SignInForm() {
         width: '100%',
         maxWidth: 480,
         mx: 'auto',
-        background:
-          theme.palette.mode === 'light' ? paperLightBackground : paperDarkBackground,
+        background: theme.palette.mode === 'light' ? paperLightBackground : paperDarkBackground,
         backdropFilter: 'blur(20px)',
-        boxShadow:
-          theme.palette.mode === 'light'
-            ? paperLightBoxShadow
-            : paperDarkBoxShadow,
-        border: `1px solid ${
-          theme.palette.mode === 'light' ? paperLightBorder : paperDarkBorder
-        }`,
+        boxShadow: theme.palette.mode === 'light' ? paperLightBoxShadow : paperDarkBoxShadow,
+        border: `1px solid ${theme.palette.mode === 'light' ? paperLightBorder : paperDarkBorder}`,
         borderRadius: 3,
       }}
       component="form"

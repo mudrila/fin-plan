@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
-import { audienceId, providerId, providerType, emailRegex, passwordRegex } from '@/constants/content';
+import { Resend } from 'resend';
+import {
+  audienceId,
+  providerId,
+  providerType,
+  emailRegex,
+  passwordRegex,
+} from '@/constants/content';
 import { generateHashPassword } from '@/utils';
 import prisma from '@/utils/prisma';
-import { Resend } from 'resend';
 
 export async function POST(request: Request) {
   try {
@@ -37,7 +43,7 @@ export async function POST(request: Request) {
     if (!process.env.RESEND_API_KEY) {
       throw new Error('RESEND_API_KEY is not set');
     }
-    
+
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const contact = await resend.contacts.create({
