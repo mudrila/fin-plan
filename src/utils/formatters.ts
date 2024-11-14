@@ -6,3 +6,7 @@ export const serializeBudgetAccount = (account: BudgetAccount): SerializedBudget
   monthlyLimit: Number(account.monthlyLimit),
   currentBalance: Number(account.currentBalance),
 });
+
+export const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+};

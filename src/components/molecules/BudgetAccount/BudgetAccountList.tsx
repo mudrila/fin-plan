@@ -1,51 +1,78 @@
-import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
+'use client';
+
+import AddIcon from '@mui/icons-material/Add';
+import {
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardHeader,
+  Divider,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { BudgetAccountType } from '@prisma/client';
 import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
 import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
-import { BudgetAccountsProps, SerializedBudgetAccount } from '@/types/budget';
+import { SerializedBudgetAccount } from '@/types/budget';
+import { formatCurrency } from '@/utils/formatters';
 
-function BudgetAccounts({ accounts, title }: BudgetAccountsProps) {
+interface BudgetAccountsProps {
+  accounts: SerializedBudgetAccount[];
+  title: string;
+  triggerText: string;
+  initialAccountType?: BudgetAccountType;
+}
+
+function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: BudgetAccountsProps) {
+  const theme = useTheme();
   return (
-    <Box key={title}>
-      <Typography
-        variant="h6"
-        sx={{ textAlign: 'center' }}
-      >
-        {title}
-      </Typography>
+    <Box>
+      <Typography variant="h6">{title}</Typography>
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'center',
-          margin: 1,
+          padding: 1,
+          gap: 1,
           flexWrap: 'wrap',
         }}
       >
         {accounts.map(account => (
-          <Card
+          <BudgetAccountForm
             key={account.id}
-            sx={{ width: 150, height: 150, marginBottom: 1, marginRight: 1 }}
-          >
-            <CardHeader
-              title={
-                account.icon ? (
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <IconRenderrer iconName={account.icon} />
-                    <Box ml={1}>{account.title}</Box>
-                  </Box>
-                ) : (
-                  account.title
-                )
-              }
-            />
-            <CardContent>
-              {`Limit: ${account.monthlyLimit}`}
-              <BudgetAccountForm account={account} />
-            </CardContent>
-          </Card>
+            account={account}
+            trigger={
+              <Card
+                variant="outlined"
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    boxShadow: theme.shadows[4],
+                  },
+                }}
+              >
+                <CardActionArea>
+                  <CardHeader
+                    avatar={account.icon ? <IconRenderrer iconName={account.icon} /> : undefined}
+                    title={account.title}
+                    subheader={formatCurrency(account.monthlyLimit)}
+                  />
+                </CardActionArea>
+              </Card>
+            }
+          />
         ))}
+        <BudgetAccountForm
+          initialAccountType={initialAccountType}
+          trigger={
+            <Button
+              variant="outlined"
+              endIcon={<AddIcon />}
+            >
+              {triggerText}
+            </Button>
+          }
+        />
       </Box>
     </Box>
   );
@@ -68,21 +95,30 @@ export default function BudgetAccountList({
       <Divider sx={{ marginY: 2 }} />
       <BudgetAccounts
         accounts={accounts.incomes}
-        title="Income Accounts"
+        initialAccountType={BudgetAccountType.Income}
+        title="Income"
+        triggerText="Income Source"
       />
+      <Divider sx={{ marginY: 2 }} />
       <BudgetAccounts
         accounts={[...accounts.debits, ...accounts.credits, ...accounts.debts]}
-        title="Debt/Credit/Debit Accounts"
+        title="Accounts"
+        triggerText="Account"
       />
+      <Divider sx={{ marginY: 2 }} />
       <BudgetAccounts
         accounts={accounts.spendingCategories}
-        title="Spending Categories Accounts"
+        initialAccountType={BudgetAccountType.SpendingCategory}
+        title="Spending Categories"
+        triggerText="Spending Category"
       />
+      <Divider sx={{ marginY: 2 }} />
       <BudgetAccounts
         accounts={accounts.goals}
-        title="Goal Accounts"
+        initialAccountType={BudgetAccountType.Goal}
+        title="Goals"
+        triggerText="Goal"
       />
-      <Divider />
     </Box>
   );
 }

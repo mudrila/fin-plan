@@ -11,7 +11,8 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { BudgetAccountType } from '@prisma/client';
+import { ReactElement, useState } from 'react';
 import MainForm from './Form';
 import IconSelect from '@/components/molecules/IconSelect/IconSelect';
 import { accountTypes } from '@/constants/content';
@@ -19,13 +20,17 @@ import { SerializedBudgetAccount } from '@/types/budget';
 
 export default function BudgetAccountForm({
   account = null,
+  trigger,
+  initialAccountType = BudgetAccountType.Debit,
 }: {
   account?: SerializedBudgetAccount | null;
+  trigger?: ReactElement;
+  initialAccountType?: BudgetAccountType;
 }) {
   const [title, setTitle] = useState(account?.title || '');
   const [description, setDescription] = useState(account?.description || '');
   const [monthlyLimit, setMonthlyLimit] = useState(account?.monthlyLimit?.toString() || '0');
-  const [type, setType] = useState(account?.type.toString() || 'Debit');
+  const [type, setType] = useState(account?.type.toString() || initialAccountType);
   const [icon, setIcon] = useState(account?.icon || '');
   const [currentBalance, setCurrentBalance] = useState(account?.currentBalance?.toString() || '0');
 
@@ -33,7 +38,9 @@ export default function BudgetAccountForm({
     <>
       <MainForm
         button={
-          account ? (
+          trigger ? (
+            trigger
+          ) : account ? (
             <IconButton
               aria-label="edit"
               color="primary"
@@ -88,7 +95,6 @@ export default function BudgetAccountForm({
               type="number"
               fullWidth
               variant="outlined"
-              defaultValue={0}
               required
               value={currentBalance}
               onChange={e => setCurrentBalance(e.target.value)}
@@ -101,7 +107,6 @@ export default function BudgetAccountForm({
               type="number"
               fullWidth
               variant="outlined"
-              defaultValue={0}
               required
               value={monthlyLimit}
               onChange={e => setMonthlyLimit(e.target.value)}
@@ -117,7 +122,6 @@ export default function BudgetAccountForm({
                 name="type"
                 labelId="type-label"
                 label="Type"
-                defaultValue="Debit"
                 required
                 value={type}
                 onChange={e => setType(e.target.value)}
@@ -137,7 +141,7 @@ export default function BudgetAccountForm({
         deleteButton={account ? true : false}
         accountId={account?.id}
         accountTitle={account?.title}
-        dialogButtonText={account ? 'Edit' : 'Create'}
+        dialogButtonText={account ? 'Save' : 'Create'}
         submitData={{
           url: account ? `/api/budgetAccount/${account.id}` : '/api/budgetAccount',
           method: account ? 'PUT' : 'POST',

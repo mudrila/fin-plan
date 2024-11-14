@@ -3,6 +3,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {
   Box,
   Button,
+  ButtonProps,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,11 +11,11 @@ import {
   IconButton,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { FormEvent, ReactNode, useState } from 'react';
+import { cloneElement, FormEvent, ReactElement, ReactNode, useMemo, useState } from 'react';
 import { submitFunction } from '@/utils/api';
 
 interface MainFormProps {
-  button: ReactNode;
+  button: ReactElement<ButtonProps, 'button'>;
   title: string;
   content: ReactNode;
   dialogButtonText: string;
@@ -80,9 +81,11 @@ export default function MainForm({
     );
   };
 
+  const dialogTrigger = useMemo(() => cloneElement(button, { onClick: handleClickOpen }), [button]);
+
   return (
     <>
-      <span onClick={handleClickOpen}>{button}</span>
+      {dialogTrigger}
       <Dialog
         open={open}
         onClose={handleClose}

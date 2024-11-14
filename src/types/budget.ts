@@ -10,8 +10,3 @@ export interface SerializedBudgetAccount {
   currentBalance: number;
   type: BudgetAccountType;
 }
-
-export interface BudgetAccountsProps {
-  accounts: SerializedBudgetAccount[];
-  title: string;
-}
