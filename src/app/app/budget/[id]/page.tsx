@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import { APP_SHORT_NAME } from '@/constants/content';
 import TransactionTable from '@/components/molecules/TransactionTable/TransactionTable';
+import { APP_SHORT_NAME } from '@/constants/content';
+import { updateTransaction } from '@/utils/getBudgetAccountInfo';
 import prisma from '@/utils/prisma';
 
 export const metadata: Metadata = {
@@ -16,16 +17,16 @@ interface BudgetAccountDetailsProps {
 export default async function budgetAccountDetails({ params }: BudgetAccountDetailsProps) {
   const { id } = params;
 
-  const transactions = await prisma.budgetAccountTransaction.findMany({
+  const userTransactions = await prisma.budgetAccountTransaction.findMany({
     where: {
-      OR: [
-        { fromBudgetAccountId: id },
-        { toBudgetAccountId: id },
-      ],
+      OR: [{ fromBudgetAccountId: id }, { toBudgetAccountId: id }],
     },
     orderBy: {
       createdAt: 'desc',
     },
-  })
-  return <TransactionTable transactions={transactions} edit/>
+  });
+
+  const changedTransactions = await updateTransaction(userTransactions);
+
+  return <TransactionTable transactions={changedTransactions} />;
 }
