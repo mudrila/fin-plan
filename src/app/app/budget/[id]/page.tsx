@@ -9,12 +9,13 @@ export const metadata: Metadata = {
 };
 
 interface BudgetAccountDetailsProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function budgetAccountDetails({ params }: BudgetAccountDetailsProps) {
+export default async function budgetAccountDetails(props: BudgetAccountDetailsProps) {
+  const params = await props.params;
   const { id } = params;
 
   const userTransactions = await prisma.budgetAccountTransaction.findMany({
