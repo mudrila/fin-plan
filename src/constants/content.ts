@@ -17,3 +17,7 @@ export const accountTypes = [
   'Debit',
   'Goal',
 ] as const;
+
+export const audienceId = '274752ed-c875-4c06-aa9e-984d5b96df11';
+export const providerId = 'email-and-password';
+export const providerType = 'CredantialsProvider';

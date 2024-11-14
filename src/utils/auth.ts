@@ -4,12 +4,13 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import prisma from './prisma';
 import { generateHashPassword } from './';
+import { providerId } from '@/constants/content';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
-      id: 'email-and-password',
+      id: providerId,
       credentials: {
         email: {},
         password: {},
