@@ -1,39 +1,21 @@
 'use client';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Card, CardActionArea, CardHeader, Divider, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardHeader,
+  Divider,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { BudgetAccountType } from '@prisma/client';
 import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
 import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
 import { SerializedBudgetAccount } from '@/types/budget';
 import { formatCurrency } from '@/utils/formatters';
-
-function BudgetAccountCard({ account }: { account: SerializedBudgetAccount }) {
-  return (
-    <BudgetAccountForm
-      account={account}
-      trigger={
-        <Card
-          variant="outlined"
-          sx={{
-            cursor: 'pointer',
-            '&:hover': {
-              boxShadow: theme => theme.shadows[4],
-            },
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              avatar={account.icon ? <IconRenderrer iconName={account.icon} /> : undefined}
-              title={account.title}
-              subheader={formatCurrency(account.monthlyLimit)}
-            />
-          </CardActionArea>
-        </Card>
-      }
-    />
-  );
-}
 
 interface BudgetAccountsProps {
   accounts: SerializedBudgetAccount[];
@@ -43,6 +25,7 @@ interface BudgetAccountsProps {
 }
 
 function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: BudgetAccountsProps) {
+  const theme = useTheme();
   return (
     <Box>
       <Typography variant="h6">{title}</Typography>
@@ -55,9 +38,28 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
         }}
       >
         {accounts.map(account => (
-          <BudgetAccountCard
-            account={account}
+          <BudgetAccountForm
             key={account.id}
+            account={account}
+            trigger={
+              <Card
+                variant="outlined"
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    boxShadow: theme.shadows[4],
+                  },
+                }}
+              >
+                <CardActionArea>
+                  <CardHeader
+                    avatar={account.icon ? <IconRenderrer iconName={account.icon} /> : undefined}
+                    title={account.title}
+                    subheader={formatCurrency(account.monthlyLimit)}
+                  />
+                </CardActionArea>
+              </Card>
+            }
           />
         ))}
         <BudgetAccountForm
