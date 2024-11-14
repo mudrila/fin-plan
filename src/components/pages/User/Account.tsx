@@ -188,14 +188,6 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
-            variant="contained"
-            onClick={handleSubmit}
-            endIcon={<Check />}
-            disabled={!!passwordError || !!emailError || isPending || !isFormChanged}
-          >
-            Update Account
-          </Button>
-          <Button
             variant="outlined"
             onClick={handleClickDelete}
             endIcon={<Delete />}
@@ -203,6 +195,14 @@ export default function Account({ userName, userEmail, userImage }: AccountProps
             disabled={isPending}
           >
             Delete account
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            endIcon={<Check />}
+            disabled={!!passwordError || !!emailError || isPending || !isFormChanged}
+          >
+            Update Account
           </Button>
         </CardActions>
       </Card>

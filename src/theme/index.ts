@@ -2,6 +2,7 @@
 import { createTheme, ThemeOptions, alpha } from '@mui/material/styles';
 import palette from './colors';
 import { aliceFont, latoFont } from './fonts';
+import { paperDarkBackground, paperLightBackground } from '@/theme/tokens';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -77,7 +78,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           backgroundColor:
-            theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(18, 18, 18, 0.8)',
+            theme.palette.mode === 'light' ? paperLightBackground : paperDarkBackground,
           backdropFilter: 'blur(12px)',
           borderRadius: 8,
           border: `1px solid ${

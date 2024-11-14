@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
 import { BudgetAccount } from '@prisma/client';
-import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
 import BudgetAccountList from '@/components/molecules/BudgetAccount/BudgetAccountList';
 import BudgetAccountTransaction from '@/components/molecules/BudgetAccount/BudgetAccountTransactionForm';
 import { serializeBudgetAccount } from '@/utils/formatters';
@@ -27,7 +26,6 @@ export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccou
         <Typography variant="h5">Budget</Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <BudgetAccountTransaction accounts={serializedBudgetAccounts} />
-          <BudgetAccountForm />
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
