@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { StyledLink } from '@/components/atoms/Link/StyledNextLink';
 import EmailInput from '@/components/molecules/Inputs/EmailInput/EmailInput';
 import PasswordInput from '@/components/molecules/Inputs/PasswordInput/PasswordInput';
-import { providerId } from '@/constants/content';
+import { darkBackground, darkBorder, darkBoxShadow, lightBackground, lightBorder, lightBoxShadow, providerId } from '@/constants/content';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -68,14 +68,14 @@ export default function SignInForm() {
         maxWidth: 480,
         mx: 'auto',
         background:
-          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(18, 18, 18, 0.8)',
+          theme.palette.mode === 'light' ? lightBackground : darkBackground,
         backdropFilter: 'blur(20px)',
         boxShadow:
           theme.palette.mode === 'light'
-            ? '0 8px 32px rgba(0, 0, 0, 0.08)'
-            : '0 8px 32px rgba(0, 0, 0, 0.24)',
+            ? lightBoxShadow
+            : darkBoxShadow,
         border: `1px solid ${
-          theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.05)'
+          theme.palette.mode === 'light' ? lightBorder : darkBorder
         }`,
         borderRadius: 3,
       }}
