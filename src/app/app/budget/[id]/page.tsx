@@ -1,20 +1,27 @@
 import { Metadata } from 'next';
 import TransactionTable from '@/components/molecules/TransactionTable/TransactionTable';
 import { APP_SHORT_NAME } from '@/constants/content';
-import { auth } from '@/utils/auth';
 import { updateTransaction } from '@/utils/getBudgetAccountInfo';
 import prisma from '@/utils/prisma';
 
 export const metadata: Metadata = {
-  title: `Dashboard | ${APP_SHORT_NAME}`,
+  title: `Budget Account Details | ${APP_SHORT_NAME}`,
 };
 
-export default async function DashboardPage() {
-  const session = await auth();
-  const userId = session?.user?.id;
+interface BudgetAccountDetailsProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export default async function budgetAccountDetails(props: BudgetAccountDetailsProps) {
+  const params = await props.params;
+  const { id } = params;
 
   const userTransactions = await prisma.budgetAccountTransaction.findMany({
-    where: { userId },
+    where: {
+      OR: [{ fromBudgetAccountId: id }, { toBudgetAccountId: id }],
+    },
     orderBy: {
       createdAt: 'desc',
     },
