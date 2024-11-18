@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/utils/auth';
 import prisma from '@/utils/prisma';
-import { budgetAccountSchema } from '@/utils/schemas';
+import { incomeAccountSchema } from '@/utils/schemas';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -12,30 +12,28 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ errorMessage: 'No user session' });
     }
 
-    const { title, description, icon, type, currentBalance } = await request.json();
+    const { title, description, icon } = await request.json();
     const { id } = await params;
 
-    const validatedData = budgetAccountSchema.parse({
+    const validatedData = incomeAccountSchema.parse({
       title,
       description,
       icon,
-      type,
-      currentBalance,
       userId,
     });
 
-    const existingAccount = await prisma.budgetAccount.findUnique({
+    const existingAccount = await prisma.incomeSource.findUnique({
       where: { id, userId },
     });
 
     if (!existingAccount) {
       return NextResponse.json({
-        errorMessage: "You don't have permission to edit this budget account",
+        errorMessage: "You don't have permission to edit this income account",
       });
     }
 
     if (validatedData) {
-      await prisma.budgetAccount.update({
+      await prisma.incomeSource.update({
         where: {
           id,
         },
@@ -43,20 +41,18 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
           title,
           description,
           icon,
-          type,
-          currentBalance,
         },
       });
       return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({
-        errorMessage: 'Data provided for Budget Account update is invalid!',
+        errorMessage: 'Data provided for Income Account update is invalid!',
       });
     }
   } catch (e) {
     console.error(e, 'Error during account updating');
     return NextResponse.json({
-      errorMessage: 'Unexpected error happened while updating budget account.',
+      errorMessage: 'Unexpected error happened while updating income account.',
     });
   }
 }
@@ -72,24 +68,25 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const { id } = await params;
 
-    const existingAccount = await prisma.budgetAccount.findUnique({
+    const existingAccount = await prisma.incomeSource.findUnique({
       where: { id, userId },
     });
 
     if (!existingAccount) {
       return NextResponse.json({
-        errorMessage: "You don't have permission to edit this budget account",
+        errorMessage: "You don't have permission to delete this income account",
       });
     }
 
-    await prisma.budgetAccount.delete({
+    await prisma.incomeSource.delete({
       where: { id },
     });
+
     return NextResponse.json({ success: true });
   } catch (e) {
-    console.error(e, 'Error during account deletion');
+    console.error('Error during account deletion:', e);
     return NextResponse.json({
-      errorMessage: 'Unexpected error happened while deletion budget account.',
+      errorMessage: 'Unexpected error happened while deleting income account.',
     });
   }
 }

@@ -1,22 +1,34 @@
 import { Box, Typography } from '@mui/material';
-import { BudgetAccount } from '@prisma/client';
-import BudgetAccountList from '@/components/molecules/BudgetAccount/BudgetAccountList';
-import BudgetAccountTransaction from '@/components/molecules/BudgetAccount/BudgetAccountTransactionForm';
-import { serializeBudgetAccount } from '@/utils/formatters';
+import { BudgetAccount, Goals, IncomeSource, SpendingCategory } from '@prisma/client';
+import AccountTransaction from '@/components/molecules/Accounts/AccountTransactionForm';
+import BudgetAccountList from '@/components/molecules/Accounts/BudgetAccounts/BudgetAccountList';
+import GoalAccountList from '@/components/molecules/Accounts/GoalAccounts/GoalAccountList';
+import IncomeAccountList from '@/components/molecules/Accounts/IncomeAccounts/IncomeAccountList';
+import SpendingCategoryAccountList from '@/components/molecules/Accounts/SpendingCategoryAccounts/SpendingCategoryAccountList';
+import {
+  serializeBudgetAccount,
+  serializeGoalAccount,
+  typeIncomeAccount,
+  typeSpendAccount,
+} from '@/utils/formatters';
 
-export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccount[] }) {
+interface AccountsProps {
+  budgetAccounts: BudgetAccount[];
+  incomeAccounts: IncomeSource[];
+  goalAccounts: Goals[];
+  spendingAccounts: SpendingCategory[];
+}
+
+export default function Accounts({
+  budgetAccounts,
+  incomeAccounts,
+  goalAccounts,
+  spendingAccounts,
+}: AccountsProps) {
+  const serializedGoalAccounts = goalAccounts.map(serializeGoalAccount);
   const serializedBudgetAccounts = budgetAccounts.map(serializeBudgetAccount);
-
-  const incomes = serializedBudgetAccounts.filter(account => account.type === 'Income');
-  const debits = serializedBudgetAccounts.filter(account => account.type === 'Debit');
-  const credits = serializedBudgetAccounts.filter(account => account.type === 'Credit');
-  const debts = serializedBudgetAccounts.filter(account => account.type === 'Debt');
-  const goals = serializedBudgetAccounts.filter(account => account.type === 'Goal');
-  const spendingCategories = serializedBudgetAccounts.filter(
-    account => account.type === 'SpendingCategory',
-  );
-
-  const groupedAccounts = { incomes, debits, credits, debts, goals, spendingCategories };
+  const typedIncomeAccounts = incomeAccounts.map(typeIncomeAccount);
+  const typedSpendAccounts = spendingAccounts.map(typeSpendAccount);
   return (
     <Box>
       <Box
@@ -25,11 +37,19 @@ export default function Budget({ budgetAccounts }: { budgetAccounts: BudgetAccou
       >
         <Typography variant="h5">Budget</Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <BudgetAccountTransaction accounts={serializedBudgetAccounts} />
+          <AccountTransaction
+            budgetAccounts={serializedBudgetAccounts}
+            incomeAccounts={typedIncomeAccounts}
+            spendingAccounts={typedSpendAccounts}
+            goalAccounts={serializedGoalAccounts}
+          />
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
-        <BudgetAccountList accounts={groupedAccounts} />
+        <BudgetAccountList accounts={serializedBudgetAccounts} />
+        <IncomeAccountList incomeAccounts={incomeAccounts} />
+        <GoalAccountList goalAccounts={serializedGoalAccounts} />
+        <SpendingCategoryAccountList SpendingCategoryAccounts={spendingAccounts} />
       </Box>
     </Box>
   );

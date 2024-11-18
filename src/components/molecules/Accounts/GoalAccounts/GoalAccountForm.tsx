@@ -2,36 +2,23 @@
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
-import { BudgetAccountType } from '@prisma/client';
+import { Button, IconButton, TextField } from '@mui/material';
 import { ReactElement, useState } from 'react';
-import MainForm from './Form';
+import MainForm from '../AccountActionForm';
 import IconSelect from '@/components/molecules/IconSelect/IconSelect';
-import { accountTypes } from '@/constants/content';
-import { SerializedBudgetAccount } from '@/types/budget';
+import { SerializedGoalAccount } from '@/types/budget';
 
-export default function BudgetAccountForm({
+export default function GoalAccountForm({
   account = null,
   trigger,
-  initialAccountType = BudgetAccountType.Debit,
 }: {
-  account?: SerializedBudgetAccount | null;
+  account?: SerializedGoalAccount | null;
   trigger?: ReactElement;
-  initialAccountType?: BudgetAccountType;
 }) {
   const [title, setTitle] = useState(account?.title || '');
   const [description, setDescription] = useState(account?.description || '');
-  const [monthlyLimit, setMonthlyLimit] = useState(account?.monthlyLimit?.toString() || '0');
-  const [type, setType] = useState(account?.type.toString() || initialAccountType);
   const [icon, setIcon] = useState(account?.icon || '');
+  const [monthlyTarget, setMonthlyTarget] = useState(account?.monthlyTarget?.toString() || '0');
   const [currentBalance, setCurrentBalance] = useState(account?.currentBalance?.toString() || '0');
 
   return (
@@ -52,11 +39,11 @@ export default function BudgetAccountForm({
               variant="outlined"
               endIcon={<AddIcon />}
             >
-              Budget Account
+              Goal
             </Button>
           )
         }
-        title={account ? `Edit ${account.title}` : 'Create Budget Account'}
+        title={account ? `Edit ${account.title}` : 'Create Goal'}
         content={
           <>
             <TextField
@@ -100,56 +87,31 @@ export default function BudgetAccountForm({
               onChange={e => setCurrentBalance(e.target.value)}
             />
             <TextField
-              id="monthlyLimit"
-              name="monthlyLimit"
+              id="monthlyTarget"
+              name="monthlyTarget"
               margin="dense"
-              label="Monthly Limit"
+              label="Monthly Target"
               type="number"
               fullWidth
               variant="outlined"
               required
-              value={monthlyLimit}
-              onChange={e => setMonthlyLimit(e.target.value)}
+              value={monthlyTarget}
+              onChange={e => setMonthlyTarget(e.target.value)}
             />
-            <FormControl
-              fullWidth
-              margin="dense"
-              variant="outlined"
-            >
-              <InputLabel id="type-label">Type</InputLabel>
-              <Select
-                id="type"
-                name="type"
-                labelId="type-label"
-                label="Type"
-                required
-                value={type}
-                onChange={e => setType(e.target.value)}
-              >
-                {accountTypes.map(option => (
-                  <MenuItem
-                    key={option}
-                    value={option}
-                  >
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </>
         }
         deleteButton={account ? true : false}
-        accountId={account?.id}
         accountTitle={account?.title}
         dialogButtonText={account ? 'Save' : 'Create'}
         submitData={{
-          url: account ? `/api/budgetAccount/${account.id}` : '/api/budgetAccount',
+          url: account ? `/api/goalAccount/${account.id}` : '/api/goalAccount',
           method: account ? 'PUT' : 'POST',
-          bodyData: { title, description, icon, monthlyLimit, type, currentBalance },
-          successMessage: `Budget Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,
-          errorMessage: 'Error while creating/updating budget account',
-          loadingMessage: `Hand tight - we are ${account ? 'updating' : 'creating'} budget account for ya...`,
+          bodyData: { title, description, icon, monthlyTarget, currentBalance },
+          successMessage: `Goal Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,
+          errorMessage: 'Error while creating/updating goal account',
+          loadingMessage: `Hand tight - we are ${account ? 'updating' : 'creating'} goal account for ya...`,
         }}
+        deleteTitle="Goal"
       />
     </>
   );

@@ -27,8 +27,8 @@ interface MainFormProps {
     errorMessage: string;
     loadingMessage: string;
   };
+  deleteTitle?: string;
   deleteButton?: ReactNode;
-  accountId?: string;
   accountTitle?: string;
 }
 
@@ -39,7 +39,7 @@ export default function MainForm({
   deleteButton,
   dialogButtonText,
   submitData,
-  accountId,
+  deleteTitle,
   accountTitle,
 }: MainFormProps) {
   const [open, setOpen] = useState(false);
@@ -48,11 +48,11 @@ export default function MainForm({
   const handleDelete = async (event: FormEvent) => {
     event.preventDefault();
     await submitFunction(
-      `/api/budgetAccount/${accountId}`,
+      submitData.url,
       'DELETE',
       {},
-      'Budget Account deleted!',
-      'Error while deleting budget account',
+      `${deleteTitle} deleted!`,
+      `Error while deleting ${deleteTitle}`,
       `Hand tight - we are deleting ${accountTitle}...`,
       () => router.refresh(),
       handleClose,

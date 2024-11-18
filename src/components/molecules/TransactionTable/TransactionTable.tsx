@@ -13,8 +13,6 @@ import {
 interface EnrichedTransaction {
   id: string;
   userId: string;
-  fromBudgetAccountId: string;
-  toBudgetAccountId: string;
   amount: number;
   description: string;
   createdAt: Date;
