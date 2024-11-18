@@ -85,9 +85,7 @@ export default function AccountTransactionFrom({
               >
                 {toAccounts
                   .filter(toAccount => {
-                    const fromAccount = fromAccounts.find(
-                      account => account.id === fromAccountId,
-                    );
+                    const fromAccount = fromAccounts.find(account => account.id === fromAccountId);
 
                     if (!fromAccount) return false;
 
@@ -152,7 +150,7 @@ export default function AccountTransactionFrom({
             amount,
             description,
             fromAccountType: fromAccounts.find(acc => acc.id === fromAccountId)?.type,
-            toAccountType: toAccounts.find(acc => acc.id === toAccountId)?.type
+            toAccountType: toAccounts.find(acc => acc.id === toAccountId)?.type,
           },
           successMessage: 'Transaction completed successfully!',
           errorMessage: 'Error while making transaction',

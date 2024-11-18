@@ -1,7 +1,12 @@
 import { Metadata } from 'next';
 import TransactionTable from '@/components/molecules/TransactionTable/TransactionTable';
 import { APP_SHORT_NAME } from '@/constants/content';
-import { updateBudgetTransaction, updateGoalTransaction, updateIncomeTransaction, updateSpendTransaction } from '@/utils/getBudgetAccountInfo';
+import {
+  updateBudgetTransaction,
+  updateGoalTransaction,
+  updateIncomeTransaction,
+  updateSpendTransaction,
+} from '@/utils/getBudgetAccountInfo';
 import prisma from '@/utils/prisma';
 
 export const metadata: Metadata = {
@@ -53,7 +58,14 @@ export default async function budgetAccountDetails(props: BudgetAccountDetailsPr
   const changedGoalTransactions = await updateGoalTransaction(goalTransactions);
   const changedSpendTransactions = await updateSpendTransaction(spendingTransactions);
 
-  return <TransactionTable
-  transactions={[...changedBudgetTransactions, ...changedIncomeTransactions, ...changedGoalTransactions, ...changedSpendTransactions]}
-  />;
+  return (
+    <TransactionTable
+      transactions={[
+        ...changedBudgetTransactions,
+        ...changedIncomeTransactions,
+        ...changedGoalTransactions,
+        ...changedSpendTransactions,
+      ]}
+    />
+  );
 }

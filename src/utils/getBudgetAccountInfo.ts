@@ -1,4 +1,9 @@
-import { BudgetAccountTransaction, GoalTransaction, IncomeSourceTransaction, SpendingCategory, SpendingCategoryTransaction } from '@prisma/client';
+import {
+  BudgetAccountTransaction,
+  GoalTransaction,
+  IncomeSourceTransaction,
+  SpendingCategoryTransaction,
+} from '@prisma/client';
 import prisma from './prisma';
 
 async function getBudgetAccount(id: string) {
@@ -15,7 +20,7 @@ async function getIncomeAccount(id: string) {
   });
 
   return incomeAccount;
-} 
+}
 
 async function getGoalAccount(id: string) {
   const goalAccount = await prisma.goals.findFirst({
@@ -23,14 +28,14 @@ async function getGoalAccount(id: string) {
   });
 
   return goalAccount;
-} 
+}
 async function getSpendAccount(id: string) {
   const spendAccount = await prisma.spendingCategory.findFirst({
     where: { id },
   });
 
   return spendAccount;
-} 
+}
 
 export async function getAccountTitle(id: string, type: string) {
   if (type === 'Budget') {
@@ -51,7 +56,6 @@ export async function getAccountTitle(id: string, type: string) {
   }
 
   return '';
-
 }
 
 export async function getAccountType(id: string) {
