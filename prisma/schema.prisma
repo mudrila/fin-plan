@@ -112,7 +112,7 @@ model Goal {
   description    String?
   icon           String?
   currentBalance Decimal @default(0)
-  monthlyTarget  String
+  monthlyTarget  Decimal @default(0)
   user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   transactionsTo   GoalTransaction[] @relation("ToAccount")

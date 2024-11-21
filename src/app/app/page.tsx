@@ -61,9 +61,5 @@ export default async function DashboardPage() {
     return dateB - dateA;
   });
 
-  return (
-    <TransactionTable
-      transactions={sortedTransactions}
-    />
-  );
+  return <TransactionTable transactions={sortedTransactions} />;
 }

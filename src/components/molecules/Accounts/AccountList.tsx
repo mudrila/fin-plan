@@ -11,24 +11,47 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { IncomeSource } from '@prisma/client';
-import IncomeAccountForm from './IncomeAccountForm';
+import { BudgetAccountType } from '@prisma/client';
+import AccountForm from '@/components/molecules/Accounts/AccountForm';
 import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
+import {
+  SerializedBudgetAccount,
+  SerializedGoal,
+  TypedIncomeAccount,
+  TypedSpendAccount,
+} from '@/types/budget';
 
-interface IncomeAccountsProps {
-  accounts: IncomeSource[];
+interface BudgetAccountsProps {
+  accounts:
+    | SerializedBudgetAccount[]
+    | SerializedGoal[]
+    | TypedIncomeAccount[]
+    | TypedSpendAccount[];
   title: string;
   triggerText: string;
+  initialAccountType?: BudgetAccountType | 'Goal' | 'Income' | 'Spending Category';
+  url: string;
+  mainText: string;
+  secondText: string;
 }
 
-function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
+function BudgetAccounts({
+  accounts,
+  title,
+  initialAccountType,
+  triggerText,
+  url,
+  mainText,
+  secondText,
+}: BudgetAccountsProps) {
   const theme = useTheme();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6">{title}</Typography>
         {accounts.length > 0 && (
-          <IncomeAccountForm
+          <AccountForm
+            initialAccountType={initialAccountType}
             trigger={
               <Button
                 variant="outlined"
@@ -37,6 +60,9 @@ function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
                 {triggerText}
               </Button>
             }
+            url={url}
+            mainText={mainText}
+            secondText={secondText}
           />
         )}
       </Box>
@@ -48,7 +74,7 @@ function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
         }}
       >
         {accounts.length === 0 ? (
-          <IncomeAccountForm
+          <AccountForm
             trigger={
               <Card
                 variant="outlined"
@@ -67,10 +93,14 @@ function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
                 </CardActionArea>
               </Card>
             }
+            initialAccountType={initialAccountType}
+            url={url}
+            mainText={mainText}
+            secondText={secondText}
           />
         ) : (
           accounts.map(account => (
-            <IncomeAccountForm
+            <AccountForm
               key={account.id}
               account={account}
               trigger={
@@ -91,6 +121,9 @@ function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
                   </CardActionArea>
                 </Card>
               }
+              url={url}
+              mainText={mainText}
+              secondText={secondText}
             />
           ))
         )}
@@ -99,19 +132,41 @@ function IncomeAccounts({ accounts, title, triggerText }: IncomeAccountsProps) {
   );
 }
 
-interface incomeAccountListProps {
-  incomeAccounts: IncomeSource[];
+interface BudgetAccountListProps {
+  accounts:
+    | SerializedBudgetAccount[]
+    | SerializedGoal[]
+    | TypedIncomeAccount[]
+    | TypedSpendAccount[];
+  title: string;
+  triggerText: string;
+  url: string;
+  mainText: string;
+  secondText: string;
+  initialAccountType?: BudgetAccountType | 'Goal' | 'Income' | 'Spending Category';
 }
 
-export default function IncomeAccountList({ incomeAccounts }: incomeAccountListProps) {
+export default function BudgetAccountList({
+  accounts,
+  title,
+  triggerText,
+  url,
+  mainText,
+  secondText,
+  initialAccountType
+}: BudgetAccountListProps) {
   return (
     <Box>
-      <IncomeAccounts
-        accounts={incomeAccounts}
-        title="Income"
-        triggerText="Income Source"
-      />
       <Divider sx={{ marginY: 2 }} />
+      <BudgetAccounts
+        accounts={accounts}
+        title={title}
+        triggerText={triggerText}
+        url={url}
+        mainText={mainText}
+        secondText={secondText}
+        initialAccountType={initialAccountType}
+      />
     </Box>
   );
 }

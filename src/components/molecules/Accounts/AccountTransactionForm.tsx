@@ -5,7 +5,7 @@ import { useState } from 'react';
 import MainForm from './AccountActionForm';
 import {
   SerializedBudgetAccount,
-  SerializedGoalAccount,
+  SerializedGoal,
   TypedIncomeAccount,
   TypedSpendAccount,
 } from '@/types/budget';
@@ -18,7 +18,7 @@ export default function AccountTransactionFrom({
 }: {
   budgetAccounts: SerializedBudgetAccount[];
   incomeAccounts: TypedIncomeAccount[];
-  goalAccounts: SerializedGoalAccount[];
+  goalAccounts: SerializedGoal[];
   spendingAccounts: TypedSpendAccount[];
 }) {
   const [fromAccountId, setFromAccountId] = useState('');
@@ -104,7 +104,7 @@ export default function AccountTransactionFrom({
                     }
                     if (
                       ['Debit', 'Credit', 'Debt'].includes(fromAccount.type) &&
-                      toAccount.type === 'SpendingCategory'
+                      toAccount.type === 'Spending Category'
                     ) {
                       return true;
                     }

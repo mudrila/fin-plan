@@ -1,10 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { BudgetAccount, Goal, IncomeSource, SpendingCategory } from '@prisma/client';
+import AccountList from '@/components/molecules/Accounts/AccountList';
 import AccountTransaction from '@/components/molecules/Accounts/AccountTransactionForm';
-import BudgetAccountList from '@/components/molecules/Accounts/BudgetAccounts/BudgetAccountList';
-import GoalsList from '@/components/molecules/Accounts/GoalAccounts/GoalAccountList';
-import IncomeAccountList from '@/components/molecules/Accounts/IncomeAccounts/IncomeAccountList';
-import SpendingCategoryAccountList from '@/components/molecules/Accounts/SpendingCategoryAccounts/SpendingCategoryAccountList';
 import {
   serializeBudgetAccount,
   serializeGoalAccount,
@@ -46,10 +43,42 @@ export default function Budget({
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
-        <BudgetAccountList accounts={serializedBudgetAccounts} />
-        <IncomeAccountList incomeAccounts={incomeAccounts} />
-        <GoalsList goals={serializedGoalAccounts} />
-        <SpendingCategoryAccountList spendingCategoryAccounts={spendingAccounts} />
+        <AccountList
+          accounts={serializedBudgetAccounts}
+          title="Accounts"
+          triggerText="Account"
+          url="budgetAccount"
+          mainText="Budget Account"
+          secondText="budget account"
+          initialAccountType='Debit'
+        />
+        <AccountList
+          accounts={typedIncomeAccounts}
+          title="Income"
+          triggerText="Income Source"
+          url="income"
+          mainText="Income Source"
+          secondText="income account"
+          initialAccountType='Income'
+        />
+        <AccountList
+          accounts={serializedGoalAccounts}
+          title="Goals"
+          triggerText="Goal"
+          url="goal"
+          mainText="Goal"
+          secondText="goal account"
+          initialAccountType='Goal'
+        />
+        <AccountList
+          accounts={typedSpendAccounts}
+          title="Spending Category"
+          triggerText="Spending Category"
+          url="spendingCategory"
+          mainText="Spending Category"
+          secondText="spending category"
+          initialAccountType='Spending Category'
+        />
       </Box>
     </Box>
   );

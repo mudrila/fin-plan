@@ -1,7 +1,7 @@
 import { BudgetAccount, Goal, IncomeSource, SpendingCategory } from '@prisma/client';
 import {
   SerializedBudgetAccount,
-  SerializedGoalAccount,
+  SerializedGoal,
   TypedIncomeAccount,
   TypedSpendAccount,
 } from '@/types/budget';
@@ -11,7 +11,7 @@ export const serializeBudgetAccount = (account: BudgetAccount): SerializedBudget
   currentBalance: Number(account.currentBalance),
 });
 
-export const serializeGoalAccount = (account: Goal): SerializedGoalAccount => ({
+export const serializeGoalAccount = (account: Goal): SerializedGoal => ({
   ...account,
   currentBalance: Number(account.currentBalance),
   monthlyTarget: Number(account.monthlyTarget),
@@ -25,7 +25,7 @@ export const typeIncomeAccount = (account: IncomeSource): TypedIncomeAccount => 
 
 export const typeSpendAccount = (account: SpendingCategory): TypedSpendAccount => ({
   ...account,
-  type: 'SpendingCategory',
+  type: 'Spending Category',
 });
 
 export const formatCurrency = (value: number) => {
