@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import { BudgetAccount, Goals, IncomeSource, SpendingCategory } from '@prisma/client';
+import { BudgetAccount, Goal, IncomeSource, SpendingCategory } from '@prisma/client';
 import AccountTransaction from '@/components/molecules/Accounts/AccountTransactionForm';
 import BudgetAccountList from '@/components/molecules/Accounts/BudgetAccounts/BudgetAccountList';
-import GoalAccountList from '@/components/molecules/Accounts/GoalAccounts/GoalAccountList';
+import GoalsList from '@/components/molecules/Accounts/GoalAccounts/GoalAccountList';
 import IncomeAccountList from '@/components/molecules/Accounts/IncomeAccounts/IncomeAccountList';
 import SpendingCategoryAccountList from '@/components/molecules/Accounts/SpendingCategoryAccounts/SpendingCategoryAccountList';
 import {
@@ -12,19 +12,19 @@ import {
   typeSpendAccount,
 } from '@/utils/formatters';
 
-interface AccountsProps {
+interface BudgetProps {
   budgetAccounts: BudgetAccount[];
   incomeAccounts: IncomeSource[];
-  goalAccounts: Goals[];
+  goalAccounts: Goal[];
   spendingAccounts: SpendingCategory[];
 }
 
-export default function Accounts({
+export default function Budget({
   budgetAccounts,
   incomeAccounts,
   goalAccounts,
   spendingAccounts,
-}: AccountsProps) {
+}: BudgetProps) {
   const serializedGoalAccounts = goalAccounts.map(serializeGoalAccount);
   const serializedBudgetAccounts = budgetAccounts.map(serializeBudgetAccount);
   const typedIncomeAccounts = incomeAccounts.map(typeIncomeAccount);
@@ -48,8 +48,8 @@ export default function Accounts({
       <Box sx={{ mt: 2 }}>
         <BudgetAccountList accounts={serializedBudgetAccounts} />
         <IncomeAccountList incomeAccounts={incomeAccounts} />
-        <GoalAccountList goalAccounts={serializedGoalAccounts} />
-        <SpendingCategoryAccountList SpendingCategoryAccounts={spendingAccounts} />
+        <GoalsList goals={serializedGoalAccounts} />
+        <SpendingCategoryAccountList spendingCategoryAccounts={spendingAccounts} />
       </Box>
     </Box>
   );

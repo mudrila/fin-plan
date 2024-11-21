@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { accountTypes } from '@/constants/content';
+import { budgetAccountTypes } from '@/constants/content';
 
-const budgetAccountTypeEnum = z.enum(accountTypes);
+const budgetAccountTypeEnum = z.enum(budgetAccountTypes);
 export const budgetAccountSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),

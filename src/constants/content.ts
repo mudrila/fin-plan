@@ -9,7 +9,7 @@ export const TWITTER_NAME = 'klimenkomud';
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{8,}$/;
 
-export const accountTypes = ['Debt', 'Credit', 'Debit'] as const;
+export const budgetAccountTypes = ['Debt', 'Credit', 'Debit'] as const;
 
 export const audienceId = '274752ed-c875-4c06-aa9e-984d5b96df11';
 export const providerId = 'email-and-password';

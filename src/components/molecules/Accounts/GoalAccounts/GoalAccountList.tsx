@@ -4,11 +4,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Card, CardActionArea, CardHeader, Typography, useTheme } from '@mui/material';
 import GoalAccountForm from './GoalAccountForm';
 import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
-import { SerializedGoalAccount } from '@/types/budget';
+import { SerializedGoal } from '@/types/budget';
 import { formatCurrency } from '@/utils/formatters';
 
 interface GoalAccountsProps {
-  accounts: SerializedGoalAccount[];
+  accounts: SerializedGoal[];
   title: string;
   triggerText: string;
 }
@@ -92,15 +92,15 @@ function GoalAccounts({ accounts, title, triggerText }: GoalAccountsProps) {
   );
 }
 
-interface incomeAccountListProps {
-  goalAccounts: SerializedGoalAccount[];
+interface GoalsListProps {
+  goals: SerializedGoal[];
 }
 
-export default function GoalAccountList({ goalAccounts }: incomeAccountListProps) {
+export default function GoalsList({ goals }: GoalsListProps) {
   return (
     <Box>
       <GoalAccounts
-        accounts={goalAccounts}
+        accounts={goals}
         title="Goals"
         triggerText="Goal"
       />

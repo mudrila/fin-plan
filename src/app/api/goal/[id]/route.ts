@@ -24,7 +24,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       userId,
     });
 
-    const existingAccount = await prisma.goals.findUnique({
+    const existingAccount = await prisma.goal.findUnique({
       where: { id, userId },
     });
 
@@ -35,7 +35,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 
     if (validatedData) {
-      await prisma.goals.update({
+      await prisma.goal.update({
         where: {
           id,
         },
@@ -72,7 +72,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const { id } = await params;
 
-    const existingAccount = await prisma.goals.findUnique({
+    const existingAccount = await prisma.goal.findUnique({
       where: { id, userId },
     });
 
@@ -82,7 +82,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       });
     }
 
-    await prisma.goals.delete({
+    await prisma.goal.delete({
       where: { id },
     });
 

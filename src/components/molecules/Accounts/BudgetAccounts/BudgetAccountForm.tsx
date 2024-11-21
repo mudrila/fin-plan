@@ -15,7 +15,7 @@ import { BudgetAccountType } from '@prisma/client';
 import { ReactElement, useState } from 'react';
 import MainForm from '../AccountActionForm';
 import IconSelect from '@/components/molecules/IconSelect/IconSelect';
-import { accountTypes } from '@/constants/content';
+import { budgetAccountTypes } from '@/constants/content';
 import { SerializedBudgetAccount } from '@/types/budget';
 
 export default function BudgetAccountForm({
@@ -113,7 +113,7 @@ export default function BudgetAccountForm({
                 value={type}
                 onChange={e => setType(e.target.value)}
               >
-                {accountTypes.map(option => (
+                {budgetAccountTypes.map(option => (
                   <MenuItem
                     key={option}
                     value={option}

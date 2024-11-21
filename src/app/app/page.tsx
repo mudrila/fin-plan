@@ -3,10 +3,10 @@ import TransactionTable from '@/components/molecules/TransactionTable/Transactio
 import { APP_SHORT_NAME } from '@/constants/content';
 import { auth } from '@/utils/auth';
 import {
-  updateBudgetTransaction,
-  updateIncomeTransaction,
-  updateGoalTransaction,
-  updateSpendTransaction,
+  mapBudgetTransaction,
+  mapIncomeTransaction,
+  mapGoalTransaction,
+  mapSpendTransaction,
 } from '@/utils/getBudgetAccountInfo';
 import prisma from '@/utils/prisma';
 
@@ -43,19 +43,27 @@ export default async function DashboardPage() {
     },
   });
 
-  const changedBudgetTransactions = await updateBudgetTransaction(budgetTransactions);
-  const changedIncomeTransactions = await updateIncomeTransaction(incomeTransactions);
-  const changedGoalTransactions = await updateGoalTransaction(goalTransactions);
-  const changedSpendTransactions = await updateSpendTransaction(spendingTransactions);
+  const mappedBudgetAccountTransactions = await mapBudgetTransaction(budgetTransactions);
+  const mappedIncomeTransactions = await mapIncomeTransaction(incomeTransactions);
+  const mappedGoalTransactions = await mapGoalTransaction(goalTransactions);
+  const mappedSpendTransactions = await mapSpendTransaction(spendingTransactions);
+
+  const allTransactions = [
+    ...mappedBudgetAccountTransactions,
+    ...mappedIncomeTransactions,
+    ...mappedGoalTransactions,
+    ...mappedSpendTransactions,
+  ];
+
+  const sortedTransactions = allTransactions.sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return dateB - dateA;
+  });
 
   return (
     <TransactionTable
-      transactions={[
-        ...changedBudgetTransactions,
-        ...changedIncomeTransactions,
-        ...changedGoalTransactions,
-        ...changedSpendTransactions,
-      ]}
+      transactions={sortedTransactions}
     />
   );
 }

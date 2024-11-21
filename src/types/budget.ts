@@ -10,7 +10,7 @@ export interface SerializedBudgetAccount {
   type: BudgetAccountType;
 }
 
-export interface SerializedGoalAccount {
+export interface SerializedGoal {
   id: string;
   userId: string;
   title: string;
@@ -18,7 +18,7 @@ export interface SerializedGoalAccount {
   icon: string | null;
   currentBalance: number;
   monthlyTarget: number;
-  type: string;
+  type: 'Goal';
 }
 
 export interface TypedIncomeAccount {
@@ -27,7 +27,7 @@ export interface TypedIncomeAccount {
   title: string;
   description: string | null;
   icon: string | null;
-  type: string;
+  type: 'Income';
 }
 
 export interface TypedSpendAccount {
@@ -36,5 +36,5 @@ export interface TypedSpendAccount {
   title: string;
   description: string | null;
   icon: string | null;
-  type: string;
+  type: 'Spending Category';
 }

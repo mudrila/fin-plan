@@ -78,7 +78,7 @@ export default function IncomeAccountForm({
         accountTitle={account?.title}
         dialogButtonText={account ? 'Save' : 'Create'}
         submitData={{
-          url: account ? `/api/incomeAccount/${account.id}` : '/api/incomeAccount',
+          url: account ? `/api/income/${account.id}` : '/api/income',
           method: account ? 'PUT' : 'POST',
           bodyData: { title, description, icon },
           successMessage: `Income Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,

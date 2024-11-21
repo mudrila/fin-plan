@@ -23,7 +23,7 @@ async function getIncomeAccount(id: string) {
 }
 
 async function getGoalAccount(id: string) {
-  const goalAccount = await prisma.goals.findFirst({
+  const goalAccount = await prisma.goal.findFirst({
     where: { id },
   });
 
@@ -64,8 +64,8 @@ export async function getAccountType(id: string) {
   return String(budgetAccount?.type);
 }
 
-export async function updateBudgetTransaction(transactions: BudgetAccountTransaction[]) {
-  const updatedTransaction = await Promise.all(
+export async function mapBudgetTransaction(transactions: BudgetAccountTransaction[]) {
+  const mappedTransaction = await Promise.all(
     transactions.map(async transaction => ({
       ...transaction,
       amount: Number(transaction.amount),
@@ -76,11 +76,11 @@ export async function updateBudgetTransaction(transactions: BudgetAccountTransac
     })),
   );
 
-  return updatedTransaction;
+  return mappedTransaction;
 }
 
-export async function updateIncomeTransaction(transactions: IncomeSourceTransaction[]) {
-  const updatedTransaction = await Promise.all(
+export async function mapIncomeTransaction(transactions: IncomeSourceTransaction[]) {
+  const mappedTransaction = await Promise.all(
     transactions.map(async transaction => ({
       ...transaction,
       amount: Number(transaction.amount),
@@ -91,11 +91,11 @@ export async function updateIncomeTransaction(transactions: IncomeSourceTransact
     })),
   );
 
-  return updatedTransaction;
+  return mappedTransaction;
 }
 
-export async function updateGoalTransaction(transactions: GoalTransaction[]) {
-  const updatedTransaction = await Promise.all(
+export async function mapGoalTransaction(transactions: GoalTransaction[]) {
+  const mappedTransaction = await Promise.all(
     transactions.map(async transaction => ({
       ...transaction,
       amount: Number(transaction.amount),
@@ -106,11 +106,11 @@ export async function updateGoalTransaction(transactions: GoalTransaction[]) {
     })),
   );
 
-  return updatedTransaction;
+  return mappedTransaction;
 }
 
-export async function updateSpendTransaction(transactions: SpendingCategoryTransaction[]) {
-  const updatedTransaction = await Promise.all(
+export async function mapSpendTransaction(transactions: SpendingCategoryTransaction[]) {
+  const mappedTransaction = await Promise.all(
     transactions.map(async transaction => ({
       ...transaction,
       amount: Number(transaction.amount),
@@ -121,5 +121,5 @@ export async function updateSpendTransaction(transactions: SpendingCategoryTrans
     })),
   );
 
-  return updatedTransaction;
+  return mappedTransaction;
 }

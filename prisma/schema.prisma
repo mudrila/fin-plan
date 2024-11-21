@@ -50,12 +50,12 @@ model User {
   sessions                     Session[]
   budgetAccounts               BudgetAccount[]
   budgetAccountTransactions    BudgetAccountTransaction[]
-  IncomeSources                IncomeSource[]
+  incomeSources                IncomeSource[]
   incomeSourceTransactions     IncomeSourceTransaction[]
-  SpendingCategories           SpendingCategory[]
-  SpendingCategoryTransactions SpendingCategoryTransaction[]
-  Goals                        Goals[]
-  GoalTransacions              GoalTransaction[]
+  spendingCategories           SpendingCategory[]
+  spendingCategoryTransactions SpendingCategoryTransaction[]
+  goals                        Goal[]
+  goalTransacions              GoalTransaction[]
 }
 
 model VerificationRequest {
@@ -105,7 +105,7 @@ model SpendingCategory {
   transactions SpendingCategoryTransaction[] @relation("Transactions")
 }
 
-model Goals {
+model Goal {
   id             String  @id @default(cuid())
   userId         String
   title          String
@@ -149,8 +149,8 @@ model IncomeSourceTransaction {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transacions IncomeSource @relation("Transactions", fields: [fromIncomeSourceId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions IncomeSource @relation("Transactions", fields: [fromIncomeSourceId], references: [id], onDelete: Cascade)
 }
 
 model SpendingCategoryTransaction {
@@ -162,8 +162,8 @@ model SpendingCategoryTransaction {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transacions SpendingCategory @relation("Transactions", fields: [transactionsTo], references: [id], onDelete: Cascade)
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions SpendingCategory @relation("Transactions", fields: [transactionsTo], references: [id], onDelete: Cascade)
 }
 
 model GoalTransaction {
@@ -176,7 +176,7 @@ model GoalTransaction {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user        User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fromAccount Goals @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: Cascade)
-  toAccount   Goals @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: Cascade)
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromAccount Goal @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: Cascade)
+  toAccount   Goal @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: Cascade)
 }

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     });
 
     if (validatedData) {
-      await prisma.goals.create({
+      await prisma.goal.create({
         data: {
           userId,
           title,

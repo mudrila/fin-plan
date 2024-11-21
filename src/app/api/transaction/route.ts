@@ -65,12 +65,12 @@ export async function POST(request: Request) {
           ['Debit', 'Credit', 'Debt', 'Goal'].includes(toAccountType):
           const fromBudgetAccount =
             fromAccountType === 'Goal'
-              ? await prisma.goals.findUnique({ where: { id: fromAccountId } })
+              ? await prisma.goal.findUnique({ where: { id: fromAccountId } })
               : await prisma.budgetAccount.findUnique({ where: { id: fromAccountId } });
 
           const toBudgetAccount =
             toAccountType === 'Goal'
-              ? await prisma.goals.findUnique({ where: { id: toAccountId } })
+              ? await prisma.goal.findUnique({ where: { id: toAccountId } })
               : await prisma.budgetAccount.findUnique({ where: { id: toAccountId } });
 
           if (!fromBudgetAccount || !toBudgetAccount) {

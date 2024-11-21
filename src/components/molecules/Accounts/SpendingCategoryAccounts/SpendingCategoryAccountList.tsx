@@ -100,17 +100,17 @@ function SpendingAccounts({ accounts, title, triggerText }: SpendingCategoryAcco
 }
 
 interface SpendingCategoryAccountListProps {
-  SpendingCategoryAccounts: SpendingCategory[];
+  spendingCategoryAccounts: SpendingCategory[];
 }
 
 export default function SpendingCategoryList({
-  SpendingCategoryAccounts,
+  spendingCategoryAccounts,
 }: SpendingCategoryAccountListProps) {
   return (
     <Box>
       <Divider sx={{ marginY: 2 }} />
       <SpendingAccounts
-        accounts={SpendingCategoryAccounts}
+        accounts={spendingCategoryAccounts}
         title="Spending Category"
         triggerText="Spending Category"
       />

@@ -104,7 +104,7 @@ export default function GoalAccountForm({
         accountTitle={account?.title}
         dialogButtonText={account ? 'Save' : 'Create'}
         submitData={{
-          url: account ? `/api/goalAccount/${account.id}` : '/api/goalAccount',
+          url: account ? `/api/goal/${account.id}` : '/api/goal',
           method: account ? 'PUT' : 'POST',
           bodyData: { title, description, icon, monthlyTarget, currentBalance },
           successMessage: `Goal Account ${account?.title ? account.title : title} ${account ? 'updated' : 'created'}!`,
