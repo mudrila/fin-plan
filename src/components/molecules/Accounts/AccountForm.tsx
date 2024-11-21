@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { BudgetAccountType } from '@prisma/client';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import MainForm from './AccountActionForm';
 import IconSelect from '@/components/molecules/IconSelect/IconSelect';
 import { budgetAccountTypes } from '@/constants/content';
@@ -96,50 +96,49 @@ export default function AccountForm({
       case 'Debt':
         return (
           <>
-          <TextField
-            id="currentBalance"
-            name="currentBalance"
-            margin="dense"
-            label="Current Balance"
-            type="number"
-            fullWidth
-            variant="outlined"
-            required
-            value={currentBalance}
-            onChange={e => setCurrentBalance(e.target.value)}
-          />
-          <FormControl
-            fullWidth
-            margin="dense"
-            variant="outlined"
-          >
-            <InputLabel id="type-label">Type</InputLabel>
-            <Select
-              id="type"
-              name="type"
-              labelId="type-label"
-              label="Type"
+            <TextField
+              id="currentBalance"
+              name="currentBalance"
+              margin="dense"
+              label="Current Balance"
+              type="number"
+              fullWidth
+              variant="outlined"
               required
-              value={type}
-              onChange={e => setType(e.target.value as BudgetAccountType)}
+              value={currentBalance}
+              onChange={e => setCurrentBalance(e.target.value)}
+            />
+            <FormControl
+              fullWidth
+              margin="dense"
+              variant="outlined"
             >
-              {budgetAccountTypes.map(option => (
-                <MenuItem
-                  key={option}
-                  value={option}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="type-label">Type</InputLabel>
+              <Select
+                id="type"
+                name="type"
+                labelId="type-label"
+                label="Type"
+                required
+                value={type}
+                onChange={e => setType(e.target.value as BudgetAccountType)}
+              >
+                {budgetAccountTypes.map(option => (
+                  <MenuItem
+                    key={option}
+                    value={option}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </>
         );
       default:
         return null;
     }
   };
-
 
   return (
     <>

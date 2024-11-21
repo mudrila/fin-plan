@@ -153,7 +153,7 @@ export default function BudgetAccountList({
   url,
   mainText,
   secondText,
-  initialAccountType
+  initialAccountType,
 }: BudgetAccountListProps) {
   return (
     <Box>

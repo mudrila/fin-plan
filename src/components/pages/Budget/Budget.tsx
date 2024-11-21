@@ -50,7 +50,7 @@ export default function Budget({
           url="budgetAccount"
           mainText="Budget Account"
           secondText="budget account"
-          initialAccountType='Debit'
+          initialAccountType="Debit"
         />
         <AccountList
           accounts={typedIncomeAccounts}
@@ -59,7 +59,7 @@ export default function Budget({
           url="income"
           mainText="Income Source"
           secondText="income account"
-          initialAccountType='Income'
+          initialAccountType="Income"
         />
         <AccountList
           accounts={serializedGoalAccounts}
@@ -68,7 +68,7 @@ export default function Budget({
           url="goal"
           mainText="Goal"
           secondText="goal account"
-          initialAccountType='Goal'
+          initialAccountType="Goal"
         />
         <AccountList
           accounts={typedSpendAccounts}
@@ -77,7 +77,7 @@ export default function Budget({
           url="spendingCategory"
           mainText="Spending Category"
           secondText="spending category"
-          initialAccountType='Spending Category'
+          initialAccountType="Spending Category"
         />
       </Box>
     </Box>
