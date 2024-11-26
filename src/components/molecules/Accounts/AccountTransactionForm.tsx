@@ -2,18 +2,32 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react';
-import MainForm from './Form';
-import { SerializedBudgetAccount } from '@/types/budget';
+import MainForm from './AccountActionForm';
+import {
+  SerializedBudgetAccount,
+  SerializedGoal,
+  TypedIncomeAccount,
+  TypedSpendAccount,
+} from '@/types/budget';
 
-export default function BudgetAccountTransactionFrom({
-  accounts,
+export default function AccountTransactionFrom({
+  budgetAccounts,
+  incomeAccounts,
+  goalAccounts,
+  spendingAccounts,
 }: {
-  accounts: SerializedBudgetAccount[];
+  budgetAccounts: SerializedBudgetAccount[];
+  incomeAccounts: TypedIncomeAccount[];
+  goalAccounts: SerializedGoal[];
+  spendingAccounts: TypedSpendAccount[];
 }) {
-  const [fromBudgetAccountId, setFromBudgetAccountId] = useState('');
-  const [toBudgetAccountId, setToBudgetAccountId] = useState('');
+  const [fromAccountId, setFromAccountId] = useState('');
+  const [toAccountId, setToAccountId] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+
+  const fromAccounts = [...incomeAccounts, ...budgetAccounts, ...goalAccounts];
+  const toAccounts = [...goalAccounts, ...budgetAccounts, ...spendingAccounts];
 
   return (
     <>
@@ -40,20 +54,18 @@ export default function BudgetAccountTransactionFrom({
                 name="fromAccount"
                 label="From Account"
                 labelId="from-account-label"
-                value={fromBudgetAccountId}
-                onChange={e => setFromBudgetAccountId(e.target.value)}
+                value={fromAccountId}
+                onChange={e => setFromAccountId(e.target.value)}
                 required
               >
-                {accounts
-                  .filter(account => account.type !== 'SpendingCategory')
-                  .map(account => (
-                    <MenuItem
-                      key={account.id}
-                      value={account.id}
-                    >
-                      {account.title} - {account.type}
-                    </MenuItem>
-                  ))}
+                {fromAccounts.map(fromAccount => (
+                  <MenuItem
+                    key={fromAccount.id}
+                    value={fromAccount.id}
+                  >
+                    {fromAccount.title}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <FormControl
@@ -67,56 +79,44 @@ export default function BudgetAccountTransactionFrom({
                 name="toAccount"
                 label="To Account"
                 labelId="to-account-label"
-                value={toBudgetAccountId}
-                onChange={e => setToBudgetAccountId(e.target.value)}
+                value={toAccountId}
+                onChange={e => setToAccountId(e.target.value)}
                 required
               >
-                {accounts
-                  .filter(account => {
-                    const fromAccount = accounts.find(
-                      account => account.id === fromBudgetAccountId,
-                    );
+                {toAccounts
+                  .filter(toAccount => {
+                    const fromAccount = fromAccounts.find(account => account.id === fromAccountId);
+
                     if (!fromAccount) return false;
 
                     if (
                       fromAccount.type === 'Income' &&
-                      (account.type === 'Debit' || account.type === 'Credit')
+                      (toAccount.type === 'Debit' || toAccount.type === 'Credit')
                     ) {
                       return true;
                     }
 
+                    if (
+                      ['Debit', 'Credit', 'Debt', 'Goal'].includes(fromAccount.type) &&
+                      ['Debit', 'Credit', 'Debt', 'Goal'].includes(toAccount.type)
+                    ) {
+                      return true;
+                    }
                     if (
                       ['Debit', 'Credit', 'Debt'].includes(fromAccount.type) &&
-                      account.type !== 'Income'
-                    ) {
-                      return true;
-                    }
-
-                    if (
-                      fromAccount.type === 'Goal' &&
-                      (account.type === 'Debit' ||
-                        account.type === 'Credit' ||
-                        account.type === 'Debt' ||
-                        account.type === 'Goal')
-                    ) {
-                      return true;
-                    }
-
-                    if (
-                      ['Debit', 'Credit', 'Debt'].includes(fromAccount.type) &&
-                      account.type === 'SpendingCategory'
+                      toAccount.type === 'Spending Category'
                     ) {
                       return true;
                     }
 
                     return false;
                   })
-                  .map(account => (
+                  .map(toAccount => (
                     <MenuItem
-                      key={account.id}
-                      value={account.id}
+                      key={toAccount.id}
+                      value={toAccount.id}
                     >
-                      {account.title} - {account.type}
+                      {toAccount.title}
                     </MenuItem>
                   ))}
               </Select>
@@ -144,7 +144,14 @@ export default function BudgetAccountTransactionFrom({
         submitData={{
           url: '/api/transaction/',
           method: 'POST',
-          bodyData: { fromBudgetAccountId, toBudgetAccountId, amount, description },
+          bodyData: {
+            fromAccountId,
+            toAccountId,
+            amount,
+            description,
+            fromAccountType: fromAccounts.find(acc => acc.id === fromAccountId)?.type,
+            toAccountType: toAccounts.find(acc => acc.id === toAccountId)?.type,
+          },
           successMessage: 'Transaction completed successfully!',
           errorMessage: 'Error while making transaction',
           loadingMessage: 'Hand tight - we are making transaction',

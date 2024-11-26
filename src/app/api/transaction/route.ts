@@ -12,12 +12,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ errorMessage: 'No user session' });
     }
 
-    const { fromBudgetAccountId, toBudgetAccountId, amount, description } = await request.json();
+    const { fromAccountId, toAccountId, amount, description, fromAccountType, toAccountType } =
+      await request.json();
 
-    const budgetAccountTransactionSchema = z.object({
+    const accountTransactionSchema = z.object({
       userId: z.string().min(1),
-      fromBudgetAccountId: z.string().min(1),
-      toBudgetAccountId: z.string().min(1),
+      fromAccountId: z.string().min(1),
+      toAccountId: z.string().min(1),
       amount: z.preprocess(
         val => Number(val),
         z.number().min(0, 'Amount must be a positive number'),
@@ -25,45 +26,117 @@ export async function POST(request: Request) {
       description: z.string().optional(),
     });
 
-    const validatedData = budgetAccountTransactionSchema.parse({
+    const validatedData = accountTransactionSchema.parse({
       userId,
-      fromBudgetAccountId,
-      toBudgetAccountId,
+      fromAccountId,
+      toAccountId,
       amount,
       description,
     });
 
     if (validatedData) {
-      const fromAccount = await prisma.budgetAccount.findUnique({
-        where: { id: fromBudgetAccountId },
-      });
+      switch (true) {
+        case fromAccountType === 'Income' && ['Debit', 'Credit'].includes(toAccountType):
+          const fromIncomeAccount = await prisma.incomeSource.findUnique({
+            where: { id: fromAccountId },
+          });
 
-      const toAccount = await prisma.budgetAccount.findUnique({
-        where: { id: toBudgetAccountId },
-      });
+          const toIncomeAccount = await prisma.budgetAccount.findUnique({
+            where: { id: toAccountId },
+          });
 
-      if (!fromAccount || !toAccount) {
-        return NextResponse.json({
-          errorMessage: 'Account does not exist.',
-        });
+          if (!fromIncomeAccount || !toIncomeAccount) {
+            return NextResponse.json({
+              errorMessage: 'Account does not exist.',
+            });
+          }
+
+          await prisma.incomeSourceTransaction.create({
+            data: {
+              userId,
+              fromIncomeSourceId: fromAccountId,
+              amount,
+              description,
+            },
+          });
+          break;
+
+        case ['Debit', 'Credit', 'Debt', 'Goal'].includes(fromAccountType) &&
+          ['Debit', 'Credit', 'Debt', 'Goal'].includes(toAccountType):
+          const fromBudgetAccount =
+            fromAccountType === 'Goal'
+              ? await prisma.goal.findUnique({ where: { id: fromAccountId } })
+              : await prisma.budgetAccount.findUnique({ where: { id: fromAccountId } });
+
+          const toBudgetAccount =
+            toAccountType === 'Goal'
+              ? await prisma.goal.findUnique({ where: { id: toAccountId } })
+              : await prisma.budgetAccount.findUnique({ where: { id: toAccountId } });
+
+          if (!fromBudgetAccount || !toBudgetAccount) {
+            return NextResponse.json({
+              errorMessage: 'Account does not exist.',
+            });
+          }
+
+          if (fromAccountType === 'Goal' && toAccountType === 'Goal') {
+            await prisma.goalTransaction.create({
+              data: {
+                userId,
+                fromAccountId,
+                toAccountId,
+                amount,
+                description,
+              },
+            });
+          } else {
+            await prisma.budgetAccountTransaction.create({
+              data: {
+                userId,
+                fromBudgetAccountId: fromAccountId,
+                toBudgetAccountId: toAccountId,
+                amount,
+                description,
+              },
+            });
+          }
+          break;
+
+        case ['Debit', 'Credit', 'Debt'].includes(fromAccountType) &&
+          toAccountType === 'SpendingCategory':
+          const fromSpendAccount = await prisma.budgetAccount.findUnique({
+            where: { id: fromAccountId },
+          });
+
+          const toSpendAccount = await prisma.spendingCategory.findUnique({
+            where: { id: toAccountId },
+          });
+
+          if (!fromSpendAccount || !toSpendAccount) {
+            return NextResponse.json({
+              errorMessage: 'Account does not exist.',
+            });
+          }
+
+          await prisma.spendingCategoryTransaction.create({
+            data: {
+              userId,
+              transactionsTo: toAccountId,
+              amount,
+              description,
+            },
+          });
+          break;
+
+        default:
+          return NextResponse.json({ errorMessage: 'Invalid transaction types' });
       }
-
-      await prisma.budgetAccountTransaction.create({
-        data: {
-          userId,
-          fromBudgetAccountId,
-          toBudgetAccountId,
-          amount,
-          description,
-        },
-      });
-
-      return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({
         errorMessage: 'Data provided for making transaction is invalid!',
       });
     }
+    return NextResponse.json({ success: true });
   } catch (e) {
     console.error(e, 'Error during making transaction');
     return NextResponse.json({

@@ -12,26 +12,45 @@ import {
   useTheme,
 } from '@mui/material';
 import { BudgetAccountType } from '@prisma/client';
-import BudgetAccountForm from '@/components/molecules/BudgetAccount/BudgetAccountForm';
+import AccountForm from '@/components/molecules/Accounts/AccountForm';
 import { IconRenderrer } from '@/components/molecules/IconSelect/IconSelect';
-import { SerializedBudgetAccount } from '@/types/budget';
-import { formatCurrency } from '@/utils/formatters';
+import {
+  SerializedBudgetAccount,
+  SerializedGoal,
+  TypedIncomeAccount,
+  TypedSpendAccount,
+} from '@/types/budget';
 
 interface BudgetAccountsProps {
-  accounts: SerializedBudgetAccount[];
+  accounts:
+    | SerializedBudgetAccount[]
+    | SerializedGoal[]
+    | TypedIncomeAccount[]
+    | TypedSpendAccount[];
   title: string;
   triggerText: string;
-  initialAccountType?: BudgetAccountType;
+  initialAccountType?: BudgetAccountType | 'Goal' | 'Income' | 'Spending Category';
+  url: string;
+  mainText: string;
+  secondText: string;
 }
 
-function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: BudgetAccountsProps) {
+function BudgetAccounts({
+  accounts,
+  title,
+  initialAccountType,
+  triggerText,
+  url,
+  mainText,
+  secondText,
+}: BudgetAccountsProps) {
   const theme = useTheme();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6">{title}</Typography>
         {accounts.length > 0 && (
-          <BudgetAccountForm
+          <AccountForm
             initialAccountType={initialAccountType}
             trigger={
               <Button
@@ -41,6 +60,9 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
                 {triggerText}
               </Button>
             }
+            url={url}
+            mainText={mainText}
+            secondText={secondText}
           />
         )}
       </Box>
@@ -52,7 +74,7 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
         }}
       >
         {accounts.length === 0 ? (
-          <BudgetAccountForm
+          <AccountForm
             trigger={
               <Card
                 variant="outlined"
@@ -71,10 +93,14 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
                 </CardActionArea>
               </Card>
             }
+            initialAccountType={initialAccountType}
+            url={url}
+            mainText={mainText}
+            secondText={secondText}
           />
         ) : (
           accounts.map(account => (
-            <BudgetAccountForm
+            <AccountForm
               key={account.id}
               account={account}
               trigger={
@@ -91,11 +117,13 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
                     <CardHeader
                       avatar={account.icon ? <IconRenderrer iconName={account.icon} /> : undefined}
                       title={account.title}
-                      subheader={formatCurrency(account.monthlyLimit)}
                     />
                   </CardActionArea>
                 </Card>
               }
+              url={url}
+              mainText={mainText}
+              secondText={secondText}
             />
           ))
         )}
@@ -104,46 +132,40 @@ function BudgetAccounts({ accounts, title, initialAccountType, triggerText }: Bu
   );
 }
 
+interface BudgetAccountListProps {
+  accounts:
+    | SerializedBudgetAccount[]
+    | SerializedGoal[]
+    | TypedIncomeAccount[]
+    | TypedSpendAccount[];
+  title: string;
+  triggerText: string;
+  url: string;
+  mainText: string;
+  secondText: string;
+  initialAccountType?: BudgetAccountType | 'Goal' | 'Income' | 'Spending Category';
+}
+
 export default function BudgetAccountList({
   accounts,
-}: {
-  accounts: {
-    incomes: SerializedBudgetAccount[];
-    debits: SerializedBudgetAccount[];
-    debts: SerializedBudgetAccount[];
-    credits: SerializedBudgetAccount[];
-    goals: SerializedBudgetAccount[];
-    spendingCategories: SerializedBudgetAccount[];
-  };
-}) {
+  title,
+  triggerText,
+  url,
+  mainText,
+  secondText,
+  initialAccountType,
+}: BudgetAccountListProps) {
   return (
     <Box>
       <Divider sx={{ marginY: 2 }} />
       <BudgetAccounts
-        accounts={accounts.incomes}
-        initialAccountType={BudgetAccountType.Income}
-        title="Income"
-        triggerText="Income Source"
-      />
-      <Divider sx={{ marginY: 2 }} />
-      <BudgetAccounts
-        accounts={[...accounts.debits, ...accounts.credits, ...accounts.debts]}
-        title="Accounts"
-        triggerText="Account"
-      />
-      <Divider sx={{ marginY: 2 }} />
-      <BudgetAccounts
-        accounts={accounts.spendingCategories}
-        initialAccountType={BudgetAccountType.SpendingCategory}
-        title="Spending Categories"
-        triggerText="Spending Category"
-      />
-      <Divider sx={{ marginY: 2 }} />
-      <BudgetAccounts
-        accounts={accounts.goals}
-        initialAccountType={BudgetAccountType.Goal}
-        title="Goals"
-        triggerText="Goal"
+        accounts={accounts}
+        title={title}
+        triggerText={triggerText}
+        url={url}
+        mainText={mainText}
+        secondText={secondText}
+        initialAccountType={initialAccountType}
       />
     </Box>
   );

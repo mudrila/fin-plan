@@ -15,5 +15,24 @@ export default async function BudgetPage() {
   const budgetAccounts = await prisma.budgetAccount.findMany({
     where: { userId },
   });
-  return <Budget budgetAccounts={budgetAccounts} />;
+
+  const incomes = await prisma.incomeSource.findMany({
+    where: { userId },
+  });
+
+  const goals = await prisma.goal.findMany({
+    where: { userId },
+  });
+
+  const spendingCategories = await prisma.spendingCategory.findMany({
+    where: { userId },
+  });
+  return (
+    <Budget
+      budgetAccounts={budgetAccounts}
+      incomeAccounts={incomes}
+      goalAccounts={goals}
+      spendingAccounts={spendingCategories}
+    />
+  );
 }
