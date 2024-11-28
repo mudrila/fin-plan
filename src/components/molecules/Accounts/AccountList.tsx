@@ -33,6 +33,7 @@ interface BudgetAccountsProps {
   url: string;
   mainText: string;
   secondText: string;
+  sumTransaction?: number | null;
 }
 
 function BudgetAccounts({
@@ -43,6 +44,7 @@ function BudgetAccounts({
   url,
   mainText,
   secondText,
+  sumTransaction
 }: BudgetAccountsProps) {
   const theme = useTheme();
   return (
@@ -53,6 +55,7 @@ function BudgetAccounts({
           <AccountForm
             initialAccountType={initialAccountType}
             trigger={
+
               <Button
                 variant="outlined"
                 endIcon={<AddIcon />}
@@ -128,6 +131,18 @@ function BudgetAccounts({
           ))
         )}
       </Box>
+      {sumTransaction != undefined && (
+         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Card variant="outlined">
+            <CardActionArea>
+              <CardHeader
+                title="Transactions"
+                subheader={`Sum: ${sumTransaction}`}
+              />
+            </CardActionArea>
+          </Card>
+        </Box>
+      )}
     </Box>
   );
 }
@@ -144,6 +159,7 @@ interface BudgetAccountListProps {
   mainText: string;
   secondText: string;
   initialAccountType?: BudgetAccountType | 'Goal' | 'Income' | 'Spending Category';
+  sumTransaction?: number | null;
 }
 
 export default function BudgetAccountList({
@@ -154,6 +170,7 @@ export default function BudgetAccountList({
   mainText,
   secondText,
   initialAccountType,
+  sumTransaction,
 }: BudgetAccountListProps) {
   return (
     <Box>
@@ -166,6 +183,7 @@ export default function BudgetAccountList({
         mainText={mainText}
         secondText={secondText}
         initialAccountType={initialAccountType}
+        sumTransaction={sumTransaction}
       />
     </Box>
   );
