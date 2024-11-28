@@ -204,7 +204,7 @@ export default function AccountForm({
           method: account ? 'PUT' : 'POST',
           bodyData:
             account?.type === 'Goal'
-              ? { title, description, icon, currentBalance, monthlyTarget: '0' }
+              ? { title, description, icon, currentBalance, monthlyTarget }
               : account?.type === 'Income' || account?.type === 'Spending Category'
                 ? { title, description, icon }
                 : { title, description, icon, type, currentBalance },

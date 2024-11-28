@@ -14,6 +14,9 @@ interface BudgetProps {
   incomeAccounts: IncomeSource[];
   goalAccounts: Goal[];
   spendingAccounts: SpendingCategory[];
+  sumGoalTransaction: number;
+  sumIncomeTransaction: number;
+  sumSpendTransaction: number;
 }
 
 export default function Budget({
@@ -21,6 +24,9 @@ export default function Budget({
   incomeAccounts,
   goalAccounts,
   spendingAccounts,
+  sumGoalTransaction,
+  sumIncomeTransaction,
+  sumSpendTransaction,
 }: BudgetProps) {
   const serializedGoalAccounts = goalAccounts.map(serializeGoalAccount);
   const serializedBudgetAccounts = budgetAccounts.map(serializeBudgetAccount);
@@ -60,6 +66,7 @@ export default function Budget({
           mainText="Income Source"
           secondText="income account"
           initialAccountType="Income"
+          sumTransaction={sumIncomeTransaction}
         />
         <AccountList
           accounts={serializedGoalAccounts}
@@ -69,6 +76,7 @@ export default function Budget({
           mainText="Goal"
           secondText="goal account"
           initialAccountType="Goal"
+          sumTransaction={sumGoalTransaction}
         />
         <AccountList
           accounts={typedSpendAccounts}
@@ -78,6 +86,7 @@ export default function Budget({
           mainText="Spending Category"
           secondText="spending category"
           initialAccountType="Spending Category"
+          sumTransaction={sumSpendTransaction}
         />
       </Box>
     </Box>
