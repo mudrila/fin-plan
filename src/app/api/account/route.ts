@@ -58,7 +58,7 @@ async function putHandler(request: Request, { userId }: { userId: string }) {
   }
 }
 
-async function deleteHandel({ userId }: { userId: string }) {
+async function deleteHandel(request: Request, { userId }: { userId: string }) {
   try {
     await prisma.user.delete({ where: { id: userId } });
     const cookiesInstance = await cookies();
