@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { auth } from '@/utils/auth';
+import { checkUser } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 
-export async function POST(request: Request) {
+async function postHandler(request: Request, { userId }: { userId: string }) {
   try {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
     const { fromAccountId, toAccountId, amount, description, fromAccountType, toAccountType } =
       await request.json();
 
@@ -144,3 +137,5 @@ export async function POST(request: Request) {
     });
   }
 }
+
+export const POST = checkUser(postHandler);

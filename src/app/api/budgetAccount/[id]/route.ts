@@ -1,17 +1,13 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/utils/auth';
+import { checkUser } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 import { budgetAccountSchema } from '@/utils/schemas';
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+async function putHandler(
+  request: Request,
+  { params, userId }: { params: Promise<{ id: string }>; userId: string },
+) {
   try {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
     const { title, description, icon, type, currentBalance } = await request.json();
     const { id } = await params;
 
@@ -61,15 +57,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+async function deleteHandel(
+  request: Request,
+  { params, userId }: { params: Promise<{ id: string }>; userId: string },
+) {
   try {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
     const { id } = await params;
 
     const existingAccount = await prisma.budgetAccount.findUnique({
@@ -93,3 +85,6 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     });
   }
 }
+
+export const PUT = checkUser(putHandler);
+export const DELETE = checkUser(deleteHandel);
