@@ -13,14 +13,14 @@ type UpdateData = {
 };
 
 export async function PUT(request: Request) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    return NextResponse.json({ errorMessage: 'No user session' });
-  }
-
   try {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json({ errorMessage: 'No user session' });
+    }
+
     const { name, email, password, image } = await request.json();
     const updateData: UpdateData = {};
 
@@ -66,14 +66,14 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE() {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    return NextResponse.json({ errorMessage: 'No user session' });
-  }
-
   try {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json({ errorMessage: 'No user session' });
+    }
+
     await prisma.user.delete({ where: { id: userId } });
     const cookiesInstance = await cookies();
     cookiesInstance.delete('next-auth.session-token');
