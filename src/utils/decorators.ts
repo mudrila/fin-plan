@@ -3,7 +3,7 @@ import { auth } from '@/utils/auth';
 
 interface HandlerContext {
   userId: string;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 type HandlerFunction = (request: Request, context: HandlerContext) => Promise<NextResponse>;
