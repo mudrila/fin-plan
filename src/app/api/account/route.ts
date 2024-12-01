@@ -2,8 +2,8 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { emailRegex, passwordRegex } from '@/constants/content';
 import { generateHashPassword } from '@/utils';
-import prisma from '@/utils/prisma';
 import { auth } from '@/utils/auth';
+import prisma from '@/utils/prisma';
 
 type UpdateData = {
   name?: string;
@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
     if (!userId) {
       return NextResponse.json({ errorMessage: 'No user session' });
     }
-    
+
     const { name, email, password, image } = await request.json();
     const updateData: UpdateData = {};
 
