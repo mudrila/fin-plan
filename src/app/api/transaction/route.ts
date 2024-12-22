@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { checkUser } from '@/utils/decorators';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 
 async function postHandler(request: Request, { userId }: { userId: string }) {
@@ -138,4 +138,4 @@ async function postHandler(request: Request, { userId }: { userId: string }) {
   }
 }
 
-export const POST = checkUser(postHandler);
+export const POST = authWrapper(postHandler);

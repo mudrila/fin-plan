@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkUser } from '@/utils/decorators';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 import { incomeAccountSchema } from '@/utils/schemas';
 
@@ -37,4 +37,4 @@ async function postHandler(request: Request, { userId }: { userId: string }) {
   }
 }
 
-export const POST = checkUser(postHandler);
+export const POST = authWrapper(postHandler);

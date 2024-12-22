@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { checkUser } from '@/utils/decorators';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 import { goalAccountSchema } from '@/utils/schemas';
 
-async function postHandle(request: Request, { userId }: { userId: string }) {
+async function postHandler(request: Request, { userId }: { userId: string }) {
   try {
     const { title, description, icon, monthlyTarget, currentBalance } = await request.json();
 
@@ -41,4 +41,4 @@ async function postHandle(request: Request, { userId }: { userId: string }) {
   }
 }
 
-export const POST = checkUser(postHandle);
+export const POST = authWrapper(postHandler);

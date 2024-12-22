@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkUser } from '@/utils/decorators';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 import { budgetAccountSchema } from '@/utils/schemas';
 
@@ -57,7 +57,7 @@ async function putHandler(
   }
 }
 
-async function deleteHandel(
+async function deleteHandler(
   request: Request,
   { params, userId }: { params: Promise<{ id: string }>; userId: string },
 ) {
@@ -86,5 +86,5 @@ async function deleteHandel(
   }
 }
 
-export const PUT = checkUser(putHandler);
-export const DELETE = checkUser(deleteHandel);
+export const PUT = authWrapper(putHandler);
+export const DELETE = authWrapper(deleteHandler);

@@ -8,8 +8,8 @@ interface HandlerContext {
 
 type HandlerFunction = (request: Request, context: HandlerContext) => Promise<NextResponse>;
 
-export function checkUser(handler: HandlerFunction): HandlerFunction {
-  return async function (request: Request, context: HandlerContext) {
+export function authWrapper(handler: HandlerFunction): HandlerFunction {
+  return async function requestHandler(request: Request, context: HandlerContext) {
     try {
       const session = await auth();
       const userId = session?.user?.id;
