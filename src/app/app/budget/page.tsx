@@ -12,27 +12,37 @@ export default async function BudgetPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const budgetAccounts = await prisma.budgetAccount.findMany({
-    where: { userId },
-  });
+  const [budgetAccounts, incomes, goals, spendingCategories, sumGoalTransaction, sumIncomeTransaction, sumSpendTransaction] = await Promise.all([
+    prisma.budgetAccount.findMany({ where: { userId } }),
+    prisma.incomeSource.findMany({ where: { userId } }),
+    prisma.goal.findMany({ where: { userId } }),
+    prisma.spendingCategory.findMany({ where: { userId } }),
+    prisma.goalTransaction.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
+    prisma.incomeSourceTransaction.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
+    prisma.spendingCategoryTransaction.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
+  ]);
 
-  const incomes = await prisma.incomeSource.findMany({
-    where: { userId },
-  });
-
-  const goals = await prisma.goal.findMany({
-    where: { userId },
-  });
-
-  const spendingCategories = await prisma.spendingCategory.findMany({
-    where: { userId },
-  });
+  const totalGoalSum = Number(sumGoalTransaction._sum.amount) || 0;
+  const totalIncomeSum = Number(sumIncomeTransaction._sum.amount) || 0;
+  const totalSpendSum = Number(sumSpendTransaction._sum.amount) || 0;
   return (
     <Budget
       budgetAccounts={budgetAccounts}
       incomeAccounts={incomes}
       goalAccounts={goals}
       spendingAccounts={spendingCategories}
+      sumGoalTransaction={totalGoalSum}
+      sumIncomeTransaction={totalIncomeSum}
+      sumSpendTransaction={totalSpendSum}
     />
   );
 }

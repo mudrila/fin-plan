@@ -139,7 +139,7 @@ export async function POST(request: Request) {
           break;
 
         case ['Debit', 'Credit', 'Debt'].includes(fromAccountType) &&
-          toAccountType === 'SpendingCategory':
+          toAccountType === 'Spending Category':
           const fromSpendAccount = await prisma.budgetAccount.findUnique({
             where: { id: fromAccountId },
           });
