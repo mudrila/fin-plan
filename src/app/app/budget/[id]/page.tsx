@@ -2,13 +2,18 @@ import { Metadata } from 'next';
 import TransactionTable from '@/components/molecules/TransactionTable/TransactionTable';
 import { APP_SHORT_NAME } from '@/constants/content';
 import {
+  serializeBudgetAccount,
+  serializeGoalAccount,
+  typeIncomeAccount,
+  typeSpendAccount,
+} from '@/utils/formatters';
+import {
   mapBudgetTransaction,
   mapGoalTransaction,
   mapIncomeTransaction,
   mapSpendTransaction,
 } from '@/utils/getBudgetAccountInfo';
 import prisma from '@/utils/prisma';
-import { serializeBudgetAccount, serializeGoalAccount, typeIncomeAccount, typeSpendAccount } from '@/utils/formatters';
 
 export const metadata: Metadata = {
   title: `Budget Account Details | ${APP_SHORT_NAME}`,
