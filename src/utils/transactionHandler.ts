@@ -20,9 +20,7 @@ export async function findTransactionById(id: string): Promise<Transaction | nul
       toType: ['Spending Category'],
       type: 'Spending Category',
       id: spendingCategoryTransaction.id,
-      // fromAccountId: '',
       toAccountId: spendingCategoryTransaction.transactionsTo,
-      // amount: Number(spendingCategoryTransaction.amount),
     } as TypedSpendingCategoryTransaction;
   }
 
@@ -69,8 +67,6 @@ export async function findTransactionById(id: string): Promise<Transaction | nul
       type: 'Income',
       id: incomeSourceTransaction.id,
       fromAccountId: incomeSourceTransaction.fromIncomeSourceId,
-      // toAccountId: '',
-      // amount: incomeSourceTransaction.amount,
     } as TypedIncomeTransaction;
   }
 
