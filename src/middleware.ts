@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
 import { auth } from '@/utils/auth';
+
+const intlMiddleware = createMiddleware(routing);
 
 export default auth(req => {
   const secret = process.env.AUTH_SECRET;
@@ -22,9 +26,11 @@ export default auth(req => {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
-  return NextResponse.next();
+  const response = intlMiddleware(req);
+
+  return response || NextResponse.next();
 });
 
 export const config = {
-  matcher: ['/app/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/app/:path*', '/sign-in', '/sign-up', '/', '/(ua|en)/:path*'],
 };

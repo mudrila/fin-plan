@@ -12,7 +12,15 @@ export default async function BudgetPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const [budgetAccounts, incomes, goals, spendingCategories, sumGoalTransaction, sumIncomeTransaction, sumSpendTransaction] = await Promise.all([
+  const [
+    budgetAccounts,
+    incomes,
+    goals,
+    spendingCategories,
+    sumGoalTransaction,
+    sumIncomeTransaction,
+    sumSpendTransaction,
+  ] = await Promise.all([
     prisma.budgetAccount.findMany({ where: { userId } }),
     prisma.incomeSource.findMany({ where: { userId } }),
     prisma.goal.findMany({ where: { userId } }),
