@@ -94,19 +94,19 @@ export async function POST(request: Request) {
               where: { id: fromAccountId },
               data: {
                 currentBalance: {
-                  decrement: amount
-                }
-              }
-            })
+                  decrement: amount,
+                },
+              },
+            });
 
             await prisma.goal.update({
               where: { id: toAccountId },
               data: {
                 currentBalance: {
-                  increment: amount
-                }
-              }
-            })
+                  increment: amount,
+                },
+              },
+            });
           } else {
             await prisma.budgetAccountTransaction.create({
               data: {
@@ -119,22 +119,22 @@ export async function POST(request: Request) {
             });
 
             await prisma.budgetAccount.update({
-              where: { id: fromAccountId},
+              where: { id: fromAccountId },
               data: {
                 currentBalance: {
-                  decrement: amount
-                }
-              }
+                  decrement: amount,
+                },
+              },
             });
 
             await prisma.budgetAccount.update({
               where: { id: toAccountId },
               data: {
                 currentBalance: {
-                  increment: amount
-                }
-              }
-            })
+                  increment: amount,
+                },
+              },
+            });
           }
           break;
 
