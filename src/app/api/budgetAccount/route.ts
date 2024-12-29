@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/utils/auth';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 import { budgetAccountSchema } from '@/utils/schemas';
 
-export async function POST(request: Request) {
+async function postHandler(request: Request, { userId }: { userId: string }) {
   try {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-      return NextResponse.json({ errorMessage: 'No user session' });
-    }
-
     const { title, description, icon, type, currentBalance } = await request.json();
 
     const validatedData = budgetAccountSchema.parse({
@@ -47,3 +40,5 @@ export async function POST(request: Request) {
     });
   }
 }
+
+export const POST = authWrapper(postHandler);

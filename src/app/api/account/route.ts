@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { emailRegex, passwordRegex } from '@/constants/content';
 import { generateHashPassword } from '@/utils';
-import { auth } from '@/utils/auth';
+import { authWrapper } from '@/utils/decorators';
 import prisma from '@/utils/prisma';
 
 type UpdateData = {
@@ -12,14 +12,7 @@ type UpdateData = {
   image?: string;
 };
 
-export async function PUT(request: Request) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    return NextResponse.json({ errorMessage: 'No user session' });
-  }
-
+async function putHandler(request: Request, { userId }: { userId: string}) {
   try {
     const { name, email, password, image } = await request.json();
     const updateData: UpdateData = {};
@@ -65,14 +58,7 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE() {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    return NextResponse.json({ errorMessage: 'No user session' });
-  }
-
+async function deleteHandler(request: Request, { userId }: { userId: string}) {
   try {
     await prisma.user.delete({ where: { id: userId } });
     const cookiesInstance = await cookies();
@@ -87,3 +73,6 @@ export async function DELETE() {
     });
   }
 }
+
+export const PUT = authWrapper(putHandler);
+export const DELETE = authWrapper(deleteHandler);
