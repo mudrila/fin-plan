@@ -3,6 +3,12 @@ import TransactionTable from '@/components/molecules/TransactionTable/Transactio
 import { APP_SHORT_NAME } from '@/constants/content';
 import { auth } from '@/utils/auth';
 import {
+  serializeBudgetAccount,
+  serializeGoalAccount,
+  typeIncomeAccount,
+  typeSpendAccount,
+} from '@/utils/formatters';
+import {
   mapBudgetTransaction,
   mapIncomeTransaction,
   mapGoalTransaction,
@@ -18,35 +24,62 @@ export default async function DashboardPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const budgetTransactions = await prisma.budgetAccountTransaction.findMany({
-    where: { userId },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  const incomeTransactions = await prisma.incomeSourceTransaction.findMany({
-    where: { userId },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  const spendingTransactions = await prisma.spendingCategoryTransaction.findMany({
-    where: { userId },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  const goalTransactions = await prisma.goalTransaction.findMany({
-    where: { userId },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+  const [
+    budgetAccounts,
+    incomeAccounts,
+    goalAccounts,
+    spendingAccounts,
+    budgetTransactions,
+    incomeTransactions,
+    spendingTransactions,
+    goalTransactions,
+  ] = await Promise.all([
+    await prisma.budgetAccount.findMany(),
+    await prisma.incomeSource.findMany(),
+    await prisma.goal.findMany(),
+    await prisma.spendingCategory.findMany(),
+    await prisma.budgetAccountTransaction.findMany({
+      where: { userId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    await prisma.incomeSourceTransaction.findMany({
+      where: { userId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    await prisma.spendingCategoryTransaction.findMany({
+      where: { userId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    await prisma.goalTransaction.findMany({
+      where: { userId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+  ]);
 
-  const mappedBudgetAccountTransactions = await mapBudgetTransaction(budgetTransactions);
-  const mappedIncomeTransactions = await mapIncomeTransaction(incomeTransactions);
-  const mappedGoalTransactions = await mapGoalTransaction(goalTransactions);
-  const mappedSpendTransactions = await mapSpendTransaction(spendingTransactions);
+  const serializedGoalAccounts = goalAccounts.map(serializeGoalAccount);
+  const serializedBudgetAccounts = budgetAccounts.map(serializeBudgetAccount);
+  const typedIncomeAccounts = incomeAccounts.map(typeIncomeAccount);
+  const typedSpendAccounts = spendingAccounts.map(typeSpendAccount);
+
+  const [
+    mappedBudgetAccountTransactions,
+    mappedIncomeTransactions,
+    mappedGoalTransactions,
+    mappedSpendTransactions,
+  ] = await Promise.all([
+    await mapBudgetTransaction(budgetTransactions),
+    await mapIncomeTransaction(incomeTransactions),
+    await mapGoalTransaction(goalTransactions),
+    await mapSpendTransaction(spendingTransactions),
+  ]);
 
   const allTransactions = [
     ...mappedBudgetAccountTransactions,
@@ -61,5 +94,13 @@ export default async function DashboardPage() {
     return dateB - dateA;
   });
 
-  return <TransactionTable transactions={sortedTransactions} />;
+  return (
+    <TransactionTable
+      transactions={sortedTransactions}
+      budgetAccounts={serializedBudgetAccounts}
+      incomeAccounts={typedIncomeAccounts}
+      spendingAccounts={typedSpendAccounts}
+      goalAccounts={serializedGoalAccounts}
+    />
+  );
 }

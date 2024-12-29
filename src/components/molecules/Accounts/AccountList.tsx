@@ -44,7 +44,7 @@ function BudgetAccounts({
   url,
   mainText,
   secondText,
-  sumTransaction
+  sumTransaction,
 }: BudgetAccountsProps) {
   const theme = useTheme();
   return (
@@ -55,7 +55,6 @@ function BudgetAccounts({
           <AccountForm
             initialAccountType={initialAccountType}
             trigger={
-
               <Button
                 variant="outlined"
                 endIcon={<AddIcon />}
@@ -132,7 +131,7 @@ function BudgetAccounts({
         )}
       </Box>
       {sumTransaction != undefined && (
-         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Card variant="outlined">
             <CardActionArea>
               <CardHeader

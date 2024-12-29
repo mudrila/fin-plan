@@ -1,8 +1,17 @@
 'use client';
+import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { useState } from 'react';
-import MainForm from './AccountActionForm';
+import MainForm from '@/components/molecules/Accounts/AccountActionForm';
 import {
   SerializedBudgetAccount,
   SerializedGoal,
@@ -15,16 +24,26 @@ export default function AccountTransactionFrom({
   incomeAccounts,
   goalAccounts,
   spendingAccounts,
+  fromId,
+  toId,
+  propAmount,
+  propDescription,
+  transactionId,
 }: {
   budgetAccounts: SerializedBudgetAccount[];
   incomeAccounts: TypedIncomeAccount[];
   goalAccounts: SerializedGoal[];
   spendingAccounts: TypedSpendAccount[];
+  fromId?: string;
+  toId?: string;
+  propAmount?: number;
+  propDescription?: string;
+  transactionId?: string;
 }) {
-  const [fromAccountId, setFromAccountId] = useState('');
-  const [toAccountId, setToAccountId] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
+  const [fromAccountId, setFromAccountId] = useState(fromId || '');
+  const [toAccountId, setToAccountId] = useState(toId || '');
+  const [amount, setAmount] = useState(propAmount || '');
+  const [description, setDescription] = useState(propDescription || '');
 
   const fromAccounts = [...incomeAccounts, ...budgetAccounts, ...goalAccounts];
   const toAccounts = [...goalAccounts, ...budgetAccounts, ...spendingAccounts];
@@ -33,14 +52,20 @@ export default function AccountTransactionFrom({
     <>
       <MainForm
         button={
-          <Button
-            endIcon={<AddIcon />}
-            variant="outlined"
-          >
-            Make transaction
-          </Button>
+          transactionId ? (
+            <IconButton>
+              <Edit />
+            </IconButton>
+          ) : (
+            <Button
+              endIcon={<AddIcon />}
+              variant="outlined"
+            >
+              Make transaction
+            </Button>
+          )
         }
-        title="Make transaction"
+        title={transactionId ? 'Edit transaction' : 'Make transaction'}
         content={
           <>
             <FormControl
@@ -142,8 +167,8 @@ export default function AccountTransactionFrom({
         }
         dialogButtonText="Submit"
         submitData={{
-          url: '/api/transaction/',
-          method: 'POST',
+          url: transactionId ? `/api/transaction/${transactionId}` : '/api/transaction/',
+          method: transactionId ? 'PUT' : 'POST',
           bodyData: {
             fromAccountId,
             toAccountId,
@@ -152,9 +177,9 @@ export default function AccountTransactionFrom({
             fromAccountType: fromAccounts.find(acc => acc.id === fromAccountId)?.type,
             toAccountType: toAccounts.find(acc => acc.id === toAccountId)?.type,
           },
-          successMessage: 'Transaction completed successfully!',
-          errorMessage: 'Error while making transaction',
-          loadingMessage: 'Hand tight - we are making transaction',
+          successMessage: `Transaction ${transactionId ? 'edited' : 'completed'} successfully!`,
+          errorMessage: `Error while ${transactionId ? 'editing' : 'making'} transaction`,
+          loadingMessage: `Hand tight - we are ${transactionId ? 'editing' : 'making'} transaction`,
         }}
       />
     </>

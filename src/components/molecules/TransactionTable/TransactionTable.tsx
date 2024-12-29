@@ -9,6 +9,13 @@ import {
   Paper,
   Chip,
 } from '@mui/material';
+import AccountTransaction from '@/components/molecules/Accounts/AccountTransactionForm';
+import {
+  SerializedBudgetAccount,
+  SerializedGoal,
+  TypedIncomeAccount,
+  TypedSpendAccount,
+} from '@/types/budget';
 
 interface EnrichedTransaction {
   id: string;
@@ -21,13 +28,25 @@ interface EnrichedTransaction {
   toTitle?: string;
   fromType?: string;
   toType?: string;
+  fromAccountId: string;
+  toAccountId: string;
 }
 
 interface TransactionTableProps {
   transactions: EnrichedTransaction[];
+  budgetAccounts: SerializedBudgetAccount[];
+  incomeAccounts: TypedIncomeAccount[];
+  goalAccounts: SerializedGoal[];
+  spendingAccounts: TypedSpendAccount[];
 }
 
-export default function TransactionTable({ transactions }: TransactionTableProps) {
+export default function TransactionTable({
+  transactions,
+  budgetAccounts,
+  incomeAccounts,
+  spendingAccounts,
+  goalAccounts,
+}: TransactionTableProps) {
   return (
     <TableContainer
       component={Paper}
@@ -76,6 +95,14 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                 Type
               </Typography>
             </TableCell>
+            <TableCell>
+              <Typography
+                variant="subtitle2"
+                fontWeight="bold"
+              >
+                Edit
+              </Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -121,6 +148,19 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                               ? 'default'
                               : undefined
                     }
+                  />
+                </TableCell>
+                <TableCell>
+                  <AccountTransaction
+                    budgetAccounts={budgetAccounts}
+                    incomeAccounts={incomeAccounts}
+                    spendingAccounts={spendingAccounts}
+                    goalAccounts={goalAccounts}
+                    propAmount={transaction.amount}
+                    propDescription={transaction.description}
+                    fromId={transaction.fromAccountId}
+                    toId={transaction.toAccountId}
+                    transactionId={transaction.id}
                   />
                 </TableCell>
               </TableRow>

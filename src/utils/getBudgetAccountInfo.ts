@@ -29,6 +29,7 @@ async function getGoalAccount(id: string) {
 
   return goalAccount;
 }
+
 async function getSpendAccount(id: string) {
   const spendAccount = await prisma.spendingCategory.findFirst({
     where: { id },
@@ -73,6 +74,8 @@ export async function mapBudgetTransaction(transactions: BudgetAccountTransactio
       toTitle: await getAccountTitle(transaction.toBudgetAccountId, 'Budget'),
       fromType: await getAccountType(transaction.fromBudgetAccountId),
       toType: await getAccountType(transaction.toBudgetAccountId),
+      fromAccountId: transaction.fromBudgetAccountId,
+      toAccountId: transaction.toBudgetAccountId,
     })),
   );
 
@@ -88,6 +91,8 @@ export async function mapIncomeTransaction(transactions: IncomeSourceTransaction
       toTitle: '',
       fromType: 'Income',
       toType: 'Budget',
+      fromAccountId: transaction.fromIncomeSourceId,
+      toAccountId: '',
     })),
   );
 
@@ -99,10 +104,12 @@ export async function mapGoalTransaction(transactions: GoalTransaction[]) {
     transactions.map(async transaction => ({
       ...transaction,
       amount: Number(transaction.amount),
-      fromTitle: await getAccountTitle(transaction.toAccountId, 'Goal'),
-      toTitle: await getAccountTitle(transaction.fromAccountId, 'Goal'),
+      fromTitle: await getAccountTitle(transaction.fromAccountId, 'Goal'),
+      toTitle: await getAccountTitle(transaction.toAccountId, 'Goal'),
       fromType: 'Goal',
       toType: 'Goal',
+      fromAccountId: transaction.fromAccountId,
+      toAccountId: transaction.toAccountId,
     })),
   );
 
@@ -118,6 +125,8 @@ export async function mapSpendTransaction(transactions: SpendingCategoryTransact
       toTitle: await getAccountTitle(transaction.transactionsTo, 'Spending Category'),
       fromType: 'Credit',
       toType: 'Spending Category',
+      fromAccountId: '',
+      toAccountId: transaction.transactionsTo,
     })),
   );
 
